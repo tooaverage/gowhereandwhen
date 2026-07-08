@@ -22,7 +22,7 @@
   --paper-2: #ecdcb6;    /* deeper cream band */
   --card: #fdf6e3;       /* ivory card */
   --ink: #2a2016;        /* warm sepia-black */
-  --ink-2: #7a6a52;      /* muted sepia body */
+  --ink-2: #5f5138;      /* muted sepia body, AA on cream and the tint band */
   --line: #e2d2ab;       /* tonal border */
   --line-2: #cfb987;
 
@@ -31,14 +31,14 @@
   --brand: #15645c;      /* deep teal, the one signature colour */
   --brand-press: #0f4a44;
   --brand-ink: #fdf6e3;
-  --rust: #b5462c;       /* muted terracotta, used sparingly */
-  --coral: #b5462c;      /* alias kept so older rules still resolve */
-  --pink: #b5462c;       /* pink retired from the chrome */
+  --rust: #9e3d24;       /* muted terracotta, AA as small text on the band */
+  --coral: #9e3d24;      /* alias kept so older rules still resolve */
+  --pink: #9e3d24;       /* pink retired from the chrome */
   --sun: #d99a26;        /* mustard, small accents only */
   --mint: #2bbf8a;
 
   /* Season scale (data only, vivid, matches the map app) */
-  --s-ideal: #12894a;
+  --s-ideal: #0f8145;
   --s-great: #74c043;
   --s-good:  #f3c218;
   --s-fair:  #ff8f2e;
@@ -150,6 +150,8 @@ svg.lucide { width: 1.15em; height: 1.15em; }
 .card { position: relative; background: var(--card); border: 2px solid var(--ink); border-radius: var(--r-lg); padding: var(--pad); }
 .card::before { content: ""; position: absolute; inset: 5px; border: 1px solid var(--line-2); border-radius: calc(var(--r-lg) - 5px); pointer-events: none; }
 .card--ink { background: var(--paper-2); }
+/* Card label that reads like a heading but stays out of the heading outline. */
+.cardhd { font-family: var(--display); text-transform: uppercase; letter-spacing: 0.02em; font-size: clamp(19px, 2.2vw, 23px); line-height: 1.1; color: var(--ink); }
 /* Give the generic card a labelled-panel feel: heading in condensed caps,
    a hairline rule under it, no floating pastel icon puck. */
 .card > .row h3, .card h3.mb-0 { font-family: var(--display); text-transform: uppercase; letter-spacing: 0.02em; color: var(--ink); }

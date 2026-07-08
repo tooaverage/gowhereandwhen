@@ -203,7 +203,7 @@ function page(c) {
     </div>
     <div class="card card--ink" style="margin-top:22px; padding:clamp(18px,4vw,30px)">
       <div class="row" style="justify-content:space-between; margin-bottom:14px">
-        <h3 class="mb-0">Every month, rated</h3>
+        <div class="cardhd">Every month, rated</div>
         ${legend()}
       </div>
       ${strip(D, c.markers)}

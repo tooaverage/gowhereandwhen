@@ -10,7 +10,7 @@ When To Go (gowhereandwhen.com): an interactive world map plus per-country guide
 
 - Static site, no build step required to serve. The deployed artifact is these files at the repo root, published to GitHub Pages and served at gowhereandwhen.com. Vanilla JS, hand-rolled CSS, warm vintage theme, mobile-first.
 - `index.html` is the standalone map app (self-contained: inline CSS/JS, climate data inlined as `DATA`). It loads the world map and fonts from CDNs only.
-- Country pages are generated. `gen.js` reads `content.js` (editorial), `data.js` (climate normals) and `engine.js` (scoring) and writes `country/<slug>/index.html`, `country/index.html` and `sitemap.xml`. Run `node gen.js` after any change to those inputs, then commit the regenerated output.
+- Country pages are generated. `gen.js` reads `content.js` (editorial), `data.js` (climate normals) and `engine.js` (scoring) and writes `country/<slug>/index.html`, `country/index.html`, `sitemap.xml` and `llms.txt`. Run `node gen.js` after any change to those inputs, then commit the regenerated output.
 - The scoring engine stays pure. No globals, no DOM access in the functions exported from `engine.js`. All thresholds live in `CFG`.
 - `data.js` must stay byte-identical to the `DATA` array inlined in `index.html`.
 - Design system is `styles/wtg.css`. Tasteful mid-century travel-brochure look: warm cream paper, one deep teal plus a muted terracotta accent, condensed display caps, a small script kicker. No gradients, no drop shadows, no rainbow headings, no cartoon badges. Restrained, editorial, not busy.

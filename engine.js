@@ -17,6 +17,11 @@ const CFG = {
   // Rainfall comfort, by monthly precipitation in mm.
   rainDry: 45, // at or below: perfect
   rainPerMm: 0.5, // score lost per mm above rainDry
+  // Above the knee, extra rain hurts less. In the wet tropics rain falls in
+  // short heavy bursts, so 250 mm is not five times worse than 50 mm, and the
+  // difference between 200 and 350 mm matters less than the numbers suggest.
+  rainKneeMm: 150,
+  rainPerMmHeavy: 0.18, // score lost per mm above the knee
   // Comfort is limited by the worst factor: a dry but freezing month is still
   // bad. Final score leans on the worse of temperature and rain (wWorst) and
   // blends the rest. This is what pushes cold-wet and monsoon months to red.
@@ -58,7 +63,8 @@ function tempScore(hi, lo, cfg) {
 
 function rainScore(pr, cfg) {
   let s = 100;
-  if (pr > cfg.rainDry) s -= (pr - cfg.rainDry) * cfg.rainPerMm;
+  if (pr > cfg.rainDry) s -= (Math.min(pr, cfg.rainKneeMm) - cfg.rainDry) * cfg.rainPerMm;
+  if (pr > cfg.rainKneeMm) s -= (pr - cfg.rainKneeMm) * cfg.rainPerMmHeavy;
   return clamp(s, 0, 100);
 }
 

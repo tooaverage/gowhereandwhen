@@ -2240,7 +2240,7 @@ const CONTENT = [
     ],
     faq: [
       { q: "What is the best time to visit Micronesia?", a: "January to March, the least-wet months with steady trade winds. It still rains most days on Pohnpei, usually in short, heavy bursts." },
-      { q: "Why is the weather rating so low all year?", a: "Pohnpei is one of the rainiest places on Earth, with over 300 mm even in its driest months. The rating is honest about that; the diving and ruins are still world class." },
+      { q: "Why is the weather rating so low all year?", a: "Pohnpei is one of the rainiest places on Earth, with 250 to 300 mm even in its driest months. The rating is honest about that; the diving and ruins are still world class." },
       { q: "How do you get around Micronesia?", a: "United's island-hopper between Honolulu and Guam calls at Kosrae, Pohnpei and Chuuk a few times a week. Book early, and plan the trip around its schedule." },
     ],
     markers: [{ mon: "Feb", kind: "sun" }, { mon: "Jan", kind: "fish" }],

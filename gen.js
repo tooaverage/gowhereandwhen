@@ -13,6 +13,7 @@ const { DATA } = require('./data.js');
 const { score, band, monthTags, seasonOf, rangeText, CFG } = require('./engine.js');
 const { CONTENT } = require('./content.js');
 
+const BUILD_DATE = new Date().toISOString().slice(0, 10);
 const MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 const MONF = ['January','February','March','April','May','June','July','August','September','October','November','December'];
 const byIso = new Map(DATA.map(d => [d.iso, d]));
@@ -116,8 +117,25 @@ function breadcrumbJsonLd(c) {
   });
 }
 
+function articleJsonLd(c) {
+  return JSON.stringify({
+    '@context': 'https://schema.org', '@type': 'Article',
+    headline: c.title, description: c.desc,
+    mainEntityOfPage: 'https://gowhereandwhen.com/country/' + c.slug + '/',
+    dateModified: BUILD_DATE,
+    author: { '@type': 'Organization', name: 'When To Go', url: 'https://gowhereandwhen.com/' },
+    publisher: { '@type': 'Organization', name: 'When To Go', url: 'https://gowhereandwhen.com/' },
+  });
+}
+
 function exploreChips(slug) {
-  const others = CONTENT.filter(x => x.slug !== slug).slice(0, 8);
+  // The 8 guides after this one in content order, wrapping around, so groups
+  // of neighbouring countries interlink and every page gets inbound links.
+  const i = CONTENT.findIndex(x => x.slug === slug);
+  const others = [];
+  for (let k = 1; others.length < 8 && k < CONTENT.length; k++) {
+    others.push(CONTENT[(i + k) % CONTENT.length]);
+  }
   return '<a class="chip" href="../../index.html"><i data-lucide="globe" class="ic"></i> World map</a>'
     + others.map(x => '<a class="chip" href="../' + x.slug + '/">' + x.name + '</a>').join('');
 }
@@ -179,6 +197,7 @@ function page(c) {
 <link rel="stylesheet" href="../../styles/wtg.css">
 <script type="application/ld+json">${breadcrumbJsonLd(c)}</script>
 <script type="application/ld+json">${faqJsonLd(c.faq)}</script>
+<script type="application/ld+json">${articleJsonLd(c)}</script>
 </head>
 <body>
 <header class="nav"><div class="wrap">
@@ -398,9 +417,25 @@ fs.writeFileSync(path.join('country', 'index.html'), indexPage());
 // Sitemap
 const urls = ['https://gowhereandwhen.com/', 'https://gowhereandwhen.com/country/'].concat(CONTENT.map(c => 'https://gowhereandwhen.com/country/' + c.slug + '/'));
 const sitemap = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
-  + urls.map((u, i) => '  <url>\n    <loc>' + u + '</loc>\n    <changefreq>' + (i ? 'monthly' : 'weekly') + '</changefreq>\n    <priority>' + (i ? '0.8' : '1.0') + '</priority>\n  </url>').join('\n')
+  + urls.map((u, i) => '  <url>\n    <loc>' + u + '</loc>\n    <lastmod>' + BUILD_DATE + '</lastmod>\n    <changefreq>' + (i ? 'monthly' : 'weekly') + '</changefreq>\n    <priority>' + (i ? '0.8' : '1.0') + '</priority>\n  </url>').join('\n')
   + '\n</urlset>\n';
 fs.writeFileSync('sitemap.xml', sitemap);
+
+// llms.txt: a plain-text index for AI crawlers, with every guide listed.
+const llms = '# When To Go\n\n'
+  + '> When To Go is an interactive world map and set of guides that show the best\n'
+  + '> time of year to visit any country, by month. Each country gets a 0 to 100\n'
+  + '> weather comfort rating per month, built from daytime heat, overnight chill,\n'
+  + '> rainfall and tropical-storm risk, plus its high versus low travel season and\n'
+  + '> any hazards like monsoon, typhoon or extreme heat.\n\n'
+  + '## Pages\n\n'
+  + '- [World map](https://gowhereandwhen.com/): pick a month, see where the weather is good across ' + DATA.length + ' countries.\n'
+  + '- [Best time to visit, by country](https://gowhereandwhen.com/country/): the full list of country guides.\n'
+  + CONTENT.map(c => '- [Best time to visit ' + c.name.replace(/^the /, '') + '](https://gowhereandwhen.com/country/' + c.slug + '/): ' + c.desc).join('\n') + '\n\n'
+  + '## Notes\n\n'
+  + '- Ratings use climate normals for one representative hub city per country, so coastal versus inland and north versus south will vary.\n'
+  + '- This is a planning guide based on long-run averages, not a forecast.\n';
+fs.writeFileSync('llms.txt', llms);
 
 // GUIDES map for the app
 const guides = '{ ' + CONTENT.map(c => c.iso + ": '" + c.slug + "'").join(', ') + ' }';

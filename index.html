@@ -490,7 +490,7 @@ const CFG = {
   coldHiPerDeg: 5.0, hotHiPerDeg: 4.0,
   coldNightStart: 4, coldNightPerDeg: 2.4,
   swelterStart: 32, swelterPerDeg: 4.3,
-  rainDry: 45, rainPerMm: 0.5,
+  rainDry: 45, rainPerMm: 0.5, rainKneeMm: 150, rainPerMmHeavy: 0.18,
   wWorst: 0.62, wTemp: 0.55, wRain: 0.45,
   stormPenalty: 22,
   monsoonMm: 230, wetMm: 130, heatHi: 35, coldHiMax: 7, coldLoMax: -6,
@@ -516,7 +516,8 @@ function tempScore(hi, lo) {
 }
 function rainScore(pr) {
   let s = 100;
-  if (pr > CFG.rainDry) s -= (pr - CFG.rainDry) * CFG.rainPerMm;
+  if (pr > CFG.rainDry) s -= (Math.min(pr, CFG.rainKneeMm) - CFG.rainDry) * CFG.rainPerMm;
+  if (pr > CFG.rainKneeMm) s -= (pr - CFG.rainKneeMm) * CFG.rainPerMmHeavy;
   return clamp(s, 0, 100);
 }
 function hasStorm(rec, m) { return !!(rec.storm && rec.storm.mo.indexOf(m) !== -1); }

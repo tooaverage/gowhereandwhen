@@ -49,19 +49,25 @@
     color: var(--ink);
     font: 15px/1.5 var(--sans);
     -webkit-font-smoothing: antialiased;
-    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+    height: 100dvh; overflow: hidden;
   }
   .ic { width: 1.1em; height: 1.1em; stroke-width: 2.2; vertical-align: -0.16em; }
-  .wrap { max-width: 1100px; margin: 0 auto; padding: 18px 14px 64px; }
-  header .kicker { font-family: var(--script); color: var(--rust); font-size: clamp(19px, 4vw, 24px); line-height: 1; margin: 2px 0 1px; }
-  header h1 { font-family: var(--display); font-size: clamp(30px, 6.5vw, 46px); font-weight: 400; text-transform: uppercase; letter-spacing: 0.01em; line-height: 1; color: var(--ink); margin: 2px 0 6px; display: inline-flex; align-items: center; gap: 11px; flex-wrap: wrap; }
-  header h1 .dot { width: 30px; height: 30px; border-radius: 50%; background: var(--brand); display: inline-grid; place-items: center; color: var(--card); }
-  header h1 .poly .w { color: inherit; }
-  header .sub { margin: 2px 0 16px; color: var(--dim); font-size: 14px; }
-  header h1 .dot .ic { width: 16px; height: 16px; }
-  header p { margin: 2px 0 16px; color: var(--dim); font-size: 14px; }
+  /* Floating top bar over the full-page map, like a map app. */
+  #topbar {
+    position: fixed; z-index: 10; top: calc(10px + env(safe-area-inset-top));
+    left: 50%; transform: translateX(-50%); width: min(1100px, calc(100% - 20px));
+    background: #fdf6e3f2; border: 1.5px solid var(--line2); border-radius: 20px; padding: 10px 12px 8px;
+  }
+  .bar { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 8px; }
+  .brand { display: inline-flex; align-items: center; gap: 9px; text-decoration: none; color: var(--ink); margin-right: 2px; }
+  .brand .dot { width: 30px; height: 30px; border-radius: 50%; background: var(--brand); display: inline-grid; place-items: center; color: var(--card); flex: 0 0 auto; }
+  .brand .dot .ic { width: 16px; height: 16px; }
+  .brand .kicker { font-family: var(--script); color: var(--rust); font-size: 13px; line-height: 1; display: block; }
+  .brand h1 { font-family: var(--display); font-size: 19px; font-weight: 400; text-transform: uppercase; letter-spacing: 0.01em; line-height: 1.05; color: var(--ink); margin: 1px 0 0; }
+  .guides { text-decoration: none; color: var(--brand); font-weight: 800; font-size: 14px; padding: 9px 14px; border: 1.5px solid var(--line2); border-radius: 999px; background: var(--card); }
+  .guides:hover { border-color: var(--ink); }
 
-  .controls { display: flex; flex-direction: column; gap: 10px; margin-bottom: 12px; }
+  .controls { display: flex; flex-direction: column; gap: 8px; }
   .months { display: flex; gap: 7px; overflow-x: auto; padding-bottom: 4px; -webkit-overflow-scrolling: touch; scrollbar-width: thin; scroll-snap-type: x proximity; }
   .months button {
     flex: 0 0 auto; min-width: 54px; padding: 11px 13px; border-radius: 999px; scroll-snap-align: center;
@@ -81,8 +87,9 @@
   }
   .search input::placeholder { color: var(--dim); }
 
-  .stage { position: relative; background: var(--ocean); border: 1.5px solid var(--line2); border-radius: 22px; overflow: hidden; }
-  svg#map { display: block; width: 100%; height: 66vh; background: var(--ocean); touch-action: pan-y; }
+  .stage { position: fixed; inset: 0; background: var(--ocean); }
+  .stage.gridmode { background: var(--paper); }
+  svg#map { display: block; width: 100%; height: 100%; background: var(--ocean); touch-action: pan-y; }
   svg#map.zoomed { cursor: grab; }
   svg#map path { stroke: var(--paper); stroke-width: 0.5; cursor: pointer; transition: opacity .1s; vector-effect: non-scaling-stroke; }
   svg#map path.sel { stroke: var(--ink); stroke-width: 1.6; }
@@ -93,28 +100,26 @@
     pointer-events: none; text-anchor: middle; dominant-baseline: central;
   }
 
-  .zoomctl { position: absolute; right: 10px; top: 10px; display: none; flex-direction: column; gap: 8px; z-index: 5; }
+  .zoomctl { position: absolute; right: 12px; bottom: calc(14px + env(safe-area-inset-bottom)); display: none; flex-direction: column; gap: 8px; z-index: 5; }
   .zoomctl button {
     width: 42px; height: 42px; border-radius: 13px; border: 1.5px solid var(--ink);
     background: var(--card); color: var(--ink); cursor: pointer; display: grid; place-items: center;
   }
   .zoomctl button .ic { width: 20px; height: 20px; }
   .zoomctl button:active { background: var(--paper2); }
-  .hint { position: absolute; left: 12px; bottom: 10px; color: var(--ink); background: #fffdf7cc; padding: 4px 10px; border-radius: 999px; font-size: 12px; font-weight: 700; pointer-events: none; z-index: 5; }
+  .hint { position: absolute; left: 50%; transform: translateX(-50%); bottom: calc(16px + env(safe-area-inset-bottom)); color: var(--ink); background: #fffdf7cc; padding: 4px 10px; border-radius: 999px; font-size: 12px; font-weight: 700; pointer-events: none; z-index: 5; white-space: nowrap; }
 
-  /* Mobile: the map becomes the hero, full bleed and tall, like a map app. */
+  /* Small screens: tighter top bar, no hint pill. */
   @media (max-width: 700px) {
-    .wrap { padding: 10px 0 36px; }
-    header, .controls, .legend { padding-left: 14px; padding-right: 14px; }
-    header h1 { font-size: 25px; }
-    header p { display: none; }
-    .controls { margin-bottom: 8px; }
-    .stage { border-radius: 0; border-left: 0; border-right: 0; }
-    svg#map { height: 64vh; }
-    .foot { display: none; }
+    #topbar { top: calc(6px + env(safe-area-inset-top)); width: calc(100% - 12px); padding: 8px 8px 6px; border-radius: 16px; }
+    .bar { gap: 8px; margin-bottom: 6px; }
+    .brand h1 { font-size: 16px; }
+    .brand .kicker { font-size: 12px; }
+    .guides { display: none; }
+    .hint { display: none; }
   }
 
-  .loading, .err { padding: 34px 16px; text-align: center; color: var(--dim); font-size: 14px; }
+  .loading, .err { position: absolute; inset: 0; display: grid; place-items: center; text-align: center; color: var(--dim); font-size: 14px; padding: 0 16px; }
   .err b { color: var(--ink); }
 
   /* Grid heatmap */
@@ -129,7 +134,13 @@
   #grid .cell { min-width: 30px; height: 28px; text-align: center; color: #14130f; font-weight: 800; cursor: pointer; border-radius: 6px; font-size: 11px; }
   #grid .cell.on { outline: 2.5px solid var(--ink); outline-offset: -2px; }
 
-  .legend { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin: 12px 2px 0; color: var(--dim); font-size: 13px; font-weight: 700; }
+  .legend {
+    position: fixed; z-index: 8; left: 12px; bottom: calc(12px + env(safe-area-inset-bottom));
+    max-width: calc(100vw - 76px); display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+    color: var(--dim); font-size: 13px; font-weight: 700;
+    background: #fffdf7d9; border: 1.5px solid var(--line2); border-radius: 999px; padding: 7px 14px;
+  }
+  .legend .abt { border: 0; background: transparent; color: var(--brand); font: inherit; font-weight: 800; cursor: pointer; padding: 0; text-decoration: underline; }
   .legend .it { display: inline-flex; align-items: center; gap: 6px; }
   .legend .sw { width: 15px; height: 15px; border-radius: 5px; display: inline-block; border: 1.5px solid rgba(0,0,0,.14); }
 
@@ -142,7 +153,12 @@
   #tip .sc { font-weight: 800; }
 
   /* Detail panel */
-  #detail { margin-top: 14px; background: var(--card); border: 1.5px solid var(--line2); border-radius: 22px; padding: 16px; display: none; }
+  #detail {
+    position: fixed; z-index: 25; top: calc(var(--tbh, 128px) + 22px); left: 12px;
+    width: min(430px, calc(100vw - 24px)); max-height: calc(100dvh - var(--tbh, 128px) - 92px);
+    overflow-y: auto; overscroll-behavior: contain;
+    background: var(--card); border: 1.5px solid var(--ink); border-radius: 22px; padding: 16px; display: none;
+  }
   #detail.show { display: block; }
   #detail .handle { display: none; }
   #detail .top { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
@@ -153,7 +169,7 @@
   .guidebtn:hover { transform: translateY(-2px); }
   @media (max-width: 700px) {
     #detail.show {
-      position: fixed; left: 0; right: 0; bottom: 0; z-index: 30; margin: 0;
+      position: fixed; left: 0; right: 0; top: auto; bottom: 0; z-index: 30; margin: 0; width: auto; max-height: 64vh;
       border-radius: 22px 22px 0 0; border-bottom: 0; border-top: 2px solid var(--ink); max-height: 64vh; overflow-y: auto;
       padding-bottom: calc(16px + env(safe-area-inset-bottom));
     }
@@ -189,51 +205,54 @@
   .onnow .t { color: var(--dim); }
   .onnow .h.active .t { color: var(--ink); font-weight: 700; }
   .onnow .mo { color: var(--brand); font-size: 13px; margin-left: 6px; font-weight: 700; }
-  .foot { color: var(--dim); font-size: 12px; margin-top: 20px; line-height: 1.6; }
+  .foot {
+    position: fixed; z-index: 26; left: 12px; bottom: calc(58px + env(safe-area-inset-bottom));
+    width: min(430px, calc(100vw - 24px)); color: var(--dim); font-size: 12px; line-height: 1.6;
+    background: var(--card); border: 1.5px solid var(--ink); border-radius: 16px; padding: 12px 14px; display: none;
+  }
+  .foot.show { display: block; }
   .foot a { color: var(--brand); }
 </style>
 </head>
 <body>
-<div class="wrap">
-  <header>
-    <p class="kicker">The best time to visit</p>
-    <h1><span class="dot"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg></span><span class="poly"><span class="w">Anywhere</span> <span class="w">on</span> <span class="w">earth</span></span></h1>
-    <p class="sub">Pick a month to see where the weather is good for travel. Tap a country for its year round arc.</p>
-  </header>
-
-  <div class="controls">
-    <div class="months" id="months"></div>
-    <div class="row">
-      <div class="seg" id="viewseg">
-        <button data-view="map" class="on">Map</button>
-        <button data-view="grid">Grid</button>
-      </div>
-      <div class="search"><input id="search" type="search" placeholder="Find a country" autocomplete="off"></div>
-    </div>
+<div class="stage" id="stage">
+  <svg id="map" viewBox="0 10 1000 450" preserveAspectRatio="xMidYMid meet" style="display:none"></svg>
+  <div class="loading" id="mapload">Loading world map.</div>
+  <div id="gridwrap" style="display:none; position:absolute; left:0; right:0; bottom:0; top:calc(var(--tbh, 128px) + 16px); overflow:auto; background:var(--paper); padding: 0 10px 64px;"><table id="grid"></table></div>
+  <div class="zoomctl" id="zoomctl">
+    <button id="zin" aria-label="Zoom in"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button>
+    <button id="zout" aria-label="Zoom out"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14"/></svg></button>
+    <button id="zreset" aria-label="Reset zoom"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg></button>
   </div>
-
-  <div class="stage" id="stage">
-    <svg id="map" viewBox="0 10 1000 450" preserveAspectRatio="xMidYMid meet" style="display:none"></svg>
-    <div class="loading" id="mapload">Loading world map.</div>
-    <div id="gridwrap" style="display:none; overflow-x:auto; padding:8px;"><table id="grid"></table></div>
-    <div class="zoomctl" id="zoomctl">
-      <button id="zin" aria-label="Zoom in"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button>
-      <button id="zout" aria-label="Zoom out"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14"/></svg></button>
-      <button id="zreset" aria-label="Reset zoom"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg></button>
-    </div>
-    <div class="hint" id="zoomhint" style="display:none">Pinch or double tap to zoom. Names appear as you zoom in.</div>
-  </div>
-
-  <div class="legend" id="legend"></div>
-
-  <div id="detail"></div>
-
-  <p class="foot">
-    Color is a 0 to 100 comfort score from daytime heat, overnight chill and rainfall, with a penalty in typhoon, hurricane and cyclone season.
-    Tap a country for its hazards (storm, monsoon, extreme heat, hard cold) and its high versus low travel season, which here tracks the best-weather months.
-    Each country uses climate normals for one hub city, so coastal versus inland or north versus south will vary. A planning guide, not a forecast.
-  </p>
+  <div class="hint" id="zoomhint" style="display:none">Pinch or double tap to zoom. Names appear as you zoom in.</div>
 </div>
+
+<div id="topbar">
+  <div class="bar">
+    <a class="brand" href="./">
+      <span class="dot"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg></span>
+      <span><span class="kicker">The best time to visit</span><h1>Anywhere on earth</h1></span>
+    </a>
+    <div class="seg" id="viewseg">
+      <button data-view="map" class="on">Map</button>
+      <button data-view="grid">Grid</button>
+    </div>
+    <a class="guides" href="country/">Guides</a>
+    <div class="search"><input id="search" type="search" placeholder="Find a country" autocomplete="off" aria-label="Find a country"></div>
+  </div>
+  <div class="months" id="months"></div>
+</div>
+
+<div class="legend" id="legend"></div>
+
+<p class="foot" id="about">
+  Color is a 0 to 100 comfort score from daytime heat, overnight chill and rainfall, with a penalty in typhoon, hurricane and cyclone season.
+  Tap a country for its hazards (storm, monsoon, extreme heat, hard cold) and its high versus low travel season, which here tracks the best-weather months.
+  Each country uses climate normals for one hub city, so coastal versus inland or north versus south will vary. A planning guide, not a forecast.
+  <a href="country/">Browse all country guides</a>.
+</p>
+
+<div id="detail"></div>
 
 <div id="tip"></div>
 
@@ -619,6 +638,7 @@ function setView(v) {
   document.getElementById('map').style.display = (v === 'map' && mapReady) ? 'block' : 'none';
   document.getElementById('mapload').style.display = (v === 'map' && !mapReady) ? 'block' : 'none';
   document.getElementById('gridwrap').style.display = (v === 'grid') ? 'block' : 'none';
+  document.getElementById('stage').classList.toggle('gridmode', v === 'grid');
   document.getElementById('zoomctl').style.display = (v === 'map' && mapReady) ? 'flex' : 'none';
   document.getElementById('zoomhint').style.display = (v === 'map' && mapReady) ? 'block' : 'none';
   if (v === 'grid') buildGrid();
@@ -822,7 +842,18 @@ function applyVB() {
   svg.style.touchAction = pan ? 'none' : 'pan-y';
   updateLabels();
 }
-function fit() { measure(); applyVB(); }
+let firstFit = true;
+function fit() {
+  measure();
+  // First layout: center the visible slice on the world instead of clamping
+  // to its left edge, which is open Pacific on a tall viewport.
+  if (firstFit) {
+    const w = maxW();
+    vb = { x: WORLD.x + (WORLD.w - w) / 2, y: WORLD.y + (WORLD.h - w * aspect) / 2, w, h: w * aspect };
+    firstFit = false;
+  }
+  applyVB();
+}
 window.addEventListener('resize', () => { if (mapReady) fit(); });
 
 function updateLabels() {
@@ -1051,9 +1082,7 @@ function select(iso, scrollTo) {
   state.selIso = iso;
   paint();
   renderDetail(iso);
-  // On small screens the detail is a fixed bottom sheet: nothing to scroll to.
-  const isSheet = window.matchMedia('(max-width: 700px)').matches;
-  if (scrollTo && !isSheet) document.getElementById('detail').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  // The detail is a floating overlay (bottom sheet on small screens): nothing to scroll to.
 }
 
 const detailEl = document.getElementById('detail');
@@ -1152,11 +1181,23 @@ function renderDetail(iso) {
   if (window.lucide) lucide.createIcons({ root: detailEl });
 }
 
-/* ============================ LEGEND ============================ */
+/* ============================ LEGEND + ABOUT ============================ */
 document.getElementById('legend').innerHTML = CFG.bands
-  .map(b => '<span class="it"><span class="sw" style="background:' + b[3] + '"></span>' + b[2] + '</span>').join('');
+  .map(b => '<span class="it"><span class="sw" style="background:' + b[3] + '"></span>' + b[2] + '</span>').join('')
+  + '<button class="abt" id="aboutbtn" aria-expanded="false">About</button>';
+document.getElementById('aboutbtn').addEventListener('click', () => {
+  const a = document.getElementById('about');
+  const show = !a.classList.contains('show');
+  a.classList.toggle('show', show);
+  document.getElementById('aboutbtn').setAttribute('aria-expanded', String(show));
+});
 
 /* ============================ GO ============================ */
+// The floating panels are laid out against the top bar's real height.
+const topbarEl = document.getElementById('topbar');
+function sizeUi() { document.documentElement.style.setProperty('--tbh', topbarEl.offsetHeight + 'px'); }
+window.addEventListener('resize', sizeUi);
+sizeUi();
 if (window.lucide) lucide.createIcons();
 loadMap();
 </script>

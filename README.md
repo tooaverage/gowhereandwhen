@@ -36,7 +36,9 @@ temperature and rain is worse, then folds in:
 - daytime high temperature, with an ideal band around 20 to 28 C
 - overnight chill, penalized hard when nights get cold
 - extreme heat, penalized hard above the low 30s C
-- monthly rainfall, penalized as it climbs
+- monthly rainfall, penalized as it climbs, with a gentler slope above 150 mm
+  a month: tropical rain falls in short heavy bursts, so a 250 mm trade-wind
+  month is unpleasant on paper but fine on the ground
 - a penalty during tropical-storm season (typhoon, hurricane, cyclone), which
   is a curated per-country field because it does not show up in average rainfall
 

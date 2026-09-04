@@ -99,6 +99,18 @@
     stroke-linejoin: round; vector-effect: non-scaling-stroke; font-family: var(--sans); font-weight: 800;
     pointer-events: none; text-anchor: middle; dominant-baseline: central;
   }
+  /* City heat layer: shows once you zoom in on a country that has places.
+     A soft halo plus a crisp dot per city, both in the month's band colour. */
+  #cities { pointer-events: none; }
+  #cities .ch { opacity: .34; }
+  #cities .cd { stroke: var(--ink); stroke-width: 1.5; vector-effect: non-scaling-stroke; pointer-events: auto; cursor: pointer; }
+  #cities .cs { font-family: var(--sans); font-weight: 800; text-anchor: middle; dominant-baseline: central; }
+  /* While the city layer shows, its country fades to a wash so the dots carry the colour. */
+  svg#map path.wash { fill-opacity: .4; }
+  #cities .cl {
+    fill: var(--ink); paint-order: stroke; stroke: var(--card); stroke-width: 3px; stroke-linejoin: round;
+    vector-effect: non-scaling-stroke; font-family: var(--sans); font-weight: 800; dominant-baseline: central;
+  }
 
   .zoomctl { position: absolute; right: 12px; bottom: calc(14px + env(safe-area-inset-bottom)); display: none; flex-direction: column; gap: 8px; z-index: 5; }
   .zoomctl button {
@@ -194,6 +206,12 @@
   .watch .k { color: var(--dim); flex: 0 0 104px; font-weight: 700; }
   .watch .v { color: var(--ink); }
   .watch .dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 6px; vertical-align: middle; }
+  .areas { margin-top: 14px; font-size: 14px; border-top: 1.5px solid var(--line); padding-top: 12px; }
+  .areas .hd { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; color: var(--dim); font-size: 13px; font-weight: 700; }
+  .areas .zoom { border: 0; background: transparent; color: var(--brand); font: inherit; font-weight: 800; cursor: pointer; padding: 0; text-decoration: underline; }
+  .areas .r { display: flex; align-items: center; gap: 9px; margin-top: 7px; }
+  .areas .pill { min-width: 44px; text-align: center; padding: 3px 8px; }
+  .areas .a { color: var(--dim); font-size: 12px; margin-left: auto; text-align: right; }
   .guideline { margin-top: 12px; font-size: 14px; color: var(--dim); }
   .guideline .ok { color: #1f9255; font-weight: 800; }
   .guideline .diff { color: #c2851a; font-weight: 800; }
@@ -467,6 +485,110 @@ const DATA = [
 /* ============================ EDITORIAL LAYER (UI only) ============================ */
 // Month-tagged highlights and what travel guides say. This does not affect the
 // climate score or colors; it adds context and a guides-vs-data check. Expandable.
+// Cities inside a country, with their own normals, plus a backpacker route.
+// Mirrors places.js: gen.js rewrites the block between the markers, do not
+// edit it here.
+/* <places> */
+const PLACES = {
+  // Germany: a north to south gradient, and the Alps are a climate of their own.
+  276: {
+    cities: [
+      { name: 'Berlin', lat: 52.52, lng: 13.405, hub: true, area: 'North and east' },
+      { name: 'Hamburg', lat: 53.55, lng: 9.99, area: 'North coast',
+        hi: [4,5,9,14,18,21,23,23,19,14,8,5], lo: [-1,-1,1,4,8,11,13,13,10,7,3,0],
+        pr: [70,51,58,42,55,72,81,78,67,67,66,72] },
+      { name: 'Cologne', lat: 50.94, lng: 6.96, area: 'Rhineland',
+        hi: [6,7,11,15,19,22,25,25,20,15,10,6], lo: [1,1,3,5,9,12,14,14,11,7,4,1],
+        pr: [66,58,58,45,63,79,80,78,64,66,64,72] },
+      { name: 'Frankfurt', lat: 50.11, lng: 8.68, area: 'Rhine-Main',
+        hi: [5,6,11,16,20,23,26,26,21,15,9,5], lo: [0,0,2,5,9,12,14,14,10,7,3,1],
+        pr: [46,44,49,38,58,58,64,55,51,55,55,59] },
+      { name: 'Dresden', lat: 51.05, lng: 13.74, area: 'Saxony',
+        hi: [3,5,9,15,20,23,25,25,20,14,8,4], lo: [-2,-2,1,4,8,11,13,13,10,6,2,-1],
+        pr: [46,37,42,42,60,66,84,79,49,44,45,45] },
+      { name: 'Munich', lat: 48.137, lng: 11.575, area: 'Bavaria',
+        hi: [3,5,10,15,19,22,25,24,19,14,8,4], lo: [-3,-3,0,3,8,11,13,13,9,5,1,-2],
+        pr: [52,46,61,56,107,121,119,117,78,67,58,59] },
+      { name: 'Freiburg', lat: 47.995, lng: 7.85, area: 'Black Forest',
+        hi: [5,7,12,16,20,24,26,26,21,15,9,6], lo: [0,0,3,6,10,13,15,15,11,8,4,1],
+        pr: [55,48,55,58,105,90,90,80,68,70,65,68] },
+      { name: 'Garmisch', lat: 47.49, lng: 11.095, area: 'Bavarian Alps',
+        hi: [2,4,8,12,17,20,22,22,17,13,6,2], lo: [-6,-5,-2,1,5,8,10,10,6,2,-2,-5],
+        pr: [90,75,95,95,150,200,210,200,130,90,85,95] },
+    ],
+    route: {
+      title: 'The classic Germany loop',
+      length: '12 to 14 days, by train',
+      lead: 'Most backpacker guides run Germany as one loop: Berlin south through Dresden and Nuremberg to Munich, then west along the Rhine to Cologne and up to Hamburg. Trains link every stop, and a Deutschland-Ticket or rail pass covers most of it.',
+      stops: [
+        { name: 'Berlin', lat: 52.52, lng: 13.405, nights: 3, p: 'Museums, the Wall, the nightlife. Most loops start here.' },
+        { name: 'Dresden', lat: 51.05, lng: 13.74, nights: 2, via: 'Train, 2 hours', p: 'Baroque old town on the Elbe, with Saxon Switzerland a day trip away.' },
+        { name: 'Nuremberg', lat: 49.45, lng: 11.08, nights: 1, via: 'Train, 3 to 4 hours', p: 'Medieval walls, the castle and the best bratwurst in the country.' },
+        { name: 'Munich', lat: 48.137, lng: 11.575, nights: 3, via: 'Train, 1 hour', p: 'Beer halls and the English Garden. Day trip to Neuschwanstein castle and the Alps.' },
+        { name: 'Heidelberg', lat: 49.40, lng: 8.69, nights: 1, via: 'Train, 3 hours', p: 'A castle above the Neckar and the old university town below it.' },
+        { name: 'Cologne', lat: 50.94, lng: 6.96, nights: 2, via: 'Train, 1 to 2 hours', p: 'The cathedral, the Rhine and the Kölsch bars. Add a Rhine castle stop on the way.' },
+        { name: 'Hamburg', lat: 53.55, lng: 9.99, nights: 2, via: 'Train, 4 hours', p: 'The harbour, Speicherstadt and the Reeperbahn. Two hours back to Berlin to fly out.' },
+      ],
+      sources: [
+        { t: 'Hostelz, Germany 3-week backpacker itinerary', u: 'https://www.hostelz.com/solo-travel-itineraries/germany/germany-3-weeks-complete-backpacker-itinerary' },
+        { t: 'kimkim, 2 weeks in Germany', u: 'https://www.kimkim.com/c/2-weeks-in-germany-unique-itineraries' },
+        { t: 'Bucketlistly, 2 to 3 weeks Germany itinerary', u: 'https://www.bucketlistly.blog/posts/two-weeks-germany-itinerary' },
+        { t: 'The Broke Backpacker, backpacking Germany', u: 'https://www.thebrokebackpacker.com/backpacking-germany-travel-guide/' },
+      ],
+    },
+  },
+
+  // Greece: the islands are drier and steadier than Athens, the north and the
+  // Pindus are a different country in winter.
+  300: {
+    cities: [
+      { name: 'Athens', lat: 37.9838, lng: 23.7275, hub: true, area: 'Attica' },
+      { name: 'Thessaloniki', lat: 40.64, lng: 22.94, area: 'The north',
+        hi: [9,12,15,20,25,30,32,32,28,22,16,11], lo: [2,4,7,11,15,20,22,22,18,13,8,4],
+        pr: [36,34,40,40,51,38,26,22,34,47,48,53] },
+      { name: 'Ioannina', lat: 39.665, lng: 20.85, area: 'Epirus and the Pindus',
+        hi: [9,11,14,18,23,28,31,31,27,21,14,10], lo: [1,1,4,6,10,14,16,16,13,9,5,2],
+        pr: [128,110,96,88,73,40,25,32,54,102,142,150] },
+      { name: 'Corfu', lat: 39.62, lng: 19.92, area: 'Ionian islands', lab: 'l',
+        hi: [14,14,16,19,24,28,31,31,28,23,18,15], lo: [6,6,8,10,14,17,20,20,17,14,10,8],
+        pr: [140,120,95,75,45,20,10,25,75,130,190,175] },
+      { name: 'Mykonos', lat: 37.445, lng: 25.33, area: 'Cyclades',
+        hi: [14,14,16,19,23,27,28,28,26,22,18,15], lo: [9,9,10,13,16,20,22,22,20,17,13,11],
+        pr: [70,45,40,20,10,3,1,1,7,40,55,75] },
+      { name: 'Santorini', lat: 36.42, lng: 25.43, area: 'Cyclades',
+        hi: [14,15,16,19,23,27,28,28,26,22,18,16], lo: [9,9,10,12,15,19,22,22,20,17,13,11],
+        pr: [110,55,45,25,10,2,1,1,8,45,60,95] },
+      { name: 'Rhodes', lat: 36.44, lng: 28.22, area: 'Dodecanese', lab: 'l',
+        hi: [15,15,17,20,24,28,31,31,29,25,20,16], lo: [9,9,10,13,16,20,23,23,21,17,13,11],
+        pr: [150,105,70,25,12,2,1,1,8,60,90,165] },
+      { name: 'Heraklion', lat: 35.34, lng: 25.13, area: 'Crete',
+        hi: [15,16,17,20,24,28,29,29,27,24,20,17], lo: [9,9,10,12,15,19,22,22,20,17,13,11],
+        pr: [85,70,50,25,12,3,1,1,15,55,60,85] },
+    ],
+    route: {
+      title: 'Athens, Meteora and down the Cyclades to Crete',
+      length: '14 days, by train and ferry',
+      lead: 'The usual backpacker line: a few days in Athens, a detour north to the monasteries at Meteora, then ferries south through the Cyclades to Santorini and on to Crete. Guides put the sweet spot for this route in late May, June and September, when the ferries are running, the sea is warm and the crowds are thinner.',
+      stops: [
+        { name: 'Athens', lat: 37.9838, lng: 23.7275, nights: 3, p: 'The Acropolis, Plaka and Psyrri. Base for the train north and the ferries south.' },
+        { name: 'Meteora', lat: 39.71, lng: 21.63, nights: 1, via: 'Train to Kalabaka, 4 to 5 hours', p: 'Monasteries on rock pillars. One full day covers the main ones; cover shoulders and knees.' },
+        { name: 'Athens', lat: 37.9838, lng: 23.7275, pass: true, via: 'Train back, then the ferry from Piraeus' },
+        { name: 'Paros', lat: 37.085, lng: 25.15, nights: 2, lab: 'l', via: 'Ferry from Piraeus, 3 to 4 hours', p: 'Naoussa harbour, Parikia and the beaches in between. A sociable hub island.' },
+        { name: 'Naxos', lat: 37.10, lng: 25.38, nights: 3, via: 'Ferry, 30 to 60 minutes', p: 'The biggest Cycladic island: long beaches, hill villages, and the best value of the group.' },
+        { name: 'Santorini', lat: 36.42, lng: 25.43, nights: 2, via: 'Ferry, 1.5 to 2 hours', p: 'The caldera, Oia at sunset and the Fira to Oia walk. Two nights is plenty.' },
+        { name: 'Heraklion, Crete', lat: 35.34, lng: 25.13, nights: 3, via: 'Ferry, 2 to 3 hours', p: 'Knossos, the old harbour, then Chania or the Samaria gorge. Fly home from Heraklion.' },
+      ],
+      sources: [
+        { t: 'Santorini Dave, Greece itinerary and island hopping', u: 'https://santorinidave.com/greece-itinerary' },
+        { t: 'Tourlane, Greece itinerary 2 weeks', u: 'https://www.tourlane.com/europe/greece/greece-itinerary-2-weeks/' },
+        { t: 'Bucketlistly, 2 weeks backpacking Greece', u: 'https://www.bucketlistly.blog/posts/greece-backpacking-itinerary' },
+        { t: 'Hostelz, Greek islands backpacking route', u: 'https://www.hostelz.com/solo-travel-itineraries/greece/greek-islands-solo-travel-backpacking-route' },
+      ],
+    },
+  },
+};
+/* </places> */
+
 const HLKIND = { wildlife: 'paw-print', festival: 'party-popper', nature: 'leaf', lights: 'sparkles', bloom: 'flower-2', dive: 'fish' };
 const HL = {
   404: [{ k: 'wildlife', mo: [6,7,8,9], t: 'Great Migration in the Masai Mara' }],
@@ -770,7 +892,7 @@ function buildMap(topo) {
     // No-data features get a fill now and are not keyed below (many share a
     // null id, which would collide in the map and leave all but one unpainted).
     buf += '<path data-iso="' + (has ? rec.iso : '') + '" d="' + d + '" fill="#ddcca6"></path>';
-    if (has && biggest) labelSrc.push({ name: rec.name, x: biggest.x, y: biggest.y, size: biggest.size });
+    if (has && biggest) labelSrc.push({ name: rec.name, iso: rec.iso, x: biggest.x, y: biggest.y, size: biggest.size });
   }
   // Labels live in their own group above the paths.
   let lbuf = '<g id="labels">';
@@ -779,6 +901,7 @@ function buildMap(topo) {
   });
   lbuf += '</g>';
   svg.innerHTML = buf + lbuf;
+  buildCities();
   labelEls = labelSrc;
   svg.querySelectorAll('.clabel').forEach(t => { labelEls[+t.dataset.li].el = t; });
   svg.querySelectorAll('path').forEach(p => {
@@ -802,6 +925,42 @@ function buildMap(topo) {
   }
   fit();
   paint();
+}
+
+// City heat layer. One halo, one dot and one label per city in PLACES, all
+// sized in screen pixels by updateCities() so they read the same at any zoom.
+let cityPts = [];
+function buildCities() {
+  cityPts = [];
+  let hb = '', db = '', sb = '', lb = '';
+  for (const iso of Object.keys(PLACES)) {
+    const rec = byIso.get(+iso);
+    if (!rec) continue;
+    for (const c of PLACES[iso].cities) {
+      const r = c.hub ? Object.assign({}, c, { hi: rec.hi, lo: rec.lo, pr: rec.pr }) : c;
+      const p = proj(c.lng, c.lat);
+      const id = cityPts.length;
+      cityPts.push({ iso: +iso, rec: r, name: c.name, x: p[0], y: p[1] });
+      hb += '<circle class="ch" data-ci="' + id + '" cx="' + p[0].toFixed(2) + '" cy="' + p[1].toFixed(2) + '" r="3"/>';
+      db += '<circle class="cd" data-ci="' + id + '" cx="' + p[0].toFixed(2) + '" cy="' + p[1].toFixed(2) + '" r="1"/>';
+      sb += '<text class="cs" data-ci="' + id + '" x="' + p[0].toFixed(2) + '" y="' + p[1].toFixed(2) + '"></text>';
+      lb += '<text class="cl" data-ci="' + id + '" x="' + p[0].toFixed(2) + '" y="' + p[1].toFixed(2) + '">' + c.name + '</text>';
+    }
+  }
+  if (!cityPts.length) return;
+  svg.insertAdjacentHTML('beforeend', '<g id="cities" style="display:none">' + hb + db + sb + lb + '</g>');
+  svg.querySelectorAll('#cities .ch').forEach(el => { cityPts[+el.dataset.ci].h = el; });
+  svg.querySelectorAll('#cities .cs').forEach(el => { cityPts[+el.dataset.ci].s = el; });
+  svg.querySelectorAll('#cities .cl').forEach(el => { cityPts[+el.dataset.ci].l = el; });
+  svg.querySelectorAll('#cities .cd').forEach(el => {
+    const cp = cityPts[+el.dataset.ci];
+    cp.d = el;
+    el.addEventListener('click', e => { e.stopPropagation(); select(cp.iso, false); });
+    if (canHover) {
+      el.addEventListener('mousemove', e => showCityTip(e, cp));
+      el.addEventListener('mouseleave', hideTip);
+    }
+  });
 }
 
 function mapFailed() {
@@ -841,6 +1000,35 @@ function applyVB() {
   svg.classList.toggle('zoomed', pan);
   svg.style.touchAction = pan ? 'none' : 'pan-y';
   updateLabels();
+  updateCities();
+}
+
+// The city layer appears at about three times zoom, names a little closer in.
+// Sizes are in screen pixels converted to viewBox units, like the labels.
+const CITY_ZOOM = 0.3, CITY_LABEL_ZOOM = 0.16;
+function cityLabelsOn() { return vb.w <= maxW() * CITY_LABEL_ZOOM; }
+function updateCities() {
+  const grp = document.getElementById('cities');
+  if (!grp) return;
+  const on = vb.w <= maxW() * CITY_ZOOM;
+  grp.style.display = on ? '' : 'none';
+  pathByIso.forEach((p, iso) => p.classList.toggle('wash', on && !!PLACES[iso]));
+  if (!on) return;
+  const u = vb.w / (svg.clientWidth || 360);
+  const lab = cityLabelsOn();
+  // Close in: a bigger dot with the score inside and the name beside it.
+  const dr = lab ? 11 : 6;
+  for (const cp of cityPts) {
+    cp.h.setAttribute('r', (18 * u).toFixed(2));
+    cp.d.setAttribute('r', (dr * u).toFixed(2));
+    cp.s.style.display = lab ? '' : 'none';
+    cp.l.style.display = lab ? '' : 'none';
+    if (lab) {
+      cp.s.setAttribute('font-size', (10 * u).toFixed(2));
+      cp.l.setAttribute('font-size', (11 * u).toFixed(2));
+      cp.l.setAttribute('x', (cp.x + (dr + 4) * u).toFixed(2));
+    }
+  }
 }
 let firstFit = true;
 function fit() {
@@ -866,9 +1054,11 @@ function updateLabels() {
   const fU = 12 * vb.w / wpx;
   const pad = fU;
   const x0 = vb.x - pad, x1 = vb.x + vb.w + pad, y0 = vb.y - pad, y1 = vb.y + vb.h + pad;
+  const cityLab = cityLabelsOn();
   for (const L of labelEls) {
     if (!L.el) continue;
-    const show = L.x > x0 && L.x < x1 && L.y > y0 && L.y < y1 && L.size > fU * 1.3;
+    // Once city names show for a country, its own name would sit on top of them.
+    const show = L.x > x0 && L.x < x1 && L.y > y0 && L.y < y1 && L.size > fU * 1.3 && !(cityLab && PLACES[L.iso]);
     if (show) { L.el.setAttribute('font-size', fU.toFixed(2)); L.el.style.display = ''; }
     else L.el.style.display = 'none';
   }
@@ -1017,6 +1207,17 @@ function paint() {
         p.setAttribute('fill', '#262d40');
       }
     });
+    for (const cp of cityPts) {
+      const sc = score(cp.rec, state.month), b = band(sc);
+      cp.h.setAttribute('fill', b.color);
+      cp.d.setAttribute('fill', b.color);
+      cp.s.textContent = sc;
+      cp.s.setAttribute('fill', (b.key === 'ideal' || b.key === 'avoid') ? '#fff' : '#14130f');
+      const dim = state.selIso != null && state.selIso !== cp.iso;
+      cp.d.style.opacity = dim ? '0.4' : '';
+      cp.h.style.opacity = dim ? '0.12' : '';
+      cp.l.style.opacity = dim ? '0.4' : '';
+    }
   }
   if (state.view === 'grid') paintGrid();
 }
@@ -1066,8 +1267,17 @@ function showTip(e, iso) {
   if (!rec) return;
   const s = score(rec, state.month);
   const b = band(s);
-  tip.innerHTML = '<b>' + rec.name + '</b>' + MONTHS_FULL[state.month]
-    + ': <span class="sc" style="color:' + scoreColor(s) + '">' + b.label + ' ' + s + '</span>';
+  placeTip(e, '<b>' + rec.name + '</b>' + MONTHS_FULL[state.month]
+    + ': <span class="sc" style="color:' + scoreColor(s) + '">' + b.label + ' ' + s + '</span>');
+}
+function showCityTip(e, cp) {
+  const s = score(cp.rec, state.month);
+  const b = band(s);
+  placeTip(e, '<b>' + cp.name + '</b>' + byIso.get(cp.iso).name + ', ' + MONTHS_FULL[state.month]
+    + ': <span class="sc" style="color:' + scoreColor(s) + '">' + b.label + ' ' + s + '</span>');
+}
+function placeTip(e, html) {
+  tip.innerHTML = html;
   tip.style.opacity = '1';
   const pad = 14;
   let x = e.clientX + pad, y = e.clientY + pad;
@@ -1082,7 +1292,26 @@ function select(iso, scrollTo) {
   state.selIso = iso;
   paint();
   renderDetail(iso);
-  // The detail is a floating overlay (bottom sheet on small screens): nothing to scroll to.
+  // The detail is a floating overlay (bottom sheet on small screens): nothing
+  // to scroll to. A country with a city layer zooms in so the layer shows.
+  if (scrollTo && PLACES[iso]) zoomToCountry(iso, false);
+}
+
+// Frame a country with room around it. Unless forced, only when it is small
+// on screen, so a click while already close does not jump the view.
+function zoomToCountry(iso, force) {
+  const p = pathByIso.get(iso);
+  if (!p || !mapReady || state.view !== 'map') return;
+  const bb = p.getBBox();
+  if (!force && vb.w < bb.width * 3) return;
+  const w = clamp(Math.max(bb.width * 1.5, bb.height * 1.5 / aspect), WORLD.w / 16, maxW());
+  const h = w * aspect;
+  const cx = bb.x + bb.width / 2, cy = bb.y + bb.height / 2;
+  // The detail panel covers the left on a desktop and the bottom on a phone,
+  // so place the country right of centre, or high up.
+  const phone = window.innerWidth <= 700;
+  const xk = phone ? 0.5 : 0.62, yk = phone ? 0.22 : 0.5;
+  animateTo({ x: cx - w * xk, y: cy - h * yk, w, h }, 320);
 }
 
 const detailEl = document.getElementById('detail');
@@ -1138,6 +1367,20 @@ function renderDetail(iso) {
     guideHtml = '<div class="guideline">Travel guides say best <b style="color:var(--ink)">' + rangeText(g.best) + '</b> '
       + (agree ? '<span class="ok">matches our data</span>' : '<span class="diff">differs from our data</span>') + '</div>';
   }
+  // City breakdown for countries with places, best first for this month.
+  let areaHtml = '';
+  if (PLACES[iso]) {
+    const rows = PLACES[iso].cities.map(c => {
+      const sc = score(c.hub ? rec : c, m);
+      return { n: c.name, a: c.area || '', s: sc, b: band(sc) };
+    }).sort((a, b) => b.s - a.s);
+    areaHtml = '<div class="areas"><div class="hd"><span>By city, ' + MONTHS_FULL[m] + '</span>'
+      + '<button class="zoom" id="zoomCountry">Zoom in</button></div>'
+      + rows.map(r => '<div class="r"><span class="pill" style="background:' + r.b.color
+        + ((r.b.key === 'ideal' || r.b.key === 'avoid') ? ';color:#fff' : '') + '">' + r.s + '</span>'
+        + '<span>' + r.n + '</span><span class="a">' + r.a + '</span></div>').join('')
+      + '</div>';
+  }
   const hls = HL[iso] || [];
   let hlHtml = '';
   if (hls.length) {
@@ -1163,6 +1406,7 @@ function renderDetail(iso) {
     + '<span>Low <b>' + rec.lo[m] + '&deg;</b></span>'
     + '<span>Rain <b>' + rec.pr[m] + ' mm</b></span></div>'
     + (GUIDES[rec.iso] ? '<a class="guidebtn" href="country/' + GUIDES[rec.iso] + '/?m=' + m + '">Read the full ' + rec.name + ' guide <i data-lucide="arrow-right" class="ic"></i></a>' : '')
+    + areaHtml
     + '<div class="tags">' + tagChips + '</div>'
     + '<div class="watch">'
     + '<div class="r"><span class="k"><span class="dot" style="background:' + SEASONSTYLE.high[0] + '"></span>High season</span><span class="v">' + (highR || 'none') + '</span></div>'
@@ -1178,6 +1422,8 @@ function renderDetail(iso) {
   detailEl.querySelectorAll('.swatch').forEach(sw => {
     sw.addEventListener('click', () => setMonth(+sw.dataset.m));
   });
+  const zb = document.getElementById('zoomCountry');
+  if (zb) zb.addEventListener('click', () => { if (state.view !== 'map') setView('map'); zoomToCountry(iso, true); });
   if (window.lucide) lucide.createIcons({ root: detailEl });
 }
 

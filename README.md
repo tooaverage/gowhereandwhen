@@ -59,10 +59,32 @@ stays a true single file.
 
 This is a planning guide based on long-run averages, not a forecast.
 
+## Cities and routes inside a country
+
+A hub city cannot stand for a big country, so `places.js` gives some countries
+(Germany and Greece so far) a set of cities with their own climate normals and
+a typical backpacker route, as travel guides describe it.
+
+- On the world map, zoom in on such a country (or tap it, which zooms for you)
+  and the cities appear as a heat layer: one dot per city in the month's band
+  colour, with the score inside once you are close. The country itself fades
+  to a wash so the dots carry the colour. The detail panel lists the cities
+  best-first for the chosen month.
+- The country page gets a city map with a month picker, a city by month grid,
+  and a route map with numbered stops and the leg between each stop.
+- Country outlines for those page maps come from `geo/<iso>.json`, written by
+  `gen-geo.js` from the world-atlas npm package (Natural Earth 50m) so the
+  build never fetches anything. `gen-maps.js` draws the SVGs for `gen.js`,
+  and `gen.js` also copies `places.js` into `index.html` between the
+  `<places>` markers so the two never drift.
+
+To add a country: give it an entry in `places.js`, run `node gen-geo.js
+<path to countries-50m.json>`, then `node gen.js`.
+
 ## Backlog
 
 - Embed the map geometry so there is no runtime fetch at all
-- More countries, and sub-country regions for large or varied countries
+- More countries, and city sets and routes for more of the big ones
 - Pull live climate normals from an API instead of hand-curated data
 - Real crowd and price data for true high vs low season, not a weather proxy
 - More hazards: wildfire smoke, air quality, sea temperature for beach trips

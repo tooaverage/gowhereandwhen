@@ -88,4 +88,5 @@
 ## Notes
 
 - Ratings use climate normals for one representative hub city per country, so coastal versus inland and north versus south will vary.
+- Some guides (Germany, Greece) also rate several cities separately and describe a typical backpacker route.
 - This is a planning guide based on long-run averages, not a forecast.

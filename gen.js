@@ -12,6 +12,7 @@ const path = require('path');
 const { DATA } = require('./data.js');
 const { score, band, monthTags, seasonOf, rangeText, CFG } = require('./engine.js');
 const { CONTENT } = require('./content.js');
+const { citySection, routeSection, placesInline, PLACES } = require('./gen-maps.js');
 
 const BUILD_DATE = new Date().toISOString().slice(0, 10);
 const MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
@@ -167,6 +168,7 @@ function page(c) {
     + '<span class="stub__v">' + (rangeText(months) || 'No clear window') + '</span><p>' + sub + '</p></div>';
   const panel = (b, i) => '<div class="panel"><span class="panel__no">' + String(i + 1).padStart(2, '0') + '</span>'
     + '<h3>' + b.h + '</h3><p>' + b.p + '</p></div>';
+  const hasPlaces = !!PLACES[c.iso];
 
   return `<!doctype html>
 <html lang="en">
@@ -205,6 +207,7 @@ function page(c) {
   <span class="spacer"></span>
   <a class="link" href="../../index.html">World map</a>
   <a class="link" href="#months">Month by month</a>
+  ${hasPlaces ? '<a class="link" href="#cities">By city</a>\n  <a class="link" href="#route">Route</a>' : ''}
   <a class="link" href="#stay">Where to stay</a>
 </div></header>
 <main>
@@ -258,13 +261,12 @@ function page(c) {
     </table></div>
   </div></section>
 
-  <div class="wrap"><div class="orn"><i data-lucide="compass" class="ic"></i></div></div>
-
+  <div class="wrap"><div class="orn"><i data-lucide="compass" class="ic"></i></div></div>${citySection(c, rec, D)}
   <section class="section--tight"><div class="wrap">
     <p class="eyebrow eyebrow--sun"><i data-lucide="map" class="ic"></i> By region</p>
     <h2 style="margin-top:14px">${poly('Where you go changes when you go')}</h2>
     <div class="panels" style="margin-top:22px">${c.regions.map(panel).join('')}</div>
-  </div></section>
+  </div></section>${routeSection(c)}
 
   <section class="section band"><div class="wrap prose">
     <p class="eyebrow eyebrow--coral"><i data-lucide="star" class="ic"></i> Go for</p>
@@ -434,8 +436,19 @@ const llms = '# When To Go\n\n'
   + CONTENT.map(c => '- [Best time to visit ' + c.name.replace(/^the /, '') + '](https://gowhereandwhen.com/country/' + c.slug + '/): ' + c.desc).join('\n') + '\n\n'
   + '## Notes\n\n'
   + '- Ratings use climate normals for one representative hub city per country, so coastal versus inland and north versus south will vary.\n'
+  + '- Some guides (' + Object.keys(PLACES).map(i => byIso.get(+i).name).join(', ') + ') also rate several cities separately and describe a typical backpacker route.\n'
   + '- This is a planning guide based on long-run averages, not a forecast.\n';
 fs.writeFileSync('llms.txt', llms);
+
+// Keep the PLACES copy inlined in index.html in step with places.js.
+{
+  const idx = fs.readFileSync('index.html', 'utf8');
+  const a = idx.indexOf('/* <places> */'), b = idx.indexOf('/* </places> */');
+  if (a !== -1 && b !== -1) {
+    const next = idx.slice(0, a) + '/* <places> */\n' + placesInline() + '\n' + idx.slice(b);
+    if (next !== idx) { fs.writeFileSync('index.html', next); console.log('Updated PLACES in index.html'); }
+  } else console.log('WARN: index.html has no <places> markers, PLACES not synced');
+}
 
 // GUIDES map for the app
 const guides = '{ ' + CONTENT.map(c => c.iso + ": '" + c.slug + "'").join(', ') + ' }';

@@ -13,6 +13,7 @@ When To Go (gowhereandwhen.com): an interactive world map plus per-country guide
 - Country pages are generated. `gen.js` reads `content.js` (editorial), `data.js` (climate normals) and `engine.js` (scoring) and writes `country/<slug>/index.html`, `country/index.html`, `sitemap.xml` and `llms.txt`. Run `node gen.js` after any change to those inputs, then commit the regenerated output.
 - The scoring engine stays pure. No globals, no DOM access in the functions exported from `engine.js`. All thresholds live in `CFG`.
 - `data.js` must stay byte-identical to the `DATA` array inlined in `index.html`.
+- `places.js` holds per-country cities (own climate normals) and a backpacker route. `gen.js` copies it into `index.html` between the `<places>` markers, so edit `places.js`, never the copy. New country in `places.js`: run `node gen-geo.js <countries-50m.json>` (from the world-atlas npm package) to write `geo/<iso>.json`, then `node gen.js`. `gen-maps.js` draws the country-page SVG maps.
 - Design system is `styles/wtg.css`. Tasteful mid-century travel-brochure look: warm cream paper, one deep teal plus a muted terracotta accent, condensed display caps, a small script kicker. No gradients, no drop shadows, no rainbow headings, no cartoon badges. Restrained, editorial, not busy.
 - User-facing strings are direct and short. No design jargon, no LLM flavour. If you can drop a word without losing meaning, drop it.
 - Facts (months, seasons, hazards, events) are checked against current best-time-to-visit guides before publishing.
@@ -28,6 +29,6 @@ Push to `main`. The Pages workflow (`.github/workflows/deploy-pages.yml`) upload
 ## Backlog
 
 - Auto-generated hero illustrations for all countries
-- More countries and cities
+- More countries and cities, and city sets plus routes for more big countries (only Germany and Greece have them)
 - Stay22 and Travelpayouts affiliate IDs (currently public placeholders)
 - Personal calibration, activity picker, runs-cold / runs-warm toggle

@@ -284,3 +284,57 @@ svg.lucide { width: 1.15em; height: 1.15em; }
 .row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
 .pop { color: var(--brand); }
 .rule { height: 1.5px; background: var(--line); border: 0; margin: 0; }
+
+/* ---- Country maps: the city heat map and the backpacker route map ----
+   Inline SVG drawn by gen.js. Sea is the same tint as the world map, land
+   is deeper cream, dots and stops carry the data. */
+:root { --sea: #cfe1db; }
+.cmap { display: block; width: 100%; height: auto; background: var(--sea); border: 2px solid var(--ink); border-radius: var(--r); }
+.cmap .land { fill: var(--paper-2); stroke: var(--ink); stroke-width: 1.2; stroke-linejoin: round; }
+.cmap .halo { opacity: .36; }
+.cmap .dot { stroke: var(--ink); stroke-width: 2; }
+.cmap .sc { font: 800 12px var(--sans); fill: #14130f; text-anchor: middle; dominant-baseline: central; pointer-events: none; }
+.cmap .lab { font: 800 13px var(--sans); fill: var(--ink); paint-order: stroke; stroke: var(--card); stroke-width: 3.5px; stroke-linejoin: round; }
+.cmap .leg { fill: none; stroke: var(--rust); stroke-width: 3; stroke-dasharray: 8 6; stroke-linecap: round; stroke-linejoin: round; }
+.cmap .stop { fill: var(--card); stroke: var(--ink); stroke-width: 2; }
+.cmap .no { font: 400 14px var(--display); fill: var(--ink); text-anchor: middle; dominant-baseline: central; pointer-events: none; }
+.cmapgrid { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: var(--gap); align-items: start; }
+@media (max-width: 760px) { .cmapgrid { grid-template-columns: 1fr; } }
+
+/* Month picker: the world map's month chips, on paper. */
+.mpick { display: flex; flex-wrap: wrap; gap: 8px; }
+.mpick button { padding: 9px 14px; border-radius: var(--r-pill); border: 1.5px solid var(--line-2); background: var(--card); color: var(--ink); font: 800 14px var(--sans); cursor: pointer; }
+.mpick button:hover { border-color: var(--ink); }
+.mpick button.on { background: var(--brand); border-color: var(--ink); color: var(--brand-ink); }
+
+/* Side panel next to the city map: the ranked list for the chosen month. */
+.cm-side { padding: clamp(16px, 3vw, 24px); }
+.cm-list { display: flex; flex-direction: column; gap: 8px; margin-top: 14px; }
+.cm-list .r { display: flex; align-items: center; gap: 10px; font-weight: 700; }
+.cm-list .badge { min-width: 46px; justify-content: center; }
+
+/* City by month grid: a small heatmap table, first column sticky. */
+.hgrid table { width: 100%; border-collapse: separate; border-spacing: 3px; font-size: 13px; }
+.hgrid th { font: 800 13px var(--sans); color: var(--ink-2); padding: 6px 2px; text-align: center; cursor: pointer; border-radius: var(--r-sm); }
+.hgrid th.on { background: var(--ink); color: var(--card); }
+.hgrid th.c, .hgrid td.c { text-align: left; white-space: nowrap; padding-left: 8px; position: sticky; left: 0; background: var(--card); cursor: default; }
+.hgrid td.c { font-weight: 800; }
+.hgrid td.c small { display: block; font-weight: 600; color: var(--ink-2); font-size: 12px; line-height: 1.2; }
+.hgrid td { min-width: 36px; height: 34px; text-align: center; font-weight: 800; color: #14130f; border-radius: var(--r-sm); cursor: pointer; }
+.hgrid td.k-ideal { background: var(--s-ideal); color: #fff; }
+.hgrid td.k-great { background: var(--s-great); }
+.hgrid td.k-good { background: var(--s-good); }
+.hgrid td.k-fair { background: var(--s-fair); }
+.hgrid td.k-avoid { background: var(--s-avoid); color: #fff; }
+.hgrid td.on:not(.c) { outline: 2.5px solid var(--ink); outline-offset: -2px; }
+
+/* Route stops: a numbered list with the leg between stops as a small line. */
+.route { list-style: none; margin: 0; padding: 0; }
+.route li { position: relative; }
+.route .via { display: block; font-size: 13px; font-weight: 700; color: var(--rust); padding: 8px 0 8px 52px; }
+.route li.pass .via { color: var(--ink-2); }
+.route .stop { display: flex; gap: 14px; align-items: flex-start; background: var(--card); border: 2px solid var(--ink); border-radius: var(--r); padding: 14px 16px; }
+.route .no { flex: none; width: 34px; height: 34px; border-radius: 50%; border: 2px solid var(--ink); background: var(--card); display: grid; place-items: center; font-family: var(--display); font-size: 17px; }
+.route h3 { font-size: 19px; }
+.route h3 small { font-family: var(--sans); font-weight: 700; text-transform: none; letter-spacing: 0; font-size: 13px; color: var(--rust); margin-left: 6px; }
+.route p { margin: 4px 0 0; color: var(--ink-2); font-size: 15px; }

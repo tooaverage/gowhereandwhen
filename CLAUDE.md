@@ -29,6 +29,6 @@ Push to `main`. The Pages workflow (`.github/workflows/deploy-pages.yml`) upload
 ## Backlog
 
 - Auto-generated hero illustrations for all countries
-- More countries and cities, and city sets plus routes for more big countries (only Germany and Greece have them)
+- More countries and cities, and city sets plus routes for more big countries (Germany, Greece and Japan have them)
 - Stay22 and Travelpayouts affiliate IDs (currently public placeholders)
 - Personal calibration, activity picker, runs-cold / runs-warm toggle

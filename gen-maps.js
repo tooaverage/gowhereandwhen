@@ -14,9 +14,31 @@ const MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','
 const MONF = ['January','February','March','April','May','June','July','August','September','October','November','December'];
 const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
 
-function outline(iso) {
+function outline(iso, clip) {
   const p = path.join('geo', iso + '.json');
-  return fs.existsSync(p) ? JSON.parse(fs.readFileSync(p, 'utf8')) : null;
+  if (!fs.existsSync(p)) return null;
+  const geo = JSON.parse(fs.readFileSync(p, 'utf8'));
+  // Optional frame for the page map (e.g. Japan without the Ryukyu islands):
+  // keep only rings whose centre falls inside it.
+  if (clip) {
+    geo.rings = geo.rings.filter(r => {
+      const c = r.reduce((a, q) => [a[0] + q[0] / r.length, a[1] + q[1] / r.length], [0, 0]);
+      return inClip(c[0], c[1], clip);
+    });
+  }
+  return geo;
+}
+function inClip(lon, lat, clip) {
+  if (!clip) return true;
+  return !(lat < (clip.minLat ?? -90) || lat > (clip.maxLat ?? 90) || lon < (clip.minLon ?? -180) || lon > (clip.maxLon ?? 180));
+}
+
+// A marker may be nudged off its true point (off: [dx, dy] in map units) so
+// clustered cities stay readable; a thin leader line keeps it honest.
+function mark(px, py, off) {
+  if (!off) return { x: px, y: py, leader: '' };
+  const x = +(px + off[0]).toFixed(1), y = +(py + off[1]).toFixed(1);
+  return { x, y, leader: '<line class="leader" x1="' + px + '" y1="' + py + '" x2="' + x + '" y2="' + y + '"/><circle class="pin" cx="' + px + '" cy="' + py + '" r="3"/>' };
 }
 
 // Equirectangular projection with longitude scaled by cos(mid latitude), so
@@ -66,22 +88,26 @@ function label(x, y, text, side, cls) {
 /* ---- City heat map, month picker and city by month grid ---- */
 function citySection(c, rec, D) {
   const P = PLACES[c.iso];
-  const geo = P && outline(c.iso);
+  const geo = P && outline(c.iso, P.clip);
   if (!P || !geo) return '';
   const pr = projector(geo, 600);
   const cities = cityRecs(c.iso, rec);
+  const offMap = cities.filter(x => !inClip(x.lng, x.lat, P.clip)).map(x => x.name + (x.area ? ' (' + x.area + ')' : ''));
   const m0 = D.best;
   const keys = cities.map(x => { const ks = [], ss = []; for (let m = 0; m < 12; m++) { const s = score(x, m); ss.push(s); ks.push(band(s).key); } return { ks, ss }; });
 
   let svg = svgOpen(pr, c.name + ' map with cities rated for the chosen month') + landPath(geo, pr);
   cities.forEach((x, i) => {
-    const [px, py] = pr.fn(x.lng, x.lat);
     const k = keys[i].ks[m0];
-    svg += '<g class="city" data-ks="' + keys[i].ks.join(',') + '" data-ss="' + keys[i].ss.join(',') + '">'
-      + '<circle class="halo" cx="' + px + '" cy="' + py + '" r="27" fill="var(--s-' + k + ')"/>'
-      + '<circle class="dot" cx="' + px + '" cy="' + py + '" r="13" fill="var(--s-' + k + ')"/>'
-      + '<text class="sc" x="' + px + '" y="' + py + '"' + ((k === 'ideal' || k === 'avoid') ? ' fill="#fff"' : '') + '>' + keys[i].ss[m0] + '</text>'
-      + label(px, py, x.name, x.lab, 'lab') + '</g>';
+    // Off-frame cities still get a (hidden) group so the month script indexes line up.
+    if (!inClip(x.lng, x.lat, P.clip)) { svg += '<g class="city" data-ks="' + keys[i].ks.join(',') + '" data-ss="' + keys[i].ss.join(',') + '" style="display:none"><circle class="halo"/><circle class="dot"/><text class="sc"></text></g>'; return; }
+    const [px, py] = pr.fn(x.lng, x.lat);
+    const M = mark(px, py, x.off);
+    svg += '<g class="city" data-ks="' + keys[i].ks.join(',') + '" data-ss="' + keys[i].ss.join(',') + '">' + M.leader
+      + '<circle class="halo" cx="' + M.x + '" cy="' + M.y + '" r="27" fill="var(--s-' + k + ')"/>'
+      + '<circle class="dot" cx="' + M.x + '" cy="' + M.y + '" r="13" fill="var(--s-' + k + ')"/>'
+      + '<text class="sc" x="' + M.x + '" y="' + M.y + '"' + ((k === 'ideal' || k === 'avoid') ? ' fill="#fff"' : '') + '>' + keys[i].ss[m0] + '</text>'
+      + label(M.x, M.y, x.name, x.lab, 'lab') + '</g>';
   });
   svg += '</svg>';
 
@@ -97,7 +123,7 @@ function citySection(c, rec, D) {
     <p class="lead" style="margin:12px 0 20px">One hub city does not cover a country this size. Pick a month to rate ${cities.length} cities and areas on the same 0 to 100 scale.</p>
     <div class="mpick" id="mpick" role="tablist" aria-label="Choose a month">${chips}</div>
     <div class="cmapgrid" style="margin-top:18px">
-      <div>${svg}</div>
+      <div>${svg}${offMap.length ? '<p class="disc" style="margin:10px 0 0">Off the frame: ' + offMap.join(', ') + '. Rated in the grid below.</p>' : ''}</div>
       <div class="card cm-side">
         <div class="cardhd" id="cm-title">${MONF[m0]}</div>
         <p id="cm-note" style="margin:10px 0 0; color:var(--ink-2)"></p>
@@ -140,7 +166,7 @@ function citySection(c, rec, D) {
 /* ---- Backpacker route map and stop list ---- */
 function routeSection(c) {
   const P = PLACES[c.iso];
-  const geo = P && P.route && outline(c.iso);
+  const geo = P && P.route && outline(c.iso, P.clip);
   if (!geo) return '';
   const R = P.route;
   const pr = projector(geo, 600);
@@ -151,10 +177,10 @@ function routeSection(c) {
   R.stops.forEach((s, i) => {
     if (s.pass) return;
     n++;
-    const [x, y] = pts[i];
-    svg += '<g class="stopmk"><circle class="stop" cx="' + x + '" cy="' + y + '" r="12"/>'
-      + '<text class="no" x="' + x + '" y="' + y + '">' + n + '</text>'
-      + label(x, y, s.name, s.lab, 'lab') + '</g>';
+    const M = mark(pts[i][0], pts[i][1], s.off);
+    svg += '<g class="stopmk">' + M.leader + '<circle class="stop" cx="' + M.x + '" cy="' + M.y + '" r="12"/>'
+      + '<text class="no" x="' + M.x + '" y="' + M.y + '">' + n + '</text>'
+      + label(M.x, M.y, s.name, s.lab, 'lab') + '</g>';
   });
   svg += '</svg>';
 

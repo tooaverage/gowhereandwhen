@@ -338,3 +338,5 @@ svg.lucide { width: 1.15em; height: 1.15em; }
 .route h3 { font-size: 19px; }
 .route h3 small { font-family: var(--sans); font-weight: 700; text-transform: none; letter-spacing: 0; font-size: 13px; color: var(--rust); margin-left: 6px; }
 .route p { margin: 4px 0 0; color: var(--ink-2); font-size: 15px; }
+.cmap .leader { stroke: var(--ink); stroke-width: 1.5; }
+.cmap .pin { fill: var(--ink); }

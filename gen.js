@@ -241,7 +241,7 @@ function page(c) {
 
   <section class="section band"><div class="wrap prose">
     <p class="eyebrow eyebrow--coral"><i data-lucide="cloud-sun" class="ic"></i> In short</p>
-    <h2 style="margin-top:14px">${poly(c.name + ' in a nutshell')}</h2>
+    <h2 style="margin-top:14px">The year at a glance</h2>
     ${c.intro.map(p => '<p>' + p + '</p>').join('\n    ')}
     <div class="grid grid--4" style="margin-top:24px">
       <div class="card stat"><div class="n">${MON[D.best]}</div><div class="k">Best month</div></div>
@@ -254,7 +254,7 @@ function page(c) {
   <section class="section" id="months"><div class="wrap">
     <p class="eyebrow"><i data-lucide="calendar-days" class="ic"></i> Month by month</p>
     <h2 style="margin-top:14px">${poly(c.name + ' month by month')}</h2>
-    <p class="lead" style="margin:12px 0 26px">Average highs and lows, monthly rainfall and the weather rating for ${rec.city}.</p>
+    <p class="lead" style="margin:12px 0 26px">Highs, lows, rainfall and the rating, for ${rec.city}.</p>
     <div class="table-wrap"><table class="table">
       <thead><tr><th>Month</th><th>High</th><th>Low</th><th>Rain</th><th>Rating</th><th>What it is like</th></tr></thead>
       <tbody>${tableRows(rec, D, c)}</tbody>
@@ -311,7 +311,7 @@ function page(c) {
 
   <section class="section--tight"><div class="wrap">
     <p class="eyebrow eyebrow--coral"><i data-lucide="message-circle-question" class="ic"></i> Questions</p>
-    <h2 style="margin-top:14px">${poly(c.name + ' travel FAQ')}</h2>
+    <h2 style="margin-top:14px">Good to know</h2>
     <div class="faq" style="margin-top:22px">
       ${c.faq.map((q, i) => '<details' + (i === 0 ? ' open' : '') + '><summary>' + q.q + ' <i data-lucide="plus" class="ic"></i></summary><div class="a">' + q.a + '</div></details>').join('\n      ')}
     </div>
@@ -321,7 +321,7 @@ function page(c) {
 
   <section class="section"><div class="wrap center">
     <h2>${poly('Where else, and when')}</h2>
-    <p class="lead" style="margin:12px auto 24px">Compare more than 190 countries on the interactive map, or jump to another favourite.</p>
+    <p class="lead" style="margin:12px auto 24px">Every country on one map, or jump straight to another guide.</p>
     <div class="row" style="justify-content:center">${exploreChips(c.slug)}</div>
   </div></section>
 </main>

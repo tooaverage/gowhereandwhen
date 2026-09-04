@@ -128,7 +128,9 @@
     .brand h1 { font-size: 16px; }
     .brand .kicker { font-size: 12px; }
     .guides { display: none; }
-    .hint { display: none; }
+    .hint { display: none !important; }
+    .legend { font-size: 12px; gap: 8px; padding: 6px 12px; }
+    .legend .sw { width: 13px; height: 13px; }
   }
 
   .loading, .err { position: absolute; inset: 0; display: grid; place-items: center; text-align: center; color: var(--dim); font-size: 14px; padding: 0 16px; }
@@ -519,15 +521,20 @@ const PLACES = {
     route: {
       title: 'The classic Germany loop',
       length: '12 to 14 days, by train',
-      lead: 'Most backpacker guides run Germany as one loop: Berlin south through Dresden and Nuremberg to Munich, then west along the Rhine to Cologne and up to Hamburg. Trains link every stop, and a Deutschland-Ticket or rail pass covers most of it.',
+      onward: 'Train onward',
+      lead: 'Berlin south through Dresden and Nuremberg to Munich, then west to Cologne and up to Hamburg. Every stop is on the rail network, and a Deutschland-Ticket or rail pass covers most of it.',
       stops: [
-        { name: 'Berlin', lat: 52.52, lng: 13.405, nights: 3, p: 'Museums, the Wall, the nightlife. Most loops start here.' },
-        { name: 'Dresden', lat: 51.05, lng: 13.74, nights: 2, via: 'Train, 2 hours', p: 'Baroque old town on the Elbe, with Saxon Switzerland a day trip away.' },
-        { name: 'Nuremberg', lat: 49.45, lng: 11.08, nights: 1, via: 'Train, 3 to 4 hours', p: 'Medieval walls, the castle and the best bratwurst in the country.' },
-        { name: 'Munich', lat: 48.137, lng: 11.575, nights: 3, via: 'Train, 1 hour', p: 'Beer halls and the English Garden. Day trip to Neuschwanstein castle and the Alps.' },
-        { name: 'Heidelberg', lat: 49.40, lng: 8.69, nights: 1, via: 'Train, 3 hours', p: 'A castle above the Neckar and the old university town below it.' },
-        { name: 'Cologne', lat: 50.94, lng: 6.96, nights: 2, via: 'Train, 1 to 2 hours', p: 'The cathedral, the Rhine and the Kölsch bars. Add a Rhine castle stop on the way.' },
-        { name: 'Hamburg', lat: 53.55, lng: 9.99, nights: 2, via: 'Train, 4 hours', p: 'The harbour, Speicherstadt and the Reeperbahn. Two hours back to Berlin to fly out.' },
+        { name: 'Berlin', lat: 52.52, lng: 13.405, tier: 3, nights: 3, p: 'Museums, the Wall, the nightlife. Most loops start here.' },
+        { name: 'Leipzig', lat: 51.34, lng: 12.37, tier: 30, nights: 1, via: 'Train, 1.5 hours', p: 'Bach, the peaceful revolution and a cheap, lively bar scene.' },
+        { name: 'Dresden', lat: 51.05, lng: 13.74, tier: 7, nights: 2, from: 'Berlin', via: 'Train, 2 hours', alt: { Leipzig: 'Train, 1 hour' }, p: 'Baroque old town on the Elbe, with Saxon Switzerland a day trip away.' },
+        { name: 'Nuremberg', lat: 49.45, lng: 11.08, tier: 14, nights: 1, via: 'Train, 3 to 4 hours', p: 'Medieval walls, the castle and the best bratwurst in the country.' },
+        { name: 'Munich', lat: 48.137, lng: 11.575, tier: 7, nights: 3, via: 'Train, 1 hour', alt: { Dresden: 'Train, 4.5 hours', Berlin: 'Train, 4 hours' }, p: 'Beer halls and the English Garden. Day trip to Neuschwanstein castle and the Alps.' },
+        { name: 'Garmisch', lat: 47.49, lng: 11.095, tier: 30, nights: 2, via: 'Train, 1.5 hours', lab: 'l', p: 'The Zugspitze, alpine trails and the Partnach gorge.' },
+        { name: 'Freiburg', lat: 47.995, lng: 7.85, tier: 30, nights: 2, via: 'Train, 4 hours', lab: 'l', p: 'Gateway to the Black Forest, with the sunniest weather in the country.' },
+        { name: 'Heidelberg', lat: 49.40, lng: 8.69, tier: 14, nights: 1, from: 'Munich', via: 'Train, 3 hours', alt: { Freiburg: 'Train, 1.5 hours' }, p: 'A castle above the Neckar and the old university town below it.' },
+        { name: 'Bacharach', lat: 50.06, lng: 7.77, tier: 30, nights: 1, via: 'Train, 1.5 hours', lab: 'l', p: 'Castles and vineyards along the Rhine gorge. Take the river boat one way.' },
+        { name: 'Cologne', lat: 50.94, lng: 6.96, tier: 14, nights: 2, from: 'Heidelberg', via: 'Train, 1 to 2 hours', alt: { Bacharach: 'Train, 1.5 hours' }, p: 'The cathedral, the Rhine and the Kölsch bars. Add a Rhine castle stop on the way.' },
+        { name: 'Hamburg', lat: 53.55, lng: 9.99, tier: 14, nights: 2, via: 'Train, 4 hours', p: 'The harbour, Speicherstadt and the Reeperbahn. Two hours back to Berlin to fly out.' },
       ],
       sources: [
         { t: 'Hostelz, Germany 3-week backpacker itinerary', u: 'https://www.hostelz.com/solo-travel-itineraries/germany/germany-3-weeks-complete-backpacker-itinerary' },
@@ -568,15 +575,19 @@ const PLACES = {
     route: {
       title: 'Athens, Meteora and down the Cyclades to Crete',
       length: '14 days, by train and ferry',
-      lead: 'The usual backpacker line: a few days in Athens, a detour north to the monasteries at Meteora, then ferries south through the Cyclades to Santorini and on to Crete. Guides put the sweet spot for this route in late May, June and September, when the ferries are running, the sea is warm and the crowds are thinner.',
+      onward: 'Ferry onward',
+      lead: 'A few days in Athens, a train north to the monasteries at Meteora, then ferries south through the Cyclades to Santorini and on to Crete. Late May, June and September are the sweet spot: ferries running, sea warm, crowds thin.',
       stops: [
-        { name: 'Athens', lat: 37.9838, lng: 23.7275, nights: 3, p: 'The Acropolis, Plaka and Psyrri. Base for the train north and the ferries south.' },
-        { name: 'Meteora', lat: 39.71, lng: 21.63, nights: 1, via: 'Train to Kalabaka, 4 to 5 hours', p: 'Monasteries on rock pillars. One full day covers the main ones; cover shoulders and knees.' },
-        { name: 'Athens', lat: 37.9838, lng: 23.7275, pass: true, via: 'Train back, then the ferry from Piraeus' },
-        { name: 'Paros', lat: 37.085, lng: 25.15, nights: 2, lab: 'l', via: 'Ferry from Piraeus, 3 to 4 hours', p: 'Naoussa harbour, Parikia and the beaches in between. A sociable hub island.' },
-        { name: 'Naxos', lat: 37.10, lng: 25.38, nights: 3, via: 'Ferry, 30 to 60 minutes', p: 'The biggest Cycladic island: long beaches, hill villages, and the best value of the group.' },
-        { name: 'Santorini', lat: 36.42, lng: 25.43, nights: 2, via: 'Ferry, 1.5 to 2 hours', p: 'The caldera, Oia at sunset and the Fira to Oia walk. Two nights is plenty.' },
-        { name: 'Heraklion, Crete', lat: 35.34, lng: 25.13, nights: 3, via: 'Ferry, 2 to 3 hours', p: 'Knossos, the old harbour, then Chania or the Samaria gorge. Fly home from Heraklion.' },
+        { name: 'Athens', lat: 37.9838, lng: 23.7275, tier: 3, nights: 3, p: 'The Acropolis, Plaka and Psyrri. Base for the train north and the ferries south.' },
+        { name: 'Nafplio', lat: 37.57, lng: 22.80, tier: 30, nights: 2, via: 'Bus, 2 hours', lab: 'l', p: 'A Venetian harbour town, with Epidaurus and Mycenae close by.' },
+        { name: 'Meteora', lat: 39.71, lng: 21.63, tier: 14, nights: 1, from: 'Athens', via: 'Train to Kalabaka, 4 to 5 hours', alt: { Nafplio: 'Bus via Athens, 6 hours' }, p: 'Monasteries on rock pillars. One full day covers the main ones; cover shoulders and knees.' },
+        { name: 'Athens', lat: 37.9838, lng: 23.7275, tier: 14, pass: true, via: 'Train back, then the ferry from Piraeus' },
+        { name: 'Paros', lat: 37.085, lng: 25.15, tier: 14, nights: 2, lab: 'l', via: 'Ferry from Piraeus, 3 to 4 hours', p: 'Naoussa harbour, Parikia and the beaches in between. A sociable hub island.' },
+        { name: 'Naxos', lat: 37.10, lng: 25.38, tier: 7, nights: 3, via: 'Ferry, 30 to 60 minutes', alt: { Athens: 'Ferry from Piraeus, 4 to 6 hours' }, p: 'The biggest Cycladic island: long beaches, hill villages, and the best value of the group.' },
+        { name: 'Milos', lat: 36.72, lng: 24.42, tier: 30, nights: 2, via: 'Ferry, 2 to 3 hours', lab: 'l', p: 'Volcanic coves and the moonscape at Sarakiniko. Rent a scooter.' },
+        { name: 'Santorini', lat: 36.42, lng: 25.43, tier: 7, nights: 2, from: 'Naxos', via: 'Ferry, 1.5 to 2 hours', alt: { Milos: 'Ferry, 2 hours' }, p: 'The caldera, Oia at sunset and the Fira to Oia walk. Two nights is plenty.' },
+        { name: 'Heraklion, Crete', lat: 35.34, lng: 25.13, tier: 14, nights: 3, via: 'Ferry, 2 to 3 hours', p: 'Knossos, the old harbour, then Chania or the Samaria gorge. Fly home from Heraklion.' },
+        { name: 'Chania', lat: 35.51, lng: 24.02, tier: 30, nights: 3, via: 'Bus, 2.5 hours', lab: 'l', p: 'The prettiest harbour in Crete, and the base for the Samaria gorge and Balos.' },
       ],
       sources: [
         { t: 'Santorini Dave, Greece itinerary and island hopping', u: 'https://santorinidave.com/greece-itinerary' },
@@ -625,20 +636,83 @@ const PLACES = {
     route: {
       title: 'The Golden Route, Tokyo to Hiroshima',
       length: '14 days, by shinkansen',
-      lead: 'Nearly every first-timer guide runs the same line: Tokyo, a night in Hakone under Fuji, then the shinkansen west to Kyoto, Nara, Osaka and Hiroshima with Miyajima. Guides agree three days each in Tokyo and Kyoto beat adding more cities. A 14-day rail pass or point-to-point tickets both work.',
+      onward: 'Shinkansen onward',
+      lead: 'Tokyo, a night in Hakone under Fuji, then the shinkansen west to Kyoto, Nara, Osaka and Hiroshima with Miyajima. Three days each in Tokyo and Kyoto beat adding more cities. A 14-day rail pass or point-to-point tickets both work.',
       stops: [
-        { name: 'Tokyo', lat: 35.68, lng: 139.69, nights: 4, p: 'Shibuya, Shinjuku, Asakusa and Akihabara. Day trip to Kamakura or Nikko if you have a spare day.' },
-        { name: 'Hakone', lat: 35.23, lng: 139.10, nights: 1, via: 'Train, 1.5 hours', off: [16, 34], p: 'Hot springs, the ropeway and Mount Fuji across Lake Ashi on a clear day.' },
-        { name: 'Kyoto', lat: 35.01, lng: 135.77, nights: 3, via: 'Shinkansen from Odawara, 2 hours', off: [-16, -34], lab: 'l', p: 'Fushimi Inari at dawn, Arashiyama, Gion and more temples than you can fit in.' },
-        { name: 'Nara', lat: 34.685, lng: 135.83, nights: 1, via: 'Train, 45 minutes', off: [38, 30], p: 'The great Buddha at Todai-ji and the deer park. Many do it as a day trip from Kyoto.' },
-        { name: 'Osaka', lat: 34.69, lng: 135.50, nights: 2, via: 'Train, 45 minutes', off: [-18, 34], lab: 'l', p: 'Dotonbori street food, the castle and the nightlife. Day trip to Himeji castle.' },
-        { name: 'Hiroshima', lat: 34.39, lng: 132.46, nights: 2, via: 'Shinkansen, 1.5 hours', lab: 'l', p: 'The Peace Memorial and Miyajima island with its floating torii. Fly out of Osaka or shinkansen back to Tokyo in under 4.5 hours.' },
+        { name: 'Tokyo', lat: 35.68, lng: 139.69, tier: 3, nights: 4, p: 'Shibuya, Shinjuku, Asakusa and Akihabara. Day trip to Kamakura or Nikko if you have a spare day.' },
+        { name: 'Hakone', lat: 35.23, lng: 139.10, tier: 14, nights: 1, via: 'Train, 1.5 hours', off: [16, 34], p: 'Hot springs, the ropeway and Mount Fuji across Lake Ashi on a clear day.' },
+        { name: 'Takayama', lat: 36.14, lng: 137.25, tier: 30, nights: 2, via: 'Train via Nagoya, 4 hours', off: [26, -30], p: 'Old merchant streets, morning markets and the thatched villages of Shirakawa-go.' },
+        { name: 'Kanazawa', lat: 36.56, lng: 136.66, tier: 30, nights: 2, via: 'Bus, 2.5 hours', lab: 'l', p: 'Kenroku-en garden, the geisha district and the best seafood market outside Tokyo.' },
+        { name: 'Kyoto', lat: 35.01, lng: 135.77, tier: 7, nights: 3, from: 'Hakone', via: 'Shinkansen from Odawara, 2 hours', alt: { Tokyo: 'Shinkansen, 2 hours 15', Kanazawa: 'Limited express, 2 hours' }, off: [-16, -34], lab: 'l', p: 'Fushimi Inari at dawn, Arashiyama, Gion and more temples than you can fit in.' },
+        { name: 'Nara', lat: 34.685, lng: 135.83, tier: 14, nights: 1, via: 'Train, 45 minutes', off: [38, 30], p: 'The great Buddha at Todai-ji and the deer park. Many do it as a day trip from Kyoto.' },
+        { name: 'Osaka', lat: 34.69, lng: 135.50, tier: 7, nights: 2, via: 'Train, 45 minutes', alt: { Kyoto: 'Train, 30 minutes' }, off: [-18, 34], lab: 'l', p: 'Dotonbori street food, the castle and the nightlife. Day trip to Himeji castle.' },
+        { name: 'Hiroshima', lat: 34.39, lng: 132.46, tier: 14, nights: 2, via: 'Shinkansen, 1.5 hours', lab: 'l', p: 'The Peace Memorial and Miyajima island with its floating torii. Fly out of Osaka or shinkansen back to Tokyo in under 4.5 hours.' },
+        { name: 'Fukuoka', lat: 33.59, lng: 130.40, tier: 30, nights: 2, via: 'Shinkansen, 1 hour', lab: 'l', p: 'Yatai food stalls, tonkotsu ramen and a day trip to Dazaifu.' },
+        { name: 'Naha, Okinawa', lat: 26.21, lng: 127.68, tier: 30, nights: 4, via: 'Fly, 1.5 hours', p: 'Beaches, Ryukyu castles and the ferry out to the Kerama islands. Fly home from Naha.' },
       ],
       sources: [
         { t: 'Japan National Tourism Organization, Golden Route', u: 'https://www.japan.travel/en/gc/itineraries/long-plan/' },
         { t: 'Bucketlistly, 2 weeks backpacking Japan', u: 'https://www.bucketlistly.blog/posts/japan-backpacking-itinerary' },
         { t: 'Never Ending Footsteps, two weeks in Japan', u: 'https://www.neverendingfootsteps.com/two-week-itinerary-japan/' },
         { t: 'Where Are Those Morgans, 14-day Japan itinerary', u: 'https://wherearethosemorgans.com/japan-itinerary-2-weeks/' },
+      ],
+    },
+  },
+
+  // The Philippines: the west (Manila, Palawan, Iloilo) has a sharp dry season
+  // from December to April; the east coast (Legazpi, Tacloban, Siargao) gets
+  // its heaviest rain in the northern winter instead. Davao sits below the
+  // typhoon belt. Normals from PAGASA, rounded.
+  608: {
+    cities: [
+      { name: 'Manila', lat: 14.60, lng: 120.98, hub: true, area: 'Luzon, west coast', lab: 'l' },
+      { name: 'Baguio', lat: 16.41, lng: 120.60, area: 'Cordillera, 1,500 m', lab: 'l',
+        hi: [23,24,25,26,25,24,23,23,23,24,24,23], lo: [13,13,14,15,16,17,17,17,17,16,15,14],
+        pr: [20,20,50,100,330,420,850,1100,650,350,110,40], storm: { type: 'Typhoon', mo: [6,7,8,9,10] } },
+      { name: 'Legazpi', lat: 13.14, lng: 123.74, area: 'Bicol, east coast',
+        hi: [28,29,30,32,33,32,31,31,31,30,29,28], lo: [23,23,23,24,25,25,25,25,25,24,24,24],
+        pr: [330,250,200,130,150,200,240,210,270,330,420,470], storm: { type: 'Typhoon', mo: [8,9,10,11] } },
+      { name: 'Puerto Princesa', lat: 9.74, lng: 118.74, area: 'Palawan', lab: 'l',
+        hi: [30,31,32,33,33,32,31,31,31,31,31,30], lo: [23,23,23,24,25,25,24,24,24,24,24,23],
+        pr: [40,25,35,45,140,200,210,210,220,220,170,90], storm: { type: 'Typhoon', mo: [9,10] } },
+      { name: 'Iloilo', lat: 10.72, lng: 122.56, area: 'Panay, Visayas', lab: 'l',
+        hi: [31,31,32,33,33,32,31,31,31,31,31,31], lo: [23,23,24,25,25,25,25,25,25,24,24,24],
+        pr: [50,35,35,55,150,300,330,330,290,280,180,110], storm: { type: 'Typhoon', mo: [8,9,10] } },
+      { name: 'Cebu', lat: 10.32, lng: 123.90, area: 'Central Visayas',
+        hi: [30,30,31,32,33,32,32,32,32,31,31,30], lo: [24,24,24,25,26,25,25,25,25,25,25,24],
+        pr: [95,65,55,50,110,180,200,160,180,200,160,130], storm: { type: 'Typhoon', mo: [10,11] } },
+      { name: 'Tacloban', lat: 11.24, lng: 125.00, area: 'Leyte, east coast',
+        hi: [29,29,30,31,32,32,31,32,31,31,30,29], lo: [23,23,24,24,25,25,25,25,25,24,24,24],
+        pr: [330,250,190,140,150,190,180,160,200,260,300,340], storm: { type: 'Typhoon', mo: [9,10,11] } },
+      { name: 'Siargao', lat: 9.78, lng: 126.16, area: 'Surf coast', lab: 'l',
+        hi: [28,28,29,30,31,31,31,31,31,30,29,29], lo: [23,23,23,24,25,25,25,25,25,24,24,24],
+        pr: [560,400,300,200,150,150,170,150,180,280,400,600], storm: { type: 'Typhoon', mo: [10,11,0] } },
+      { name: 'Davao', lat: 7.07, lng: 125.61, area: 'Mindanao',
+        hi: [31,32,32,33,33,32,31,32,32,32,32,31], lo: [23,23,23,24,24,24,24,24,24,24,24,23],
+        pr: [100,90,80,110,180,200,170,150,150,170,120,90] },
+    ],
+    route: {
+      title: 'Manila, Palawan and the Visayas',
+      length: '14 days, by plane and ferry',
+      onward: 'Fly or ferry onward',
+      lead: 'A night in Manila, a flight to Palawan for El Nido and Coron, then Cebu for Moalboal, a ferry to Bohol and a flight to Siargao to surf. Go in the dry season, December to April. Siargao surfs best from September to November.',
+      stops: [
+        { name: 'Manila', lat: 14.60, lng: 120.98, tier: 3, nights: 1, lab: 'l', p: 'Intramuros, then a bed near the airport for the early flight out.' },
+        { name: 'Banaue', lat: 16.92, lng: 121.06, tier: 30, nights: 2, via: 'Night bus, 9 hours', p: 'The rice terraces at Batad and Bangaan, walked in a day with a guide.' },
+        { name: 'Manila', lat: 14.60, lng: 120.98, tier: 30, pass: true, via: 'Bus back, then fly to Palawan' },
+        { name: 'El Nido', lat: 11.18, lng: 119.39, tier: 3, nights: 3, from: 'Manila', via: 'Fly to Puerto Princesa and a van, 6 hours', lab: 'l', p: 'Island hopping tours A to D through lagoons and limestone cliffs. Nacpan beach for a day off.' },
+        { name: 'Coron', lat: 12.00, lng: 120.20, tier: 7, nights: 3, via: 'Ferry, 3.5 to 4 hours', p: 'Kayangan lake, the Japanese wrecks for divers, and hot springs at dusk.' },
+        { name: 'Boracay', lat: 11.97, lng: 121.93, tier: 30, nights: 2, via: 'Fly via Manila, or ferry to Caticlan', p: 'White Beach, sunset paraws and the party. Skip it if that is not your thing.' },
+        { name: 'Moalboal', lat: 9.94, lng: 123.40, tier: 7, nights: 2, via: 'Fly to Cebu, then bus, 3 hours', alt: { Boracay: 'Fly to Cebu, then bus, 3 hours' }, lab: 'l', off: [-30, -12], p: 'The sardine run right off the beach, and Kawasan falls canyoneering.' },
+        { name: 'Bohol', lat: 9.58, lng: 123.75, tier: 14, nights: 2, via: 'Ferry from Cebu City, 2 hours', off: [26, 22], p: 'Chocolate Hills, tarsiers and the Loboc river, from a base on Panglao.' },
+        { name: 'Siquijor', lat: 9.20, lng: 123.55, tier: 30, nights: 2, via: 'Ferry, 1.5 hours', lab: 'l', off: [-14, 34], p: 'Waterfalls, cliff jumps and empty roads. The quietest island on the route.' },
+        { name: 'Siargao', lat: 9.85, lng: 126.05, tier: 14, nights: 3, via: 'Fly from Cebu, 1 hour', p: 'Cloud 9 surf, island hopping to Naked and Daku, and Sugba lagoon. Fly home via Cebu or Manila.' },
+      ],
+      sources: [
+        { t: 'Vicky Flip Flop Travels, 2 weeks in the Philippines', u: 'https://vickyflipfloptravels.com/2-weeks-in-philippines/' },
+        { t: 'Life of Brit, 2 weeks in the Philippines', u: 'https://lifeofbrit.com/2-weeks-in-the-philippines-itinerary/' },
+        { t: 'Backpacking Is Life, 2-week Philippines itinerary', u: 'https://backpackingislife.com/2-week-philippines-itinerary/' },
+        { t: 'Guide to the Philippines, best 2-week itineraries', u: 'https://guidetothephilippines.ph/articles/what-to-experience/best-2-week-philippines-itinerary-guide' },
       ],
     },
   },
@@ -917,22 +991,27 @@ function buildMap(topo) {
       for (let ri = 0; ri < polygon.length; ri++) {
         const r = polygon[ri];
         if (r.length < 2) continue;
-        let prevLon = null;
-        for (let i = 0; i < r.length; i++) {
-          const lon = r[i][0], lat = r[i][1];
-          const p = proj(lon, lat);
-          // Break the path where a ring jumps across the 180 deg meridian,
-          // otherwise a flat projection draws a line straight across the map
-          // (the Russia/Antarctica artifact).
-          const brk = prevLon !== null && Math.abs(lon - prevLon) > 180;
-          d += ((i === 0 || brk) ? 'M' : 'L') + p[0].toFixed(1) + ' ' + p[1].toFixed(1);
-          prevLon = lon;
+        // A ring that crosses the 180 deg meridian (Russia, Fiji) would draw a
+        // line straight across the map. Unwrap it so longitudes run past 180
+        // instead of jumping, draw it once, then draw a copy shifted a full
+        // turn so the far side shows at the other edge. Beyond-the-edge parts
+        // fall outside the viewBox and are clipped.
+        const pts = [];
+        let shift = 0, prevLon = null;
+        for (const pt of r) {
+          if (prevLon !== null) { if (pt[0] - prevLon > 180) shift -= 360; else if (pt[0] - prevLon < -180) shift += 360; }
+          prevLon = pt[0];
+          pts.push([pt[0] + shift, pt[1]]);
         }
-        d += 'Z';
+        const over = pts.some(p => p[0] > 180), under = pts.some(p => p[0] < -180);
+        const ringPath = dx => pts.map((p, i) => { const q = proj(p[0] + dx, p[1]); return (i ? 'L' : 'M') + q[0].toFixed(1) + ' ' + q[1].toFixed(1); }).join('') + 'Z';
+        d += ringPath(0);
+        if (over) d += ringPath(-360);
+        if (under) d += ringPath(360);
         // Track the largest outer ring for label placement.
         if (ri === 0) {
           let minx = 1e9, maxx = -1e9, miny = 1e9, maxy = -1e9;
-          for (const pt of r) {
+          for (const pt of pts) {
             const p = proj(pt[0], pt[1]);
             if (p[0] < minx) minx = p[0]; if (p[0] > maxx) maxx = p[0];
             if (p[1] < miny) miny = p[1]; if (p[1] > maxy) maxy = p[1];

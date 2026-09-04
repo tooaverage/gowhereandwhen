@@ -119,11 +119,11 @@ function citySection(c, rec, D) {
   return `
   <section class="section--tight" id="cities"><div class="wrap">
     <p class="eyebrow"><i data-lucide="map-pinned" class="ic"></i> By city</p>
-    <h2 style="margin-top:14px">Where ${esc(c.name)} is good, month by month</h2>
-    <p class="lead" style="margin:12px 0 20px">One hub city does not cover a country this size. Pick a month to rate ${cities.length} cities and areas on the same 0 to 100 scale.</p>
+    <h2 style="margin-top:14px">Which city, which month</h2>
+    <p class="lead" style="margin:12px 0 20px">The strip above rates ${esc(rec.city)}. Pick a month to see how ${cities.length} cities compare.</p>
     <div class="mpick" id="mpick" role="tablist" aria-label="Choose a month">${chips}</div>
     <div class="cmapgrid" style="margin-top:18px">
-      <div>${svg}${offMap.length ? '<p class="disc" style="margin:10px 0 0">Off the frame: ' + offMap.join(', ') + '. Rated in the grid below.</p>' : ''}</div>
+      <div>${svg}${offMap.length ? '<p class="disc" style="margin:10px 0 0">Off the frame: ' + offMap.join(', ') + '. It is in the grid below.</p>' : ''}</div>
       <div class="card cm-side">
         <div class="cardhd" id="cm-title">${MONF[m0]}</div>
         <p id="cm-note" style="margin:10px 0 0; color:var(--ink-2)"></p>
@@ -133,7 +133,7 @@ function citySection(c, rec, D) {
     <div class="table-wrap hgrid" style="margin-top:22px"><table>
       <thead>${head}</thead><tbody>${rows}</tbody>
     </table></div>
-    <p class="disc" style="margin:14px 0 0">Same rating as the strip above: daytime heat, overnight chill, rainfall and storm risk, from long-run normals for each city. Add <code>?m=6</code> to the address to open on July.</p>
+    <p class="disc" style="margin:14px 0 0">Same 0 to 100 rating as the strip above, from each city's own long-run normals.</p>
   </div></section>
   <script>
   (function(){
@@ -163,36 +163,39 @@ function citySection(c, rec, D) {
   </script>`;
 }
 
-/* ---- Backpacker route map and stop list ---- */
+/* ---- Backpacker route map and stop list, with a trip-length filter ----
+   Each stop carries a tier: the shortest trip (in days) that includes it.
+   Nights are written for two weeks and rescaled to the chosen length by the
+   page script, which also redraws the line and renumbers the stops. */
+const LENGTHS = [[3, '3 days'], [7, '1 week'], [14, '2 weeks'], [30, '1 month']];
 function routeSection(c) {
   const P = PLACES[c.iso];
   const geo = P && P.route && outline(c.iso, P.clip);
   if (!geo) return '';
   const R = P.route;
   const pr = projector(geo, 600);
-  const pts = R.stops.map(s => pr.fn(s.lng, s.lat));
-  let svg = svgOpen(pr, c.name + ' backpacker route map') + landPath(geo, pr);
-  svg += '<polyline class="leg" points="' + pts.map(p => p.join(',')).join(' ') + '"/>';
-  let n = 0;
+  let svg = svgOpen(pr, c.name + ' backpacker route map') + landPath(geo, pr) + '<polyline class="leg" id="rt-line" points=""/>';
   R.stops.forEach((s, i) => {
-    if (s.pass) return;
-    n++;
-    const M = mark(pts[i][0], pts[i][1], s.off);
-    svg += '<g class="stopmk">' + M.leader + '<circle class="stop" cx="' + M.x + '" cy="' + M.y + '" r="12"/>'
-      + '<text class="no" x="' + M.x + '" y="' + M.y + '">' + n + '</text>'
-      + label(M.x, M.y, s.name, s.lab, 'lab') + '</g>';
+    const on = inClip(s.lng, s.lat, P.clip);
+    const [x, y] = on ? pr.fn(s.lng, s.lat) : [0, 0];
+    const M = mark(x, y, s.off);
+    svg += '<g class="stopmk" data-i="' + i + '" data-tier="' + (s.tier || 14) + '" data-xy="' + x + ',' + y + '"' + (on ? '' : ' data-off="1"') + (s.pass ? ' data-pass="1"' : '') + '>'
+      + (s.pass || !on ? '' : M.leader + '<circle class="stop" cx="' + M.x + '" cy="' + M.y + '" r="12"/><text class="no" x="' + M.x + '" y="' + M.y + '"></text>' + label(M.x, M.y, s.name, s.lab, 'lab'))
+      + '</g>';
   });
   svg += '</svg>';
 
-  let k = 0;
-  const list = R.stops.map(s => {
-    if (s.pass) return '<li class="pass"><span class="via">' + esc(s.via || 'Back through ' + s.name) + '</span></li>';
-    k++;
-    return '<li>' + (s.via ? '<span class="via">' + esc(s.via) + '</span>' : '')
-      + '<div class="stop"><span class="no">' + k + '</span><div><h3>' + esc(s.name) + ' <small>' + s.nights + (s.nights === 1 ? ' night' : ' nights') + '</small></h3>'
+  const list = R.stops.map((s, i) => {
+    const on = inClip(s.lng, s.lat, P.clip);
+    const prevName = i ? R.stops[i - 1].name : '';
+    const vias = Object.assign({}, s.alt || {}, s.via ? { [s.from || prevName]: s.via } : {});
+    const attrs = ' data-i="' + i + '" data-tier="' + (s.tier || 14) + '" data-n="' + (s.nights || 0) + '" data-name="' + esc(s.name) + '" data-via="' + esc(JSON.stringify(vias)) + '"';
+    if (s.pass) return '<li class="pass"' + attrs + ' data-pass="1"><span class="via">' + esc(s.via || 'Back through ' + s.name) + '</span></li>';
+    return '<li' + attrs + '><span class="via"></span>'
+      + '<div class="stop"><span class="no"></span><div><h3>' + esc(s.name) + ' <small class="nt"></small>' + (on ? '' : ' <small>off the map</small>') + '</h3>'
       + '<p>' + esc(s.p) + '</p></div></div></li>';
   }).join('');
-  const nights = R.stops.reduce((a, s) => a + (s.nights || 0), 0);
+  const chips = LENGTHS.map(([d, t]) => '<button type="button" data-d="' + d + '"' + (d === 14 ? ' class="on"' : '') + '>' + t + '</button>').join('');
   const srcs = (R.sources || []).map(s => '<a href="' + esc(s.u) + '" rel="nofollow noopener" target="_blank">' + esc(s.t) + '</a>').join(', ');
 
   return `
@@ -200,12 +203,53 @@ function routeSection(c) {
     <p class="eyebrow eyebrow--coral"><i data-lucide="route" class="ic"></i> Backpacker route</p>
     <h2 style="margin-top:14px">${esc(R.title)}</h2>
     <p class="lead" style="margin:12px 0 20px">${esc(R.lead)}</p>
+    <div class="row" style="gap:14px; margin-bottom:18px"><span class="eyebrow eyebrow--sun">How long have you got?</span><div class="mpick" id="rpick" role="tablist" aria-label="Trip length">${chips}</div></div>
     <div class="cmapgrid">
-      <div>${svg}<p class="disc" style="margin:10px 0 0">${esc(R.length)}, about ${nights} nights. Lines are the order of stops, not exact roads or ferry tracks.</p></div>
-      <ol class="route">${list}</ol>
+      <div>${svg}<p class="disc" style="margin:10px 0 0"><span id="rt-sum"></span> Lines show the order of stops, not the roads or ferry tracks.</p></div>
+      <ol class="route" id="rt-list" data-onward="${esc(R.onward || 'Onward')}">${list}</ol>
     </div>
-    ${srcs ? '<p class="disc" style="margin:18px 0 0">Route drawn from ' + srcs + '. Check ferry and rail timetables for the month you travel.</p>' : ''}
-  </div></section>`;
+    ${srcs ? '<p class="disc" style="margin:18px 0 0">Route drawn from ' + srcs + '. Check timetables for the month you travel.</p>' : ''}
+  </div></section>
+  <script>
+  (function(){
+    var LEN=${JSON.stringify(Object.fromEntries(LENGTHS))};
+    var pick=document.getElementById('rpick'), list=document.getElementById('rt-list'), line=document.getElementById('rt-line');
+    var marks=[].slice.call(document.querySelectorAll('#route .stopmk')), items=[].slice.call(list.children);
+    function vias0(li){ var v=JSON.parse(li.dataset.via||'{}'); return v[Object.keys(v)[0]]||''; }
+    function set(d){
+      pick.querySelectorAll('button').forEach(function(b){b.classList.toggle('on',+b.dataset.d===d);});
+      var on=items.map(function(li){return +li.dataset.tier<=d;});
+      // Nights: scale the two-week baseline to the trip, at least one night each.
+      var T=d-1, idx=[], B=0;
+      items.forEach(function(li,i){ if(on[i]&&!li.dataset.pass){ idx.push(i); B+=+li.dataset.n; } });
+      var nights={}, sum=0, big=idx[0];
+      idx.forEach(function(i){ var n=Math.max(1,Math.round(+items[i].dataset.n*T/B)); nights[i]=n; sum+=n; if(+items[i].dataset.n>+items[big].dataset.n) big=i; });
+      nights[big]=Math.max(1,nights[big]+T-sum);
+      var k=0, prev=-1, pts=[];
+      items.forEach(function(li,i){
+        li.hidden=!on[i];
+        var mk=marks[i];
+        mk.style.display=on[i]?'':'none';
+        if(!on[i]) return;
+        if(!mk.dataset.off) pts.push(mk.dataset.xy);
+        var via=li.querySelector('.via');
+        if(li.dataset.pass){ via.textContent=vias0(li); prev=i; return; }
+        var vias=JSON.parse(li.dataset.via||'{}'), pn=prev<0?'':items[prev].dataset.name;
+        via.textContent = prev<0 ? '' : (vias[pn] || list.dataset.onward);
+        via.hidden = prev<0;
+        k++;
+        li.querySelector('.no').textContent=k;
+        var t=mk.querySelector('.no'); if(t) t.textContent=k;
+        li.querySelector('.nt').textContent=nights[i]+(nights[i]===1?' night':' nights');
+        prev=i;
+      });
+      line.setAttribute('points',pts.join(' '));
+      document.getElementById('rt-sum').textContent=LEN[d]+': '+k+(k===1?' stop, ':' stops, ')+T+' nights.';
+    }
+    pick.addEventListener('click',function(e){var b=e.target.closest('button');if(b)set(+b.dataset.d);});
+    set(14);
+  })();
+  </script>`;
 }
 
 // The world map app inlines PLACES. gen.js swaps the block between the two

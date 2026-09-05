@@ -24,7 +24,7 @@ function elevation(x,y){let h=.68;for(const [a,b,sx,sy,v] of ranges)h+=Math.exp(
 function desert(x,y){return (y>17&&y<31&&x>-18&&x<55)||(x>117&&x<143&&y< -20&&y> -31)||(x>51&&x<89&&y>34&&y<44);}
 function landColor(lat,h,n,x){if(desert(x,lat))return new THREE.Color(n>.5?'#c7af68':'#d0b972');if(Math.abs(lat)>65||h>6)return new THREE.Color(n>.5?'#eaf1e5':'#d6e5df');if(h>3.5)return new THREE.Color(n>.5?'#a1ad86':'#7f9273');if(Math.abs(lat)<32&&Math.abs(lat)>17&&n>.4)return new THREE.Color('#cbbb73');return new THREE.Color(n>.6?'#a9c975':n>.25?'#93b963':'#80a55a');}
 export async function createWorldMap(container,{data,iso=null,month=10,onSelect=()=>{},onCity=()=>{},compact=false,flat=false}={}){
- if(!flat&&!compact)return (await import('./blender-map.js?v=world6')).createWorldMap(container,arguments[1]);
+ if(!flat&&!compact)return (await import('./blender-map.js?v=world7final')).createWorldMap(container,arguments[1]);
  const renderer=new THREE.WebGLRenderer({antialias:true,alpha:false,powerPreference:'low-power'});renderer.setPixelRatio(Math.min(devicePixelRatio,1.5));renderer.setClearColor('#82d0d8');renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.domElement.className='map-canvas';renderer.domElement.setAttribute('aria-label','Drag to explore the '+(flat?'weather':'low-poly')+' map. Use the buttons to zoom or select a place.');renderer.domElement.tabIndex=0;container.append(renderer.domElement);
  const scene=new THREE.Scene();scene.background=new THREE.Color('#82d0d8');scene.add(new THREE.HemisphereLight('#fffdea','#527a85',2.3));const sun=new THREE.DirectionalLight('#fff5dc',2.1);sun.position.set(-80,140,65);scene.add(sun);
  const camera=new THREE.PerspectiveCamera(36,1,.1,1800);camera.position.set(0,240,270);

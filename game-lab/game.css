@@ -18,3 +18,5 @@
 @media(max-width:699px){.game-nav nav>a:first-child{display:none}.game-nav .brand{font-size:1rem}.game-nav nav{font-size:.8125rem;gap:10px}.game-nav .direction-link{white-space:nowrap}.game-nav .versions-link{padding:5px 7px}}@media(max-width:359px){.game-nav .versions-link{display:none}}
 
 .hero-scene .map-mini-controls{bottom:120px;right:14px}@media(max-width:699px){#mpick{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:4px;overflow:visible}#mpick button{min-width:0;min-height:44px;padding:0 4px;font-size:.8125rem}}@media(max-width:359px){.hero-actions{top:425px}}
+
+.country-panel[hidden]{display:none}.panel-close{position:absolute;right:10px;top:8px;width:32px;height:32px;border:0;background:transparent;color:var(--ink);font:800 26px/1 sans-serif;cursor:pointer}.country-title{padding-right:20px}

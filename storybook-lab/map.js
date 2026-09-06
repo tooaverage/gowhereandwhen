@@ -1,10 +1,10 @@
-import {addCanadaSnow} from './canada-snow.js?v=storybook31';
-import {createReveal} from './reveal.js?v=storybook31';
-import {createTraffic,travelClock} from './traffic.js?v=storybook31';
+import {addCanadaSnow} from './canada-snow.js?v=storybook32';
+import {createReveal} from './reveal.js?v=storybook32';
+import {createTraffic,travelClock} from './traffic.js?v=storybook32';
 import * as THREE from 'three';
 import {GLTFLoader} from '../play/vendor/GLTFLoader.js';
 import {OrbitControls} from '../play/vendor/OrbitControls.js';
-import {addWorldDetails,australiaRegions,regionalScore,heatColor} from './world-details.js?v=storybook31';
+import {addWorldDetails,australiaRegions,regionalScore,heatColor} from './world-details.js?v=storybook32';
 const reduced=()=>matchMedia('(prefers-reduced-motion: reduce)').matches;
 const palette={ideal:'#40a773',great:'#a9dc67',good:'#f4d45d',fair:'#f0a45c',avoid:'#e77c75'};
 export async function createWorldMap(container,{data,iso=null,month=10,onSelect=()=>{},onCity=()=>{},onDismiss=()=>{},compact=false,flat=false,rounded=false}={}){
@@ -14,8 +14,8 @@ export async function createWorldMap(container,{data,iso=null,month=10,onSelect=
  const controls=new OrbitControls(camera,renderer.domElement);controls.enableDamping=false;controls.zoomSpeed=2.5;controls.minDistance=18;controls.maxDistance=1200;controls.minPolarAngle=.01;controls.maxPolarAngle=1.1;controls.enablePan=true;controls.mouseButtons={LEFT:THREE.MOUSE.PAN,MIDDLE:THREE.MOUSE.DOLLY,RIGHT:THREE.MOUSE.ROTATE};controls.touches={ONE:THREE.TOUCH.PAN,TWO:THREE.TOUCH.DOLLY_PAN};controls.target.set(10,0,-12);if(flat){controls.enableRotate=false;controls.minPolarAngle=0;controls.maxPolarAngle=.001;}
  const labelLayer=document.createElement('div');labelLayer.className='map-labels';container.append(labelLayer);
  const labels=[],meshes=[],countryGroups=new Map(),featureMap=new Map();let selected=iso,mo=month,disposed=false,frame=0,tween=null;const byIso=new Map(data.map(r=>[r.iso,r]));
- function label(name,x,y,kind,rec){const el=document.createElement('button');el.className='map-label '+kind;el.innerHTML=kind==='city'?'<span class="dot"></span><span></span>':'';if(kind==='city')el.lastElementChild.textContent=name;else el.textContent=name;el.setAttribute('aria-label',kind==='city'?'Explore '+name:'Select '+name);el.addEventListener('click',()=>{if(kind==='city'){onCity(rec);focusCity(rec);}else{select(rec.iso,true);onSelect(rec.iso);}});labelLayer.append(el);labels.push({el,p:new THREE.Vector3(x,2,-y),kind,rec,priority:name==='Vancouver'?3:['Toronto','San Francisco','Tokyo','Manila','Kyoto','Sapporo','Naha','Cebu','Siargao'].includes(name)});}
- const response=await fetch(new URL('./assets/storybook-v1.glb.gz?v=storybook31',import.meta.url));if(!response.ok)throw new Error('World model unavailable');const bytes=await new Response(response.body.pipeThrough(new DecompressionStream('gzip'))).arrayBuffer();const asset=await new GLTFLoader().parseAsync(bytes,'');
+ function label(name,x,y,kind,rec){const el=document.createElement('button');el.className='map-label '+kind;el.innerHTML=kind==='city'?'<span class="dot"></span><span></span>':'';if(kind==='city')el.lastElementChild.textContent=name;else el.textContent=name;el.setAttribute('aria-label',kind==='city'?'Explore '+name:'Select '+name);el.addEventListener('click',()=>{if(kind==='city'){onCity(rec);focusCity(rec);}else{select(rec.iso,true);onSelect(rec.iso);}});labelLayer.append(el);labels.push({el,p:new THREE.Vector3(x,2,-y),kind,rec,priority:['Vancouver','San Francisco'].includes(name)?3:['Toronto','San Francisco','Tokyo','Manila','Kyoto','Sapporo','Naha','Cebu','Siargao'].includes(name)});}
+ const response=await fetch(new URL('./assets/storybook-v1.glb.gz?v=storybook32',import.meta.url));if(!response.ok)throw new Error('World model unavailable');const bytes=await new Response(response.body.pipeThrough(new DecompressionStream('gzip'))).arrayBuffer();const asset=await new GLTFLoader().parseAsync(bytes,'');
  const weather=[],blossoms=[],transport=[],oldSuns=[],borders=new Map();let growing=false,motion=!reduced(),regional=false,hovered=null,orbit=false,details,lastDraw=0;
  const tip=document.createElement('div');tip.className='map-hover';tip.hidden=true;container.append(tip);
  const info=document.createElement('section');info.className='sight-info';info.hidden=true;info.setAttribute('aria-live','polite');container.parentElement.append(info);
@@ -39,7 +39,7 @@ export async function createWorldMap(container,{data,iso=null,month=10,onSelect=
  const traffic=createTraffic(scene,transport),trafficClock=travelClock(),reveal=createReveal(()=>!reduced());
  const groundRay=new THREE.Raycaster();
  function ground(id,x,y){groundRay.set(new THREE.Vector3(x,80,-y),new THREE.Vector3(0,-1,0));const group=countryGroups.get(id);return group?(groundRay.intersectObject(group,true)[0]?.point.y??0):0;}
- const borderData=await fetch(new URL('./assets/borders.json?v=storybook31',import.meta.url)).then(r=>r.json());
+ const borderData=await fetch(new URL('./assets/borders.json?v=storybook32',import.meta.url)).then(r=>r.json());
  for(const [id,pts] of Object.entries(borderData)){if(!pts.length)continue;const geo=new THREE.BufferGeometry().setFromPoints(pts.map(p=>new THREE.Vector3(...p)));const line=new THREE.LineSegments(geo,new THREE.LineBasicMaterial({color:'#e2eee2',transparent:false,opacity:1,depthWrite:false,depthTest:false}));line.renderOrder=1;scene.add(line);line.userData.countries=id.split('-').map(Number);borders.set(id,line);}
  function addSight(rec,position){const el=document.createElement('button');el.className='map-label sight'+(rec.type==='monsoon'?' monsoon':'');const icon=rec.type==='beach'?'☂':rec.type==='monsoon'?'🌧':'✦';el.textContent=icon+' '+(rec.type==='monsoon'?(rec.shortLabel||'Monsoon season'):rec.name);el.setAttribute('aria-label','Explore '+rec.name);el.onclick=()=>showSight(rec);labelLayer.append(el);labels.push({el,p:position,kind:'sight',rec,priority:rec.type==='monsoon'});}
  details=addWorldDetails(scene,{ground,data,animateVisibility:()=>!reduced()});
@@ -75,7 +75,7 @@ export async function createWorldMap(container,{data,iso=null,month=10,onSelect=
   labelLayer.style.opacity=String(THREE.MathUtils.clamp((220-distance)/40,0,1));
   if(!compact){const r=container.getBoundingClientRect();container.parentElement.querySelectorAll('.world-tools,.country-panel,.world-months,.sight-info,.map-options[open] .map-options-content').forEach(el=>{if(el.hidden)return;const b=el.getBoundingClientRect();occupied.push([b.left-r.left,b.top-r.top,b.right-r.left,b.bottom-r.top]);});}
   for(const l of labels.slice().sort((a,b)=>Number(b.kind==='country'&&b.rec.iso===selected)*10+Number(b.priority)-Number(a.kind==='country'&&a.rec.iso===selected)*10-Number(a.priority))){
-   let show=l.kind==='sight'?distance<125&&(!l.rec.months||l.rec.months.includes(mo+1))&&(l.rec.type!=='region'||regional):l.kind==='city'?(distance<(l.rec.name==='Vancouver'?180:[124,840].includes(l.rec.iso)&&l.rec.iso===selected?180:95)&&(!compact||l.rec.iso===selected)):distance>=95||(l.rec.iso===selected&&!l.rec.cities?.length);
+   let show=l.kind==='sight'?distance<125&&(!l.rec.months||l.rec.months.includes(mo+1))&&(l.rec.type!=='region'||regional):l.kind==='city'?(distance<(['Vancouver','San Francisco'].includes(l.rec.name)?180:[124,840].includes(l.rec.iso)&&l.rec.iso===selected?180:95)&&(!compact||l.rec.iso===selected)):distance>=95||(l.rec.iso===selected&&!l.rec.cities?.length);
    if(l.rec.type==='beach'&&distance>75)show=false;
    if(l.kind==='city'&&distance>65&&!l.priority&&!([124,840].includes(l.rec.iso)&&l.rec.iso===selected))show=false;
    const p=l.p.clone();if(flat)p.y=.9;p.project(camera);

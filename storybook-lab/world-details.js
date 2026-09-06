@@ -1,5 +1,5 @@
 import * as T from 'three';
-import {createReveal} from './reveal.js?v=storybook31';
+import {createReveal} from './reveal.js?v=storybook32';
 import {sights,experiences,beachTowns} from '../play/world-details.js?v=world7final';
 export {australiaRegions,regionalScore,heatColor} from '../play/world-details.js?v=world7final';
 // Each landmark has its own composition, silhouette, proportions and palette.

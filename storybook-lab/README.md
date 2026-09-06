@@ -13,3 +13,5 @@ Japan has its own Storybook guide at storybook/country/japan. Its hero uses the 
 Vancouver’s full diorama remains a standalone Blender preview outside the website, now on a white background with its blue water circle. The world map uses a separately sized Canada Place model.
 
 Selected countries keep a highlighted name label. City labels use white pills and numerical colour-coded weather ratings. The original editorial content and scoring are unchanged.
+
+Public release: `node build-public.cjs` creates `public-dist/` with the Storybook homepage at `/` and guides at `/country/<slug>/`. GitHub Pages publishes this build. The root editorial source and older editions remain intact. Public pages are indexable and preserve month parameters across navigation.

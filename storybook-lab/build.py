@@ -13,7 +13,7 @@ import re
 for source in sorted((r.parent/'play/country').glob('*/index.html')):
  slug=source.parent.name
  page=source.read_text()
- page=page.replace('../../game.css?v=world7final','../../game.css?v=storybook7').replace('../../app.js?v=world7final','../../app.js?v=storybook7')
+ page=page.replace('../../game.css?v=world7final','../../game.css?v=storybook8').replace('../../app.js?v=world7final','../../app.js?v=storybook8')
  page=page.replace('./../../vendor/three.module.js','../../../play/vendor/three.module.js').replace('../../vendor/delaunator.min.js','../../../play/vendor/delaunator.min.js').replace('../../styles/affiliates.js','../../../play/styles/affiliates.js').replace('../../favicon.svg','../../assets/logo.svg')
  page=page.replace('root:"../../",slug:"'+slug+'"','root:"../../../play/",slug:"'+slug+'",storybook:true,rounded:true')
  page=page.replace('When to go Explorer','When to go').replace('<span aria-hidden="true" class="brand-symbol">✦</span>','<img class="brand-mark" src="../../assets/logo.svg" alt="" width="34" height="34">')

@@ -1,10 +1,12 @@
 import * as T from 'three';
+import {createReveal} from './reveal.js?v=storybook29';
 import {sights,experiences,beachTowns} from '../play/world-details.js?v=world7final';
 export {australiaRegions,regionalScore,heatColor} from '../play/world-details.js?v=world7final';
 // Each landmark has its own composition, silhouette, proportions and palette.
 // Small scenery uses shared materials and is merged per material for mobile rendering.
-export function addWorldDetails(scene,{ground,data=[]}){
- const materials=new Map(),items=[],interactive=[],monsoonRain=[],weather=[],billboards=[];
+export function addWorldDetails(scene,{ground,data=[],animateVisibility=()=>true}){
+ const reveal=createReveal(animateVisibility);
+ const materials=new Map(),items=[],interactive=[],typhoons=[],monsoonRain=[],weather=[],billboards=[];
  const mat=c=>{if(!materials.has(c))materials.set(c,new T.MeshStandardMaterial({color:c,roughness:.84}));return materials.get(c);};
  function mesh(g,geo,c,x=0,y=0,z=0,sx=1,sy=1,sz=1){const m=new T.Mesh(geo,mat(c));m.position.set(x,y,z);m.scale.set(sx,sy,sz);m.castShadow=true;m.receiveShadow=true;g.add(m);return m;}
  const ball=(g,c,x,y,z,rx,ry=rx,rz=rx)=>mesh(g,new T.SphereGeometry(1,16,10),c,x,y,z,rx,ry,rz);
@@ -147,14 +149,59 @@ export function addWorldDetails(scene,{ground,data=[]}){
  for(const r of monsoons){
   const rec={...r,type:'monsoon',description:'Rain clouds mark the usual monsoon or seasonal rainy period. Timing and rainfall vary by region and year; the map shows a planning season, not a live forecast.'};
   const g=place(rec,g=>{
-   for(const [x,y,z,rx,ry] of [[-.68,.1,0,.48,.31],[-.22,.36,0,.57,.43],[.35,.29,0,.56,.40],[.78,.06,0,.38,.27],[.02,.03,.12,.80,.28]])
-    ball(g,z?'#bdc9d7':'#f3f1ec',x,y,z,rx,ry,.32);
-  },1.3,3.1);
+   // Overlapping rounded lobes create a full cloud with a scalloped silhouette.
+   // A single neutral material lets the lighting supply the depth and shading.
+   for(const [x,y,z,rx,ry,rz] of [
+    [-.72,.12,-.05,.36,.31,.32],[-.35,.32,-.08,.47,.46,.40],
+    [.13,.43,-.12,.49,.52,.43],[.56,.27,-.08,.43,.40,.35],[.86,.06,0,.28,.25,.27],
+    [-.69,-.03,.14,.29,.24,.28],[-.31,.01,.22,.38,.29,.35],[.09,.03,.28,.40,.32,.36],
+    [.49,.0,.21,.35,.27,.30],[-.13,.64,-.02,.23,.25,.25],[.50,.48,.06,.23,.24,.25],
+    [-.49,.39,.17,.22,.24,.22],[.20,.29,.43,.24,.25,.24]
+   ])ball(g,'#f5f5ef',x,y,z,rx,ry,rz);
+  },.95,3.1);
+  g.traverse(o=>{if(o.isMesh)o.receiveShadow=false;});
   const drops=new T.Group();g.add(drops);
-  for(let i=0;i<6;i++)ball(drops,'#528eb7',-.66+i*.25,-.4-(i%3)*.2,.10,.048,.14,.055);
+  // A rounded teardrop profile, with a fine pointed tip and a fuller base.
+  const dropGeometry=new T.LatheGeometry([[0,-.11],[.04,-.09],[.056,-.045],[.046,.01],[.027,.065],[0,.14]].map(([r,y])=>new T.Vector2(r,y)),12);
+  for(let i=0;i<7;i++)mesh(drops,dropGeometry.clone(),'#6a9eac',-.72+i*.24,-.45-(i%3)*.18,.12);
+  dropGeometry.dispose();
   monsoonRain.push({g,drops});
+ }
+ const typhoonSeasons=[
+  {iso:608,x:132,y:12,months:[7,8,9,10],name:'Philippines typhoon season',window:'July to October is the peak season.',url:'https://www.pagasa.dost.gov.ph/climate/tropical-cyclone-information'},
+  {iso:392,x:149,y:29,months:[7,8,9,10],name:'Japan typhoon season',window:'July to October has the most typhoon approaches.',url:'https://www.jma.go.jp/jma/kishou/know/typhoon/1-4.html'},
+  {iso:158,x:130,y:24,months:[7,8,9,10],name:'Taiwan typhoon season',window:'July to October is the most active period in the western North Pacific.',url:'https://climate.cwa.gov.tw/ClimatePedia/detail_page/14'}
+ ];
+ for(const r of typhoonSeasons){
+  const rec={...r,type:'typhoon',description:'The spiral marks recurring typhoon risk. This can overlap with monsoon rain. It represents a typical season, not a live storm position or forecast.'};
+  const g=place(rec,g=>{
+   cylinder(g,'#527589',0,-.09,0,.39,.10);
+   for(let arm=0;arm<2;arm++)for(let i=0;i<24;i++){
+    const t=i/23,a=arm*Math.PI+t*4.8,rr=.44+t*1.03,radius=.24-.12*t;
+    const x=Math.cos(a)*rr,z=Math.sin(a)*rr;
+    ball(g,'#8298b4',x,-.025,z,radius*1.16,.17,radius*1.16);
+    ball(g,'#fcfaf1',x,.11+Math.sin(t*Math.PI)*.06,z,radius,.15,radius);
+   }
+  },1.15,2.5);typhoons.push(g);
  }
  const locations=[[124,-100,57],[840,-101,36],[76,-53,-9],[826,-3,54],[156,108,35],[356,81,24],[392,141,38],[608,124,12],[36,133,-25],[710,25,-29]];
  for(const [iso,x,y] of locations){const rec=data.find(r=>r.iso===iso);if(!rec)continue;const host=new T.Group();host.position.set(x,ground(iso,x,y)+2.3,-y);scene.add(host);const cloud=new T.Group();host.add(cloud);for(const [xx,yy,r] of [[-.35,0,.26],[0,.12,.34],[.35,0,.24]])ball(cloud,'#f7f3e8',xx,yy,0,r,r*.65,r*.75);pack(cloud);const drops=new T.Group(),flakes=new T.Group(),sun=new T.Group();host.add(drops,flakes,sun);sunShape(sun);for(let i=0;i<7;i++){const x=(i%4-1.5)*.17,z=Math.floor(i/4)*.2;const drop=ball(drops,'#75b9d5',x,-.22-(i%3)*.12,z,.025,.09,.025);ball(flakes,'#fff9ed',x,-.22-(i%3)*.12,z,.046);}weather.push({host,cloud,drops,flakes,sun,rec});}
- return {items,interactive,makeSun(){},update(month,distance,time,motion,camera){for(const g of items){g.visible=(!g.userData.months||g.userData.months.includes(month+1))&&(g.userData.type!=='beach'||distance<80);if(g.userData.type==='sun')g.position.y=ground(g.userData.iso,g.userData.x,g.userData.y)+1.9;}for(const {g,drops} of monsoonRain){g.scale.setScalar(g.userData.fullScale*T.MathUtils.clamp(distance/85,1,3));g.quaternion.copy(camera.quaternion);if(g.visible&&motion)drops.children.forEach((drop,i)=>{drop.position.y=-.32-((time*.48+i*.17)%.75);});}for(const g of billboards)g.quaternion.copy(camera.quaternion);for(const w of weather){const rain=w.rec.pr[month]>=140,snow=w.rec.hi[month]<=5;w.cloud.visible=rain||snow;w.drops.visible=rain&&!snow;w.flakes.visible=snow;w.sun.visible=!rain&&!snow;w.host.visible=distance<180;if(motion){w.drops.position.y=-(time*.18% .22);w.flakes.position.y=-(time*.06% .18);}}}};
+ return {items,interactive,makeSun(){},update(month,distance,time,motion,camera){
+  let transitioning=false;
+  for(const g of items){
+   const show=(!g.userData.months||g.userData.months.includes(month+1))&&(g.userData.type!=='beach'||distance<80);
+   const size=['monsoon','typhoon'].includes(g.userData.type)?T.MathUtils.clamp(distance/85,1,3):1;
+   transitioning=reveal(g,show,size)||transitioning;
+   if(g.userData.type==='sun')g.position.y=ground(g.userData.iso,g.userData.x,g.userData.y)+1.9;
+  }
+  for(const g of typhoons)if(g.visible&&motion)g.rotation.y=time*.15;
+  for(const {g,drops} of monsoonRain){g.quaternion.copy(camera.quaternion);if(g.visible&&motion)drops.children.forEach((drop,i)=>{drop.position.y=-.32-((time*.48+i*.17)%.75);});}
+  for(const g of billboards)g.quaternion.copy(camera.quaternion);
+  for(const w of weather){
+   const rain=w.rec.pr[month]>=140,snow=w.rec.hi[month]<=5;
+   for(const [object,show] of [[w.cloud,rain||snow],[w.drops,rain&&!snow],[w.flakes,snow],[w.sun,!rain&&!snow],[w.host,distance<180]])transitioning=reveal(object,show)||transitioning;
+   if(motion){w.drops.position.y=-(time*.18% .22);w.flakes.position.y=-(time*.06% .18);}
+  }
+  return transitioning;
+ }};
 }

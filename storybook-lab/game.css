@@ -33,3 +33,5 @@
 /* The Storybook edition owns its palette and keeps other editions untouched. */
 :root{--s-ideal:#40a773;--s-great:#a9dc67;--s-good:#f4d45d;--s-fair:#f0a45c;--s-avoid:#e77c75;--sea:#78cbd5}
 .storybook-badge{font:800 12px/1.2 'Nunito Sans',sans-serif;letter-spacing:.02em;padding:5px 8px;background:#dcf5e7;color:#235d50;border-radius:6px;white-space:nowrap}.edition-links{flex-wrap:wrap}.edition-links a{min-width:75px}.game-nav .brand{gap:8px}@media(max-width:699px){.storybook-badge{font-size:10px;padding:4px 6px}}
+
+.sight-picker{width:100%;min-height:44px;border:1px solid #c8d6c0;border-radius:8px;padding:8px;font:inherit;color:var(--ink);background:#fffdf3}.sight-info{max-height:34vh;overflow:auto}

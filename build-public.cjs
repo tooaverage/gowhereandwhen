@@ -17,8 +17,8 @@ function publicHTML(html){
 }
 let home=fs.readFileSync(path.join(root,'storybook/index.html'),'utf8');
 home=publicHTML(home).replace(/<title>[^<]*<\/title>/,'<title>gowhereandwhen.com | Best time to visit anywhere, by month</title>')
- .replaceAll('./assets/logo.svg','./storybook/assets/logo.svg').replaceAll('./game.css?v=storybook29','./storybook/game.css?v=storybook29')
- .replaceAll('./app.js?v=storybook29','./storybook/app.js?v=storybook29').replaceAll('../play/','./play/')
+ .replaceAll('./assets/logo.svg','./storybook/assets/logo.svg').replaceAll('./game.css?v=storybook31','./storybook/game.css?v=storybook31')
+ .replaceAll('./app.js?v=storybook31','./storybook/app.js?v=storybook31').replaceAll('../play/','./play/')
  .replace('storybook:true','storybook:true,public:true')
  .replace('</head>','<meta name="description" content="Explore a playful 3D world map and find the best time to visit 74 countries. Compare monthly weather ratings, cities and seasonal highlights."/><link rel="canonical" href="https://gowhereandwhen.com/"/></head>');
 fs.writeFileSync(path.join(out,'index.html'),home);
@@ -27,7 +27,7 @@ for(const entry of fs.readdirSync(path.join(root,'storybook/country'),{withFileT
  if(!entry.isDirectory())continue;
  const src=path.join(root,'storybook/country',entry.name,'index.html');if(!fs.existsSync(src))continue;
  let page=publicHTML(fs.readFileSync(src,'utf8')).replaceAll('../../../play/','../../play/').replaceAll('../../../bureau/','../../bureau/').replaceAll('../../../versions/','../../versions/')
- .replaceAll('../../game.css?v=storybook29','../../storybook/game.css?v=storybook29').replaceAll('../../app.js?v=storybook29','../../storybook/app.js?v=storybook29')
+ .replaceAll('../../game.css?v=storybook31','../../storybook/game.css?v=storybook31').replaceAll('../../app.js?v=storybook31','../../storybook/app.js?v=storybook31')
  .replaceAll('../../assets/','../../storybook/assets/').replace('storybook:true','storybook:true,public:true');
  const dest=path.join(out,'country',entry.name);fs.mkdirSync(dest,{recursive:true});fs.writeFileSync(path.join(dest,'index.html'),page);count++;
 }

@@ -1,5 +1,5 @@
 import * as T from 'three';
-import {createReveal} from './reveal.js?v=storybook29';
+import {createReveal} from './reveal.js?v=storybook31';
 import {sights,experiences,beachTowns} from '../play/world-details.js?v=world7final';
 export {australiaRegions,regionalScore,heatColor} from '../play/world-details.js?v=world7final';
 // Each landmark has its own composition, silhouette, proportions and palette.
@@ -175,14 +175,13 @@ export function addWorldDetails(scene,{ground,data=[],animateVisibility=()=>true
  for(const r of typhoonSeasons){
   const rec={...r,type:'typhoon',description:'The spiral marks recurring typhoon risk. This can overlap with monsoon rain. It represents a typical season, not a live storm position or forecast.'};
   const g=place(rec,g=>{
-   cylinder(g,'#527589',0,-.09,0,.39,.10);
    for(let arm=0;arm<2;arm++)for(let i=0;i<24;i++){
     const t=i/23,a=arm*Math.PI+t*4.8,rr=.44+t*1.03,radius=.24-.12*t;
     const x=Math.cos(a)*rr,z=Math.sin(a)*rr;
     ball(g,'#8298b4',x,-.025,z,radius*1.16,.17,radius*1.16);
     ball(g,'#fcfaf1',x,.11+Math.sin(t*Math.PI)*.06,z,radius,.15,radius);
    }
-  },1.15,2.5);typhoons.push(g);
+  },.9,2.5);typhoons.push(g);
  }
  const locations=[[124,-100,57],[840,-101,36],[76,-53,-9],[826,-3,54],[156,108,35],[356,81,24],[392,141,38],[608,124,12],[36,133,-25],[710,25,-29]];
  for(const [iso,x,y] of locations){const rec=data.find(r=>r.iso===iso);if(!rec)continue;const host=new T.Group();host.position.set(x,ground(iso,x,y)+2.3,-y);scene.add(host);const cloud=new T.Group();host.add(cloud);for(const [xx,yy,r] of [[-.35,0,.26],[0,.12,.34],[.35,0,.24]])ball(cloud,'#f7f3e8',xx,yy,0,r,r*.65,r*.75);pack(cloud);const drops=new T.Group(),flakes=new T.Group(),sun=new T.Group();host.add(drops,flakes,sun);sunShape(sun);for(let i=0;i<7;i++){const x=(i%4-1.5)*.17,z=Math.floor(i/4)*.2;const drop=ball(drops,'#75b9d5',x,-.22-(i%3)*.12,z,.025,.09,.025);ball(flakes,'#fff9ed',x,-.22-(i%3)*.12,z,.046);}weather.push({host,cloud,drops,flakes,sun,rec});}
@@ -190,7 +189,7 @@ export function addWorldDetails(scene,{ground,data=[],animateVisibility=()=>true
   let transitioning=false;
   for(const g of items){
    const show=(!g.userData.months||g.userData.months.includes(month+1))&&(g.userData.type!=='beach'||distance<80);
-   const size=['monsoon','typhoon'].includes(g.userData.type)?T.MathUtils.clamp(distance/85,1,3):1;
+   const size=g.userData.type==='typhoon'?T.MathUtils.clamp(distance/150,1,1.5):g.userData.type==='monsoon'?T.MathUtils.clamp(distance/85,1,3):1;
    transitioning=reveal(g,show,size)||transitioning;
    if(g.userData.type==='sun')g.position.y=ground(g.userData.iso,g.userData.x,g.userData.y)+1.9;
   }

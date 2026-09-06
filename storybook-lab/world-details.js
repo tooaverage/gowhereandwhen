@@ -56,9 +56,10 @@ export function addWorldDetails(scene,{ground,data=[]}){
  },.78);
 
  // Vancouver's waterfront is anchored by Canada Place's five tensioned white sails.
- const vancouverDeck=Math.max(...[-.58,0,.58].flatMap(dx=>[-.2,.2].map(dy=>ground(124,-123.111+dx,49.288+dy))))+.04;
+ const vancouverDeck=-.32;
  place({iso:124,name:'Canada Place, Vancouver',x:-123.111,y:49.288,type:'vancouver',description:'Vancouver’s waterfront landmark, with five white sails overlooking the harbour.',url:'https://www.canadaplace.ca/'},g=>{
-  const depth=(vancouverDeck+.48)/.5;for(const x of [-.9,0,.9])for(const z of [-.26,.26])cylinder(g,'#98aaa1',x,-depth/2,z,.036,depth);
+  // A solid quay meets the water directly, with no exposed stilts.
+  box(g,'#b8bba4',0,-.22,0,2.36,.46,.84,.035);
   box(g,'#e4dbc0',0,.065,0,2.30,.13,.78,.06);
   box(g,'#568d95',0,.24,0,2.10,.24,.58,.035);
   for(let i=0;i<5;i++){

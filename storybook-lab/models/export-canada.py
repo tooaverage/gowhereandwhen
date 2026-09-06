@@ -129,7 +129,7 @@ land=mesh('Continuous coastal meadow',vs,fs,'grass')
 vs=[(x,y,-.12) for x,y in rim]+[(x,y,-.58) for x,y in rim]
 soil=mesh('Solid coastal foundation',vs,[tuple(range(N)),tuple(reversed(range(N,N*2)))]+[(i,(i+1)%N,N+(i+1)%N,N+i) for i in range(N)],'soil')
 # A calm inlet opens right through the front shore, between city and forest.
-bay=[(1.1,1.3),(2.6,2.0),(4.5,1.8),(5.8,.8),(6,-.8),(5.5,-2.7),(5.9,-4.4),(6.4,-6.2),(7.2,-9.5),(4.3,-9.5),(3.4,-6.3),(3.4,-4.2),(3.7,-2.4),(3.2,-1.0),(1.6,-.5)]
+bay=[(1.1,1.3),(1.8,2.1),(2.5,3.0),(2.8,5.0),(3.3,9.5),(5.1,9.5),(4.7,5.0),(4.6,3.0),(5.8,.8),(6,-.8),(5.5,-2.7),(5.9,-4.4),(6.4,-6.2),(7.2,-9.5),(4.3,-9.5),(3.4,-6.3),(3.4,-4.2),(3.7,-2.4),(3.2,-1.0),(1.6,-.5)]
 bay.reverse()
 carve('Harbour inlet',bay)
 # The ocean stage itself fills the cutout, so water has one continuous level and outline.
@@ -137,7 +137,7 @@ bpy.ops.mesh.primitive_cylinder_add(vertices=128,radius=1,depth=.16,location=(0,
 # Distinct peaks rather than rounded green domes. Snow is part of each mesh.
 mountain('North Shore central summit',-2,3.65,4.1,6.7,'rock',True)
 mountain('Lions western summit',-6.15,3.65,2.7,4.3,'hill',True)
-mountain('Eastern forested shoulder',4.9,4.25,3.1,3.65,'hill',True)
+mountain('Eastern forested shoulder',7.2,4.5,2.3,3.65,'hill',True)
 # Cedar homes form a small waterfront neighbourhood, with visible roof boards.
 M['cedar']=mat('Warm coastal cedar','b57d55')
 M['cityglass']=mat('Soft sea glass','609fa0')
@@ -156,7 +156,14 @@ def cabin(x,y,s=1):
   cube('Window glass',(x+dx*s,y-.6*s,z+.65*s),(.25*s,.03,.34*s),'glass',.01)
  cube('Porch step',(x,y-.78*s,z+.02),(.62*s,.4*s,.14),'rock',.03)
 for x,y,s in [(-7.3,-.9,.85),(-5.35,-1.1,.8),(-7,-3.2,.84),(-4.9,-3.4,.78)]:cabin(x,y,s)
-line('Waterfront walking trail',[(-8,-4.7,.66),(-5,-4.6,.66),(-2.5,-4.5,.66),(0,-4.6,.66),(1,-3,.66),(1.25,-1.25,.66)],.17,'path')
+def flat_road(name,points,width=.4):
+ vs=[]
+ for i,p in enumerate(points):
+  before=Vector(points[max(0,i-1)]);after=Vector(points[min(len(points)-1,i+1)]);d=after-before;normal=Vector((-d.y,d.x,0)).normalized()*width/2
+  for sign in [-1,1]:vs.append(tuple(Vector(p)+normal*sign))
+ mesh(name,vs,[(2*i,2*i+2,2*i+3,2*i+1) for i in range(len(points)-1)],'path')
+flat_road('Flat city waterfront road',[(-8,-4.7,.645),(-5,-4.6,.645),(-2.5,-4.5,.645),(0,-4.6,.645),(.55,-4.1,.645),(.65,-2.5,.645),(1.4,-1.7,.645),(2.3,-1.7,.645)],.35)
+flat_road('Forest shore path',[(6.5,-1,.645),(7.2,-1.7,.645),(7.3,-3,.645)],.28)
 # Compact Vancouver towers with stepped roofs and restrained glazing.
 for x,y,w,d,h in [(-2.1,-1.5,.85,.8,2.8),(-.65,-1.25,.95,.85,3.65),(.6,-1.4,.78,.72,2.45),(-1.55,-3.25,.95,.75,2.1),(.05,-3.15,.8,.72,2.85)]:
  cube('Sea glass tower',(x,y,.66+h/2),(w,d,h),'cityglass',.055)
@@ -183,22 +190,22 @@ for i in range(5):
 from mathutils import Matrix
 pavilion_transform=Matrix.Translation(Vector((2.1,-3.4,0))) @ Matrix.Rotation(math.pi/2,4,'Z') @ Matrix.Translation(Vector((-1.10,-.12,0)))
 for o in set(sc.objects)-place_before:o.matrix_world=pavilion_transform @ o.matrix_world
-# Lions Gate connects the city shore to the North Shore mountains across the inlet.
-start=Vector((1.25,-1.25,.85));end=Vector((4.1,2.6,2.35));delta=end-start
+# A level Lions Gate bridge joins the city and forest shores. Mountains sit behind the shore.
+start=Vector((2.3,-1.7,.77));end=Vector((6.5,-1.0,.77));delta=end-start
 angle=math.atan2(delta.y,delta.x);side=Vector((-math.sin(angle),math.cos(angle),0))
 def bridgepoint(t):
- p=start+delta*t;p.z+=.08*math.sin(t*math.pi);return p
+ return start+delta*t
 for i in range(36):
  p=bridgepoint(i/35);o=cube('Bridge cedar deck',p,(delta.length/35*.97,.62,.12),'wood',.014);o.rotation_euler.z=angle
 for t in [.10,.88]:
  p=bridgepoint(t)
  for sign in [-1,1]:
-  a=p+side*.38*sign;rod('North Shore bridge tower',a,a+Vector((0,0,2.15)),.06,'fir')
- rod('Bridge tower cross beam',p-side*.38+Vector((0,0,1.95)),p+side*.38+Vector((0,0,1.95)),.045,'fir')
+  a=p+side*.38*sign;rod('North Shore bridge tower',a,a+Vector((0,0,1.5)),.06,'fir')
+ rod('Bridge tower cross beam',p-side*.38+Vector((0,0,1.35)),p+side*.38+Vector((0,0,1.35)),.045,'fir')
 for sign in [-1,1]:
  pts=[]
  for i in range(25):
-  t=i/24;p=bridgepoint(t)+side*.35*sign;top=p+Vector((0,0,1.15+1.1*(2*t-1)**2));pts.append(tuple(top));rod('Suspension hanger',p,top,.013,'fir')
+  t=i/24;p=bridgepoint(t)+side*.35*sign;top=p+Vector((0,0,.68+.92*(2*t-1)**2));pts.append(tuple(top));rod('Suspension hanger',p,top,.013,'fir')
  line('Sweeping suspension cable',pts,.024,'fir')
 # Trees use Japan's exact connected, four-tier evergreen silhouettes.
 for x,y,h in [(-9,0,2.5),(-9,1.4,2.85),(-8.2,1.7,2.15),(-9,-2,1.9),(-9,-4.1,2.2),(-8.2,-5.1,1.8),(-3.1,-5.75,2.1),(-2,-6,1.65),(7.7,-1,2.6),(8.8,-.2,2.7),(9,-2,2.2),(8,-4.3,2.5),(7,-5.3,1.8),(9,1.8,2.7)]:fir(x,y,h)

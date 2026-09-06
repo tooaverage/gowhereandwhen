@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import {GLTFLoader} from '../play/vendor/GLTFLoader.js';
 import {OrbitControls} from '../play/vendor/OrbitControls.js';
-import {addWorldDetails,australiaRegions,regionalScore,heatColor} from './world-details.js?v=storybook18';
+import {addWorldDetails,australiaRegions,regionalScore,heatColor} from './world-details.js?v=storybook20';
 const reduced=()=>matchMedia('(prefers-reduced-motion: reduce)').matches;
 const palette={ideal:'#40a773',great:'#a9dc67',good:'#f4d45d',fair:'#f0a45c',avoid:'#e77c75'};
 export async function createWorldMap(container,{data,iso=null,month=10,onSelect=()=>{},onCity=()=>{},onDismiss=()=>{},compact=false,flat=false,rounded=false}={}){
@@ -12,7 +12,7 @@ export async function createWorldMap(container,{data,iso=null,month=10,onSelect=
  const labelLayer=document.createElement('div');labelLayer.className='map-labels';container.append(labelLayer);
  const labels=[],meshes=[],countryGroups=new Map(),featureMap=new Map();let selected=iso,mo=month,disposed=false,frame=0,tween=null;const byIso=new Map(data.map(r=>[r.iso,r]));
  function label(name,x,y,kind,rec){const el=document.createElement('button');el.className='map-label '+kind;el.innerHTML=kind==='city'?'<span class="dot"></span><span></span>':'';if(kind==='city')el.lastElementChild.textContent=name;else el.textContent=name;el.setAttribute('aria-label',kind==='city'?'Explore '+name:'Select '+name);el.addEventListener('click',()=>{if(kind==='city'){onCity(rec);focusCity(rec);}else{select(rec.iso,true);onSelect(rec.iso);}});labelLayer.append(el);labels.push({el,p:new THREE.Vector3(x,2,-y),kind,rec,priority:['Toronto','San Francisco','Tokyo','Manila','Kyoto','Sapporo','Naha','Cebu','Siargao'].includes(name)});}
- const response=await fetch(new URL('./assets/storybook-v1.glb.gz?v=storybook18',import.meta.url));if(!response.ok)throw new Error('World model unavailable');const bytes=await new Response(response.body.pipeThrough(new DecompressionStream('gzip'))).arrayBuffer();const asset=await new GLTFLoader().parseAsync(bytes,'');
+ const response=await fetch(new URL('./assets/storybook-v1.glb.gz?v=storybook20',import.meta.url));if(!response.ok)throw new Error('World model unavailable');const bytes=await new Response(response.body.pipeThrough(new DecompressionStream('gzip'))).arrayBuffer();const asset=await new GLTFLoader().parseAsync(bytes,'');
  const weather=[],blossoms=[],transport=[],oldSuns=[],borders=new Map();let growing=false,motion=!reduced(),regional=false,hovered=null,orbit=false,details,lastDraw=0;
  const tip=document.createElement('div');tip.className='map-hover';tip.hidden=true;container.append(tip);
  const info=document.createElement('section');info.className='sight-info';info.hidden=true;info.setAttribute('aria-live','polite');container.parentElement.append(info);
@@ -34,7 +34,7 @@ export async function createWorldMap(container,{data,iso=null,month=10,onSelect=
  }
  const groundRay=new THREE.Raycaster();
  function ground(id,x,y){groundRay.set(new THREE.Vector3(x,80,-y),new THREE.Vector3(0,-1,0));const group=countryGroups.get(id);return group?(groundRay.intersectObject(group,true)[0]?.point.y??0):0;}
- const borderData=await fetch(new URL('./assets/borders.json?v=storybook18',import.meta.url)).then(r=>r.json());
+ const borderData=await fetch(new URL('./assets/borders.json?v=storybook20',import.meta.url)).then(r=>r.json());
  for(const [id,pts] of Object.entries(borderData)){if(!pts.length)continue;const geo=new THREE.BufferGeometry().setFromPoints(pts.map(p=>new THREE.Vector3(...p)));const line=new THREE.LineSegments(geo,new THREE.LineBasicMaterial({color:'#e2eee2',transparent:false,opacity:1,depthWrite:false,depthTest:false}));line.renderOrder=1;scene.add(line);line.userData.countries=id.split('-').map(Number);borders.set(id,line);}
  function addSight(rec,position){const el=document.createElement('button');el.className='map-label sight';const icon=rec.type==='beach'?'☂':rec.type==='storm'?'◉':'✦';el.textContent=icon+' '+rec.name;el.setAttribute('aria-label','Explore '+rec.name);el.onclick=()=>showSight(rec);labelLayer.append(el);labels.push({el,p:position,kind:'sight',rec,priority:rec.type==='storm'});}
  details=addWorldDetails(scene,{ground,data});

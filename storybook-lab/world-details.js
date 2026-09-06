@@ -35,8 +35,30 @@ export function addWorldDetails(scene,{ground,data=[]}){
  function wildebeest(g,x,z,s){const a=new T.Group();a.position.set(x,0,z);a.scale.setScalar(s);g.add(a);ball(a,'#948975',0,.36,0,.28,.17,.13);ball(a,'#7c7668',-.22,.42,0,.12,.16,.11);ball(a,'#5e645b',-.32,.34,0,.11,.075,.08);for(const xx of [-.17,.17])for(const zz of [-.085,.085]){tube(a,[[xx,.34,zz],[xx+.018,.16,zz],[xx-.014,.025,zz]],'#6d6b5e',.027);box(a,'#454e47',xx-.018,.024,zz,.071,.04,.051,.006);}for(const dz of [-1,1]){tube(a,[[-.23,.5,dz*.055],[-.22,.55,dz*.16],[-.26,.65,dz*.17]],'#ede1c7',.019);ball(a,'#4b5147',-.31,.45,dz*.081,.012);}tube(a,[[.25,.39,0],[.36,.25,0],[.40,.20,0]],'#645d50',.02);}
  const scales={taj:.68,angkor:.68,rome:.54,petra:.73,inca:.90,wall:.80,pyramids:.83,canyon:.95,safari:1,reef:1.25};
  for(const rec of sights)place(rec,builders[rec.type],scales[rec.type],rec.type==='reef'?-.47:null);
+ // Two braced orange towers, paired suspension cables and a slender roadway.
+ place({iso:840,name:'Golden Gate Bridge, San Francisco',x:-122.4783,y:37.8199,type:'golden-gate',description:'San Francisco’s International Orange suspension bridge across the Golden Gate strait.',window:'September and October often bring warm days. Coastal wind and fog can arrive in any season.',url:'https://www.goldengate.org/bridge/visiting-the-bridge/'},g=>{
+  const orange='#d77754',edge='#eea27b';
+  box(g,'#b7b5a0',0,.10,0,2.9,.09,.33,.01);box(g,'#777f79',0,.17,0,2.88,.08,.29,.008);
+  for(const z of [-.18,.18]){box(g,orange,0,.19,z,2.94,.11,.045,.008);tube(g,[[-1.46,.29,z],[1.46,.29,z]],edge,.012);}
+  for(let x=-1.3;x<1.4;x+=.17)box(g,'#eee1be',x,.214,0,.075,.007,.015,0);
+  for(const x of [-.77,.77]){
+   box(g,'#a19f8f',x,-.04,0,.29,.40,.48,.035);
+   for(const z of [-.20,.20]){box(g,orange,x,.76,z,.102,1.55,.105,.008);box(g,edge,x,1.56,z,.14,.07,.14,.008);}
+   for(const y of [.36,.74,1.16,1.46])box(g,orange,x,y,0,.10,.065,.48,.008);
+   for(const y of [.44,.85])for(const side of [-1,1])tube(g,[[x,y,-.15*side],[x,y+.22,.15*side]],edge,.018);
+  }
+  for(const z of [-.2,.2]){
+   const pts=Array.from({length:41},(_,i)=>{const x=-.77+i*1.54/40;return [x,.48+1.04*(x/.77)**2,z];});tube(g,pts,orange,.025);
+   for(const side of [-1,1])tube(g,[[side*.77,1.52,z],[side*1.10,.82,z],[side*1.47,.25,z]],orange,.025);
+   for(let i=1;i<20;i++){const x=-.77+i*1.54/20;tube(g,[[x,.25,z],[x,.48+1.04*(x/.77)**2,z]],edge,.009);}
+  }
+  g.rotation.y=-1.3;
+ },.78);
+
  // Vancouver's waterfront is anchored by Canada Place's five tensioned white sails.
+ const vancouverDeck=Math.max(...[-.58,0,.58].flatMap(dx=>[-.2,.2].map(dy=>ground(124,-123.111+dx,49.288+dy))))+.04;
  place({iso:124,name:'Canada Place, Vancouver',x:-123.111,y:49.288,type:'vancouver',description:'Vancouver’s waterfront landmark, with five white sails overlooking the harbour.',url:'https://www.canadaplace.ca/'},g=>{
+  const depth=(vancouverDeck+.48)/.5;for(const x of [-.9,0,.9])for(const z of [-.26,.26])cylinder(g,'#98aaa1',x,-depth/2,z,.036,depth);
   box(g,'#e4dbc0',0,.065,0,2.30,.13,.78,.06);
   box(g,'#568d95',0,.24,0,2.10,.24,.58,.035);
   for(let i=0;i<5;i++){
@@ -52,7 +74,7 @@ export function addWorldDetails(scene,{ground,data=[]}){
   }
   for(let i=0;i<11;i++){box(g,'#cbe5df',-.95+i*.19,.25,.296,.105,.12,.013,.002);cylinder(g,'#ede7d4',-.95+i*.19,.14,.355,.01,.16);}
   tube(g,[[-1.1,.22,.355],[0,.22,.355],[1.1,.22,.355]],'#ede7d4',.009);
- },.7);
+ },.5,vancouverDeck);
 
  // Canadian sights use separate, deliberately spaced compositions.
  function alpinePeak(g,x,z,w,h,seed){

@@ -16,9 +16,9 @@ function publicHTML(html){
  .replaceAll('View & style for angles and motion','Map controls for angles and motion');
 }
 let home=fs.readFileSync(path.join(root,'storybook/index.html'),'utf8');
-home=publicHTML(home).replace('Soft Storybook world | When to go','When To Go: best time to visit anywhere, by month')
- .replaceAll('./assets/logo.svg','./storybook/assets/logo.svg').replaceAll('./game.css?v=storybook8','./storybook/game.css?v=storybook8')
- .replaceAll('./app.js?v=storybook8','./storybook/app.js?v=storybook8').replaceAll('../play/','./play/')
+home=publicHTML(home).replace(/<title>[^<]*<\/title>/,'<title>gowhereandwhen.com | Best time to visit anywhere, by month</title>')
+ .replaceAll('./assets/logo.svg','./storybook/assets/logo.svg').replaceAll('./game.css?v=storybook9','./storybook/game.css?v=storybook9')
+ .replaceAll('./app.js?v=storybook9','./storybook/app.js?v=storybook9').replaceAll('../play/','./play/')
  .replace('storybook:true','storybook:true,public:true')
  .replace('</head>','<meta name="description" content="Explore a playful 3D world map and find the best time to visit 74 countries. Compare monthly weather ratings, cities and seasonal highlights."/><link rel="canonical" href="https://gowhereandwhen.com/"/></head>');
 fs.writeFileSync(path.join(out,'index.html'),home);
@@ -27,10 +27,14 @@ for(const entry of fs.readdirSync(path.join(root,'storybook/country'),{withFileT
  if(!entry.isDirectory())continue;
  const src=path.join(root,'storybook/country',entry.name,'index.html');if(!fs.existsSync(src))continue;
  let page=publicHTML(fs.readFileSync(src,'utf8')).replaceAll('../../../play/','../../play/').replaceAll('../../../bureau/','../../bureau/').replaceAll('../../../versions/','../../versions/')
- .replaceAll('../../game.css?v=storybook8','../../storybook/game.css?v=storybook8').replaceAll('../../app.js?v=storybook8','../../storybook/app.js?v=storybook8')
+ .replaceAll('../../game.css?v=storybook9','../../storybook/game.css?v=storybook9').replaceAll('../../app.js?v=storybook9','../../storybook/app.js?v=storybook9')
  .replaceAll('../../assets/logo.svg','../../storybook/assets/logo.svg').replace('storybook:true','storybook:true,public:true');
  const dest=path.join(out,'country',entry.name);fs.mkdirSync(dest,{recursive:true});fs.writeFileSync(path.join(dest,'index.html'),page);count++;
 }
+const directory=path.join(out,'country/index.html');
+if(fs.existsSync(directory))fs.writeFileSync(directory,fs.readFileSync(directory,'utf8').replaceAll('When To Go','gowhereandwhen.com').replaceAll('When to go','gowhereandwhen.com'));
+const manifestPath=path.join(out,'site.webmanifest');
+if(fs.existsSync(manifestPath)){const manifest=JSON.parse(fs.readFileSync(manifestPath,'utf8'));manifest.name='gowhereandwhen.com';manifest.short_name='gowhereandwhen.com';fs.writeFileSync(manifestPath,JSON.stringify(manifest));}
 fs.copyFileSync(path.join(root,'storybook/assets/logo.svg'),path.join(out,'favicon.svg'));
 fs.writeFileSync(path.join(out,'.nojekyll'),'');
 if(count!==74)throw Error(`Expected 74 Storybook country guides; found ${count}`);

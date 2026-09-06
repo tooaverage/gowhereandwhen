@@ -1,4 +1,4 @@
-import {createWorldMap} from './map.js?v=storybook8';
+import {createWorldMap} from './map.js?v=storybook9';
 const meta=window.GAME_META,$=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)],params=new URLSearchParams(location.search);
 const months=['January','February','March','April','May','June','July','August','September','October','November','December'];
 const colors={ideal:'#40a773',great:'#a9dc67',good:'#f4d45d',fair:'#f0a45c',avoid:'#e77c75'};

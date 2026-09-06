@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import {GLTFLoader} from '../play/vendor/GLTFLoader.js';
 import {OrbitControls} from '../play/vendor/OrbitControls.js';
-import {addWorldDetails,australiaRegions,regionalScore,heatColor} from './world-details.js?v=storybook8';
+import {addWorldDetails,australiaRegions,regionalScore,heatColor} from './world-details.js?v=storybook9';
 const reduced=()=>matchMedia('(prefers-reduced-motion: reduce)').matches;
 const palette={ideal:'#40a773',great:'#a9dc67',good:'#f4d45d',fair:'#f0a45c',avoid:'#e77c75'};
 export async function createWorldMap(container,{data,iso=null,month=10,onSelect=()=>{},onCity=()=>{},onDismiss=()=>{},compact=false,flat=false,rounded=false}={}){
@@ -12,7 +12,7 @@ export async function createWorldMap(container,{data,iso=null,month=10,onSelect=
  const labelLayer=document.createElement('div');labelLayer.className='map-labels';container.append(labelLayer);
  const labels=[],meshes=[],countryGroups=new Map(),featureMap=new Map();let selected=iso,mo=month,disposed=false,frame=0,tween=null;const byIso=new Map(data.map(r=>[r.iso,r]));
  function label(name,x,y,kind,rec){const el=document.createElement('button');el.className='map-label '+kind;el.innerHTML=kind==='city'?'<span class="dot"></span><span></span>':'';if(kind==='city')el.lastElementChild.textContent=name;else el.textContent=name;el.setAttribute('aria-label',kind==='city'?'Explore '+name:'Select '+name);el.addEventListener('click',()=>{if(kind==='city'){onCity(rec);focusCity(rec);}else{select(rec.iso,true);onSelect(rec.iso);}});labelLayer.append(el);labels.push({el,p:new THREE.Vector3(x,2,-y),kind,rec,priority:['Tokyo','Manila','Kyoto','Sapporo','Naha','Cebu','Siargao'].includes(name)});}
- const response=await fetch(new URL('./assets/storybook-v1.glb.gz?v=storybook8',import.meta.url));if(!response.ok)throw new Error('World model unavailable');const bytes=await new Response(response.body.pipeThrough(new DecompressionStream('gzip'))).arrayBuffer();const asset=await new GLTFLoader().parseAsync(bytes,'');
+ const response=await fetch(new URL('./assets/storybook-v1.glb.gz?v=storybook9',import.meta.url));if(!response.ok)throw new Error('World model unavailable');const bytes=await new Response(response.body.pipeThrough(new DecompressionStream('gzip'))).arrayBuffer();const asset=await new GLTFLoader().parseAsync(bytes,'');
  const weather=[],blossoms=[],transport=[],oldSuns=[],borders=new Map();let growing=false,motion=!reduced(),regional=false,hovered=null,orbit=false,details,lastDraw=0;
  const tip=document.createElement('div');tip.className='map-hover';tip.hidden=true;container.append(tip);
  const info=document.createElement('section');info.className='sight-info';info.hidden=true;info.setAttribute('aria-live','polite');container.parentElement.append(info);
@@ -61,6 +61,10 @@ export async function createWorldMap(container,{data,iso=null,month=10,onSelect=
  }
  function updateLabels(){
   const occupied=[],distance=camera.position.distanceTo(controls.target),w=container.clientWidth,h=container.clientHeight;
+  // Keep the whole-world view clear, including the selected country label.
+  labelLayer.hidden=distance>=220;
+  if(labelLayer.hidden)return;
+  labelLayer.style.opacity=String(THREE.MathUtils.clamp((220-distance)/40,0,1));
   if(!compact){const r=container.getBoundingClientRect();container.parentElement.querySelectorAll('.world-tools,.country-panel,.world-months,.sight-info,.map-options[open] .map-options-content').forEach(el=>{if(el.hidden)return;const b=el.getBoundingClientRect();occupied.push([b.left-r.left,b.top-r.top,b.right-r.left,b.bottom-r.top]);});}
   for(const l of labels.slice().sort((a,b)=>Number(b.kind==='country'&&b.rec.iso===selected)*10+Number(b.priority)-Number(a.kind==='country'&&a.rec.iso===selected)*10-Number(a.priority))){
    let show=l.kind==='sight'?distance<125&&(!l.rec.months||l.rec.months.includes(mo+1))&&(l.rec.type!=='region'||regional):l.kind==='city'?(distance<95&&(!compact||l.rec.iso===selected)):distance>=95||l.rec.iso===selected;

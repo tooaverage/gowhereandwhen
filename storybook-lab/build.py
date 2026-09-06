@@ -8,14 +8,17 @@ for name in ['index.html','app.js','map.js','game.css','world-details.js']:
 shutil.copytree(r/'assets',out/'assets',dirs_exist_ok=True)
 print('Built separate Storybook edition.')
 
-# The existing Japan guide keeps its content, with independent Storybook rendering.
-page=(r.parent/'play/country/japan/index.html').read_text()
-page=page.replace('../../game.css?v=world7final','../../game.css?v=storybook6').replace('../../app.js?v=world7final','../../app.js?v=storybook6')
-page=page.replace('./../../vendor/three.module.js','../../../play/vendor/three.module.js').replace('../../vendor/delaunator.min.js','../../../play/vendor/delaunator.min.js').replace('../../styles/affiliates.js','../../../play/styles/affiliates.js').replace('../../favicon.svg','../../../play/favicon.svg')
-page=page.replace('root:"../../",slug:"japan"','root:"../../../play/",slug:"japan",storybook:true,rounded:true')
-page=page.replace('Japan | When to go Explorer','Japan | Soft Storybook').replace('When to go</a>','When to go <span class="storybook-badge">Storybook</span></a>')
+# Keep every guide's editorial content and SVG city map in the Storybook edition.
 import re
-page=re.sub(r'href="../(?!japan/)([a-z-]+)/',r'href="../../../play/country/\1/',page)
-page=page.replace('../../country/philippines/','../../../play/country/philippines/')
-page=page.replace('Explore an illustrative low-poly landscape of Japan','Explore a soft Storybook landscape of Japan')
-target=out/'country/japan';target.mkdir(parents=True,exist_ok=True);(target/'index.html').write_text(page)
+for source in sorted((r.parent/'play/country').glob('*/index.html')):
+ slug=source.parent.name
+ page=source.read_text()
+ page=page.replace('../../game.css?v=world7final','../../game.css?v=storybook7').replace('../../app.js?v=world7final','../../app.js?v=storybook7')
+ page=page.replace('./../../vendor/three.module.js','../../../play/vendor/three.module.js').replace('../../vendor/delaunator.min.js','../../../play/vendor/delaunator.min.js').replace('../../styles/affiliates.js','../../../play/styles/affiliates.js').replace('../../favicon.svg','../../assets/logo.svg')
+ page=page.replace('root:"../../",slug:"'+slug+'"','root:"../../../play/",slug:"'+slug+'",storybook:true,rounded:true')
+ page=page.replace('When to go Explorer','When to go').replace('<span aria-hidden="true" class="brand-symbol">✦</span>','<img class="brand-mark" src="../../assets/logo.svg" alt="" width="34" height="34">')
+ page=page.replace('Explore an illustrative low-poly landscape of','Explore the Storybook map around').replace('Illustrative landscape · drag to explore','Drag to explore · select a country' if slug!='japan' else 'Drag to explore Japan')
+ page=re.sub(r'<div[^>]*data-country-scene="[^"]*"[^>]*></div>','',page)
+ if slug!='japan':page=page.replace('class="game-hero"','class="game-hero map-guide-hero"')
+ target=out/'country'/slug;target.mkdir(parents=True,exist_ok=True);(target/'index.html').write_text(page)
+print('Built',len(list((out/'country').glob('*/index.html'))),'Storybook country guides.')

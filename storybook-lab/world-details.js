@@ -35,10 +35,29 @@ export function addWorldDetails(scene,{ground,data=[]}){
  function wildebeest(g,x,z,s){const a=new T.Group();a.position.set(x,0,z);a.scale.setScalar(s);g.add(a);ball(a,'#948975',0,.36,0,.28,.17,.13);ball(a,'#7c7668',-.22,.42,0,.12,.16,.11);ball(a,'#5e645b',-.32,.34,0,.11,.075,.08);for(const xx of [-.17,.17])for(const zz of [-.085,.085]){tube(a,[[xx,.34,zz],[xx+.018,.16,zz],[xx-.014,.025,zz]],'#6d6b5e',.027);box(a,'#454e47',xx-.018,.024,zz,.071,.04,.051,.006);}for(const dz of [-1,1]){tube(a,[[-.23,.5,dz*.055],[-.22,.55,dz*.16],[-.26,.65,dz*.17]],'#ede1c7',.019);ball(a,'#4b5147',-.31,.45,dz*.081,.012);}tube(a,[[.25,.39,0],[.36,.25,0],[.40,.20,0]],'#645d50',.02);}
  const scales={taj:.68,angkor:.68,rome:.54,petra:.73,inca:.90,wall:.80,pyramids:.83,canyon:.95,safari:1,reef:1.25};
  for(const rec of sights)place(rec,builders[rec.type],scales[rec.type],rec.type==='reef'?-.47:null);
+ // Vancouver's waterfront is anchored by Canada Place's five tensioned white sails.
+ place({iso:124,name:'Canada Place, Vancouver',x:-123.111,y:49.288,type:'vancouver',description:'Vancouver’s waterfront landmark, with five white sails overlooking the harbour.',url:'https://www.canadaplace.ca/'},g=>{
+  box(g,'#e4dbc0',0,.065,0,2.30,.13,.78,.06);
+  box(g,'#568d95',0,.24,0,2.10,.24,.58,.035);
+  for(let i=0;i<5;i++){
+   const x=(i-2)*.405,w=.41,d=.65,h=.53-(Math.abs(i-2)*.035),pos=[],idx=[],n=10;
+   for(let u=0;u<=n;u++)for(let v=0;v<=n;v++){
+    const xx=(u/n-.5)*w,zz=(v/n-.5)*d;
+    const yy=.36+h*Math.pow(Math.max(0,1-Math.abs(xx)/(w/2)),.72)*Math.pow(Math.max(0,1-Math.abs(zz)/(d/2)),.42);
+    pos.push(x+xx,yy,zz);
+   }
+   for(let u=0;u<n;u++)for(let v=0;v<n;v++){const a=u*(n+1)+v,b=a+n+1;idx.push(a,a+1,b,b,a+1,b+1);}
+   const geo=new T.BufferGeometry();geo.setAttribute('position',new T.Float32BufferAttribute(pos,3));geo.setIndex(idx);geo.computeVertexNormals();mesh(g,geo,'#fff7df');
+   cylinder(g,'#e8d6ac',x,.36+h*.5,0,.008,h+.09);
+  }
+  for(let i=0;i<11;i++){box(g,'#cbe5df',-.95+i*.19,.25,.296,.105,.12,.013,.002);cylinder(g,'#ede7d4',-.95+i*.19,.14,.355,.01,.16);}
+  tube(g,[[-1.1,.22,.355],[0,.22,.355],[1.1,.22,.355]],'#ede7d4',.009);
+ },.7);
+
  function sunShape(g){ball(g,'#ffd65a',0,0,0,.34,.34,.10);for(let i=0;i<12;i++){const a=i*Math.PI/6;const o=box(g,'#ffdd74',Math.cos(a)*.53,Math.sin(a)*.53,0,.065,.17,.075,.025);o.rotation.z=a-Math.PI/2;}billboards.push(g);}
  function fir(g,snow=false){cylinder(g,'#a3825e',0,.3,0,.045,.6);for(let i=0;i<3;i++)mesh(g,new T.CylinderGeometry(.015,.25-i*.045,.34,14),snow&&i===2?'#f1f5e6':'#579776',0,.35+i*.21,0);}
  function flower(g,x,z,c){cylinder(g,'#669773',x,.10,z,.010,.20);for(let i=0;i<5;i++){const a=i*Math.PI*.4;ball(g,c,x+Math.cos(a)*.045,.21,z+Math.sin(a)*.045,.035,.016,.028);}ball(g,'#f9d376',x,.228,z,.019);}
- for(const rec of experiences){if(rec.type==='blossom')continue;place(rec,g=>{
+ for(const original of experiences){const rec=original.type==='autumn'?{...original,x:134.95,y:35.4}:original;if(rec.type==='blossom')continue;place(rec,g=>{
   const t=rec.type;if(t==='sun'){sunShape(g);g.userData.float=true;}
   if(t==='tulips'||t==='flowers'){for(let i=0;i<6;i++)for(let j=0;j<4;j++){const x=(i-2.5)*.13,z=(j-1.5)*.12;if(t==='flowers')flower(g,x,z,(i+j)%2?'#eca88b':'#f5d67c');else{cylinder(g,'#619875',x,.12,z,.009,.24);for(let k=0;k<3;k++){const a=k*2.094;ball(g,['#f2a4aa','#ffe6a0','#d998be'][j%3],x+Math.cos(a)*.025,.27,z+Math.sin(a)*.025,.03,.049,.026);}}}}
   if(t==='puffin'){for(const x of [-.18,.18]){ball(g,'#526365',x,.22,0,.10,.18,.10);ball(g,'#f8f4e6',x,.20,.064,.073,.13,.045);ball(g,'#3b4c50',x,.40,0,.087);ball(g,'#f9f0dc',x,.42,.057,.069,.065,.032);const b=mesh(g,new T.ConeGeometry(.064,.14,3),'#edaa64',x,.38,.13);b.rotation.x=Math.PI/2;for(const dx of [-.05,.05])ball(g,'#efb269',x+dx,.025,.035,.037,.025,.062);ball(g,'#34464b',x-.03,.435,.082,.012);}}

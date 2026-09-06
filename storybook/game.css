@@ -35,3 +35,15 @@
 .storybook-badge{font:800 12px/1.2 'Nunito Sans',sans-serif;letter-spacing:.02em;padding:5px 8px;background:#dcf5e7;color:#235d50;border-radius:6px;white-space:nowrap}.edition-links{flex-wrap:wrap}.edition-links a{min-width:75px}.game-nav .brand{gap:8px}@media(max-width:699px){.storybook-badge{font-size:10px;padding:4px 6px}}
 
 .sight-picker{width:100%;min-height:44px;border:1px solid #c8d6c0;border-radius:8px;padding:8px;font:inherit;color:var(--ink);background:#fffdf3}.sight-info{max-height:34vh;overflow:auto}
+
+/* Storybook launch: consistent labels and clear weather scores. */
+.brand-mark{display:block;width:34px;height:34px;flex:none}.brand{gap:8px}
+.map-label,.map-label.city{background:#fffdf3;color:#243f50;border:2px solid #fffdf3;border-bottom:2px solid #fffdf3;border-radius:12px;box-shadow:0 2px 5px #244b5320;gap:6px;padding:5px 8px;min-height:34px}
+.map-label::after{border-top-color:#fffdf3}.map-label.active{background:#fff2b9;color:#243f50;border-color:#fff2b9;box-shadow:0 0 0 3px #ffffffb3,0 3px 8px #234b5330}.map-label.active::after{border-top-color:#fff2b9}
+.map-label .dot{display:grid;place-items:center;width:23px;height:23px;border-radius:50%;font-size:10px;font-weight:900;color:#203f45;background:var(--weather);border:1px solid #203f4515}
+.rating-caption{font-size:11px;font-weight:800;line-height:1.2;text-align:center;color:#f5faef;margin:0 0 5px}.weather-key{margin:5px 0 8px}
+#cities .cmap{display:block!important;width:100%;height:auto}.city-scene{display:none}
+.map-guide-hero .hero-scene{left:0!important}.map-guide-hero .hero-heading{pointer-events:none}.map-guide-hero .hero-heading a,.map-guide-hero .hero-actions{pointer-events:auto}
+@media(max-width:699px){.map-label,.map-label.city{font-size:12px;padding:4px 6px;min-height:30px}.map-label .dot{width:21px;height:21px;font-size:9px}.map-guide-hero .hero-heading h1{font-size:3rem}}
+@media(max-width:480px){.game-nav .direction-link{display:none}.game-nav{gap:8px;padding-inline:14px}.game-nav nav{gap:6px}.brand{min-width:0;font-size:14px}.storybook-badge{font-size:9px}.brand-mark{width:29px;height:29px}}
+:root{--s-ideal:#40a773;--s-great:#a9dc67;--s-good:#f4d45d;--s-fair:#f0a45c;--s-avoid:#e77c75}

@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import {GLTFLoader} from '../play/vendor/GLTFLoader.js';
 import {OrbitControls} from '../play/vendor/OrbitControls.js';
-import {addWorldDetails,australiaRegions,regionalScore,heatColor} from './world-details.js?v=storybook6';
+import {addWorldDetails,australiaRegions,regionalScore,heatColor} from './world-details.js?v=storybook7';
 const reduced=()=>matchMedia('(prefers-reduced-motion: reduce)').matches;
 const palette={ideal:'#40a773',great:'#a9dc67',good:'#f4d45d',fair:'#f0a45c',avoid:'#e77c75'};
 export async function createWorldMap(container,{data,iso=null,month=10,onSelect=()=>{},onCity=()=>{},onDismiss=()=>{},compact=false,flat=false,rounded=false}={}){
@@ -12,11 +12,11 @@ export async function createWorldMap(container,{data,iso=null,month=10,onSelect=
  const labelLayer=document.createElement('div');labelLayer.className='map-labels';container.append(labelLayer);
  const labels=[],meshes=[],countryGroups=new Map(),featureMap=new Map();let selected=iso,mo=month,disposed=false,frame=0,tween=null;const byIso=new Map(data.map(r=>[r.iso,r]));
  function label(name,x,y,kind,rec){const el=document.createElement('button');el.className='map-label '+kind;el.innerHTML=kind==='city'?'<span class="dot"></span><span></span>':'';if(kind==='city')el.lastElementChild.textContent=name;else el.textContent=name;el.setAttribute('aria-label',kind==='city'?'Explore '+name:'Select '+name);el.addEventListener('click',()=>{if(kind==='city'){onCity(rec);focusCity(rec);}else{select(rec.iso,true);onSelect(rec.iso);}});labelLayer.append(el);labels.push({el,p:new THREE.Vector3(x,2,-y),kind,rec,priority:['Tokyo','Manila','Kyoto','Sapporo','Naha','Cebu','Siargao'].includes(name)});}
- const response=await fetch(new URL('./assets/storybook-v1.glb.gz?v=storybook6',import.meta.url));if(!response.ok)throw new Error('World model unavailable');const bytes=await new Response(response.body.pipeThrough(new DecompressionStream('gzip'))).arrayBuffer();const asset=await new GLTFLoader().parseAsync(bytes,'');
+ const response=await fetch(new URL('./assets/storybook-v1.glb.gz?v=storybook7',import.meta.url));if(!response.ok)throw new Error('World model unavailable');const bytes=await new Response(response.body.pipeThrough(new DecompressionStream('gzip'))).arrayBuffer();const asset=await new GLTFLoader().parseAsync(bytes,'');
  const weather=[],blossoms=[],transport=[],oldSuns=[],borders=new Map();let growing=false,motion=!reduced(),regional=false,hovered=null,orbit=false,details,lastDraw=0;
  const tip=document.createElement('div');tip.className='map-hover';tip.hidden=true;container.append(tip);
  const info=document.createElement('section');info.className='sight-info';info.hidden=true;info.setAttribute('aria-live','polite');container.parentElement.append(info);
- function showSight(rec){info.replaceChildren();const close=document.createElement('button');close.textContent='×';close.setAttribute('aria-label','Close place information');close.onclick=()=>{info.hidden=true;};const title=document.createElement('h2');title.textContent=rec.name;const description=document.createElement('p');description.textContent=rec.description||'Regional season estimate based on local travel seasons.';info.append(close,title,description);if(rec.window){const when=document.createElement('p');when.textContent='Typical window: '+rec.window;info.append(when);}if(rec.url){const a=document.createElement('a');a.href=rec.url;a.target='_blank';a.rel='noopener';a.textContent='Read the local guide ↗';info.append(a);}info.hidden=false;}
+ function showSight(rec){select(rec.iso,false);const l=labels.find(l=>l.kind==='country'&&l.rec.iso===rec.iso);if(l&&Number.isFinite(rec.x))l.p.set(rec.x,ground(rec.iso,rec.x,rec.y)+1,-rec.y);info.replaceChildren();const close=document.createElement('button');close.textContent='×';close.setAttribute('aria-label','Close place information');close.onclick=()=>{info.hidden=true;};const title=document.createElement('h2');title.textContent=rec.name;const description=document.createElement('p');description.textContent=rec.description||'Regional season estimate based on local travel seasons.';info.append(close,title,description);if(rec.window){const when=document.createElement('p');when.textContent='Typical window: '+rec.window;info.append(when);}if(rec.url){const a=document.createElement('a');a.href=rec.url;a.target='_blank';a.rel='noopener';a.textContent='Read the local guide ↗';info.append(a);}info.hidden=false;}
  scene.add(asset.scene);asset.scene.updateMatrixWorld(true);
  asset.scene.traverse(o=>{
   if(['boat','airplane'].includes(o.userData.role)){o.userData.start=o.position.clone();transport.push(o);}
@@ -30,7 +30,7 @@ export async function createWorldMap(container,{data,iso=null,month=10,onSelect=
   const bounds=new THREE.Box3().setFromObject(group);featureMap.set(id,{bounds});
   group.traverse(o=>{if(o.isMesh){o.userData.iso=id;meshes.push(o);}});
   const rec=byIso.get(id),center=bounds.getCenter(new THREE.Vector3());
-  if(rec&&[392,608,124,840,76,826,250,380,710,818,356,36,554,484,156,764,360].includes(id))label(rec.name,rec.hub?.lng??center.x,rec.hub?.lat??-center.z,'country',rec);
+  if(rec)label(rec.name,rec.hub?.lng??center.x,rec.hub?.lat??-center.z,'country',rec);
  }
  const groundRay=new THREE.Raycaster();
  function ground(id,x,y){groundRay.set(new THREE.Vector3(x,80,-y),new THREE.Vector3(0,-1,0));const group=countryGroups.get(id);return group?(groundRay.intersectObject(group,true)[0]?.point.y??0):0;}
@@ -50,7 +50,7 @@ export async function createWorldMap(container,{data,iso=null,month=10,onSelect=
  function colorCountries(){
   for(const [id,group] of countryGroups){const band=byIso.get(id)?.months[mo]?.band;const c=new THREE.Color(band?palette[band.key]:'#bdcddd');
    group.traverse(o=>{if(!o.isMesh)return;for(const m of Array.isArray(o.material)?o.material:[o.material]){
-    if(/Monthly heat|Heatmap facet|No climate data/.test(m.name)){const factor=m.name.match(/facet (\d*\.?\d+)/);m.color.copy(c).multiplyScalar(factor?+factor[1]:1);}
+    m.emissive?.set(id===selected?'#e9d9a0':'#000000');m.emissiveIntensity=id===selected?.13:0;if(/Monthly heat|Heatmap facet|No climate data/.test(m.name)){const factor=m.name.match(/facet (\d*\.?\d+)/);m.color.copy(c).multiplyScalar(factor?+factor[1]:1);}
    }});
   }
   for(const o of weather)o.visible=Array.from(o.userData.months).includes(mo+1);
@@ -62,8 +62,8 @@ export async function createWorldMap(container,{data,iso=null,month=10,onSelect=
  function updateLabels(){
   const occupied=[],distance=camera.position.distanceTo(controls.target),w=container.clientWidth,h=container.clientHeight;
   if(!compact){const r=container.getBoundingClientRect();container.parentElement.querySelectorAll('.world-tools,.country-panel,.world-months,.sight-info,.map-options[open] .map-options-content').forEach(el=>{if(el.hidden)return;const b=el.getBoundingClientRect();occupied.push([b.left-r.left,b.top-r.top,b.right-r.left,b.bottom-r.top]);});}
-  for(const l of labels.slice().sort((a,b)=>Number(b.priority)-Number(a.priority))){
-   let show=l.kind==='sight'?distance<125&&(!l.rec.months||l.rec.months.includes(mo+1))&&(l.rec.type!=='region'||regional):l.kind==='city'?(distance<95&&(!compact||l.rec.iso===selected)):distance>=95;
+  for(const l of labels.slice().sort((a,b)=>Number(b.kind==='country'&&b.rec.iso===selected)*10+Number(b.priority)-Number(a.kind==='country'&&a.rec.iso===selected)*10-Number(a.priority))){
+   let show=l.kind==='sight'?distance<125&&(!l.rec.months||l.rec.months.includes(mo+1))&&(l.rec.type!=='region'||regional):l.kind==='city'?(distance<95&&(!compact||l.rec.iso===selected)):distance>=95||l.rec.iso===selected;
    if(l.rec.type==='beach'&&distance>75)show=false;
    if(l.kind==='city'&&distance>65&&!l.priority)show=false;
    const p=l.p.clone();if(flat)p.y=.9;p.project(camera);
@@ -77,7 +77,7 @@ export async function createWorldMap(container,{data,iso=null,month=10,onSelect=
    l.el.hidden=!show;if(!show)continue;
    occupied.push(box);l.el.style.visibility='';l.el.style.left=sx+'px';l.el.style.top=sy+'px';
    l.el.classList.toggle('active',l.kind==='country'&&l.rec.iso===selected);
-   if(l.kind==='city'){const b=l.rec.months[mo].band;l.el.style.setProperty('--weather',palette[b.key]);l.el.setAttribute('aria-label',l.rec.name+': '+b.label+' weather in '+['January','February','March','April','May','June','July','August','September','October','November','December'][mo]);}
+   if(l.kind==='city'){const b=l.rec.months[mo].band;l.el.querySelector('.dot').textContent=Math.round(l.rec.months[mo].score);l.el.style.setProperty('--weather',palette[b.key]);l.el.setAttribute('aria-label',l.rec.name+': weather rating '+Math.round(l.rec.months[mo].score)+' out of 100, '+b.label+' in '+['January','February','March','April','May','June','July','August','September','October','November','December'][mo]);}
   }
  }
 
@@ -96,7 +96,7 @@ export async function createWorldMap(container,{data,iso=null,month=10,onSelect=
  const resume=()=>{if(!document.hidden)invalidate();};document.addEventListener('visibilitychange',resume);
  const ro=new ResizeObserver(resize);ro.observe(container);controls.addEventListener('change',invalidate);controls.addEventListener('start',()=>{tween=null;});
  const ray=new THREE.Raycaster();let down;
- function hover(id,e){if(hovered!==id){for(const [key,g] of countryGroups)g.traverse(o=>{if(o.isMesh)for(const m of Array.isArray(o.material)?o.material:[o.material]){m.emissive?.set(key===id?'#b5ddc6':'#000000');m.emissiveIntensity=key===id?.22:0;}});for(const [key,b] of borders){b.material.color.set(key===id?'#fffef0':key===selected?'#fff8c7':'#e2eee2');b.material.opacity=key===id||key===selected?1:.75;}hovered=id;container.dataset.hover=String(id??'');invalidate();}renderer.domElement.style.cursor=id?'pointer':orbit?'grab':'grab';tip.hidden=!id;if(id){tip.textContent=byIso.get(id)?.name||countryGroups.get(id)?.userData.country||'Country';tip.style.left=Math.min(container.clientWidth-140,e.offsetX+14)+'px';tip.style.top=Math.max(10,e.offsetY-30)+'px';}}
+ function hover(id,e){if(hovered!==id){for(const [key,g] of countryGroups)g.traverse(o=>{if(o.isMesh)for(const m of Array.isArray(o.material)?o.material:[o.material]){m.emissive?.set(key===id?'#b5ddc6':key===selected?'#e9d9a0':'#000000');m.emissiveIntensity=key===id?.22:key===selected?.13:0;}});for(const [key,b] of borders){b.material.color.set(key===id?'#fffef0':key===selected?'#fff8c7':'#e2eee2');b.material.opacity=key===id||key===selected?1:.75;}hovered=id;container.dataset.hover=String(id??'');invalidate();}renderer.domElement.style.cursor=id?'pointer':orbit?'grab':'grab';tip.hidden=!id;if(id){tip.textContent=byIso.get(id)?.name||countryGroups.get(id)?.userData.country||'Country';tip.style.left=Math.min(container.clientWidth-140,e.offsetX+14)+'px';tip.style.top=Math.max(10,e.offsetY-30)+'px';}}
  renderer.domElement.addEventListener('pointermove',e=>{if(e.buttons)return;const r=renderer.domElement.getBoundingClientRect();ray.setFromCamera(new THREE.Vector2((e.clientX-r.left)/r.width*2-1,-(e.clientY-r.top)/r.height*2+1),camera);const poi=ray.intersectObjects(details.interactive.filter(o=>o.parent.visible),false)[0];hover(ray.intersectObjects(meshes,false)[0]?.object.userData.iso??null,e);if(poi){renderer.domElement.style.cursor='pointer';tip.hidden=false;tip.textContent=poi.object.userData.sight.name;tip.style.left=Math.min(container.clientWidth-180,e.offsetX+14)+'px';tip.style.top=Math.max(10,e.offsetY-30)+'px';}});
  renderer.domElement.addEventListener('pointerleave',()=>hover(null,{}));
  renderer.domElement.addEventListener('pointerdown',e=>down=[e.clientX,e.clientY]);renderer.domElement.addEventListener('pointerup',e=>{if(!down||Math.hypot(e.clientX-down[0],e.clientY-down[1])>5)return;const r=renderer.domElement.getBoundingClientRect();ray.setFromCamera(new THREE.Vector2((e.clientX-r.left)/r.width*2-1,-(e.clientY-r.top)/r.height*2+1),camera);const sightHit=ray.intersectObjects(details.interactive.filter(o=>o.parent.visible),false)[0];if(sightHit){showSight(sightHit.object.userData.sight);return;}const hit=ray.intersectObjects(meshes,false)[0];if(hit&&byIso.has(hit.object.userData.iso)){select(hit.object.userData.iso,false);onSelect(hit.object.userData.iso);}else{info.hidden=true;onDismiss();}});

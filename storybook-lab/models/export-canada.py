@@ -123,10 +123,11 @@ N=112
 rim=[]
 for i in range(N):
  t=i*math.tau/N;r=1+.035*math.sin(5*t)+.025*math.cos(7*t);rim.append((11.6*r*math.cos(t),8.4*r*math.sin(t)))
-vs=[(0,0,.62)]+[(x,y,.62) for x,y in rim]+[(x,y,-.1) for x,y in rim]
-fs=[tuple(reversed(range(1+N,1+N*2)))]+[(0,1+i,1+(i+1)%N) for i in range(N)]+[(1+i,1+N+i,1+N+(i+1)%N,1+(i+1)%N) for i in range(N)]
-land=mesh('Continuous coastal meadow',vs,fs,'grass')
-vs=[(x,y,-.12) for x,y in rim]+[(x,y,-.58) for x,y in rim]
+# Clean green shores match the raised island edge used on Japan's cover.
+vs=[(x,y,.62) for x,y in rim]+[(x,y,-.48) for x,y in rim]
+fs=[tuple(range(N)),tuple(reversed(range(N,N*2)))]+[(i,N+i,N+(i+1)%N,(i+1)%N) for i in range(N)]
+land=mesh('Two green harbour shores',vs,fs,'grass')
+vs=[(x,y,-.49) for x,y in rim]+[(x,y,-.58) for x,y in rim]
 soil=mesh('Solid coastal foundation',vs,[tuple(range(N)),tuple(reversed(range(N,N*2)))]+[(i,(i+1)%N,N+(i+1)%N,N+i) for i in range(N)],'soil')
 # An uninterrupted harbour separates the front city island from the rear mountain island.
 bay=[(-14,-.15),(-8,-.05),(-3,.05),(2,.05),(7,-.15),(14,-.2),(14,3.15),(7,3.35),(2,3.3),(-3,3.1),(-8,3.0),(-14,3.2)]
@@ -154,15 +155,15 @@ def cabin(x,y,s=1):
   cube('Cream window frame',(x+dx*s,y-.57*s,z+.65*s),(.34*s,.04,.43*s),'wall',.02)
   cube('Window glass',(x+dx*s,y-.6*s,z+.65*s),(.25*s,.03,.34*s),'glass',.01)
  cube('Porch step',(x,y-.78*s,z+.02),(.62*s,.4*s,.14),'rock',.03)
-for x,y,s in [(-7.3,-.9,.85),(-5.35,-1.1,.8),(-7,-3.2,.84),(-4.9,-3.4,.78)]:cabin(x,y,s)
+for x,y,s in [(3.4,-4.7,.83),(5.4,-4.4,.78),(6.9,-3.2,.8),(4.3,-6.1,.72)]:cabin(x,y,s)
 def flat_road(name,points,width=.4):
  vs=[]
  for i,p in enumerate(points):
   before=Vector(points[max(0,i-1)]);after=Vector(points[min(len(points)-1,i+1)]);d=after-before;normal=Vector((-d.y,d.x,0)).normalized()*width/2
   for sign in [-1,1]:vs.append(tuple(Vector(p)+normal*sign))
  mesh(name,vs,[(2*i,2*i+2,2*i+3,2*i+1) for i in range(len(points)-1)],'path')
-flat_road('Flat city waterfront road',[(-8,-4.7,.645),(-5,-4.6,.645),(-2.5,-4.5,.645),(0,-4.6,.645),(.55,-4.1,.645),(.65,-2.5,.645),(2,-1.3,.645),(4.6,-.65,.645)],.35)
-flat_road('Forest shore path',[(4.6,3.65,.645),(3.7,4,.645),(2.8,4.2,.645)],.28)
+flat_road('Flat city waterfront road',[(-7.8,-.65,.645),(-7.5,-2,.645),(-5,-3.9,.645),(-2.5,-4.5,.645),(0,-4.6,.645),(1.5,-4,.645),(3,-3.6,.645),(5.3,-3.4,.645)],.35)
+flat_road('Forest shore path',[(-7.8,3.65,.645),(-8.5,4.2,.645),(-8.8,5.1,.645)],.28)
 # Compact Vancouver towers with stepped roofs and restrained glazing.
 for x,y,w,d,h in [(-2.1,-1.5,.85,.8,2.8),(-.65,-1.25,.95,.85,3.65),(.6,-1.4,.78,.72,2.45),(-1.55,-3.25,.95,.75,2.1),(.05,-3.15,.8,.72,2.85)]:
  cube('Sea glass tower',(x,y,.66+h/2),(w,d,h),'cityglass',.055)
@@ -171,43 +172,84 @@ for x,y,w,d,h in [(-2.1,-1.5,.85,.8,2.8),(-.65,-1.25,.95,.85,3.65),(.6,-1.4,.78,
   z=.65+j*.35;cube('Tower floor ledge',(x,y,z),(w+.025,d+.025,.035),'wall',.008)
  for xx in [-w*.29,w*.29]:cube('Slender facade mullion',(x+xx,y-d/2-.014,.66+h/2),(.025,.025,h-.12),'wall',.005)
  cube('Set back rooftop',(x,y,.66+h+.12),(w*.67,d*.7,.24),'roof',.025)
-# Canada Place sits along the inlet, with five tensioned fabric sails.
+# Individually detailed Canada Place: five curved tensile sails, masts and glass pavilion.
 place_before=set(sc.objects)
-cube('Canada Place waterside plinth',(1.10,.12,.46),(1.35,2.8,.36),'rock',.04)
-cube('Canada Place pavilion',(1.10,.12,.79),(1.12,2.65,.45),'wall',.025)
-for i in range(5):
- y=-.93+i*.52;n=8;vs=[];fs=[]
+cube('Canada Place stone quay',(0,0,.48),(3.45,1.4,.33),'rock',.045)
+cube('Canada Place promenade',(0,0,.68),(3.5,1.45,.1),'path',.025)
+cube('Canada Place glazed hall',(0,0,.99),(3.1,1.06,.55),'glass',.03)
+cube('Canada Place roof fascia',(0,0,1.28),(3.28,1.17,.10),'wall',.025)
+for side in [-1,1]:
+ for j in range(19):
+  x=-1.49+j*2.98/18
+  cube('Pavilion window mullion',(x,side*.546,.99),(.027,.025,.48),'wall',.004)
+ rod('Pavilion glazing transom',(-1.52,side*.55,1.05),(1.52,side*.55,1.05),.018,'wall')
+ for j in range(15):
+  x=-1.62+j*3.24/14;rod('Promenade baluster',(x,side*.68,.73),(x,side*.68,.91),.012,'wall')
+ rod('Continuous promenade handrail',(-1.65,side*.68,.92),(1.65,side*.68,.92),.014,'wall')
+for j in range(5):
+ x=(j-2)*.63;w=.66;depth=1.2;height=.86+(2-abs(j-2))*.06;n=18;vs=[];fs=[]
+ def sail(u,v):
+  # Rounded tensile curvature with thin fabric, rather than a solid pyramid roof.
+  xx=(u-.5)*w;yy=(v-.5)*depth
+  zz=1.34+height*max(0,1-abs(xx)/(w/2))**.65*max(0,1-abs(yy)/(depth/2))**.48
+  return (x+xx,yy,zz)
  for u in range(n+1):
-  for v in range(n+1):
-   xx=(u/n-.5)*1.25;yy=(v/n-.5)*.55
-   z=1.04+.79*max(0,1-abs(xx)/.625)**.8*max(0,1-abs(yy)/.275)**.5
-   vs.append((1.10+xx,y+yy,z))
+  for v in range(n+1):vs.append(sail(u/n,v/n))
  for u in range(n):
   for v in range(n):a=u*(n+1)+v;b=a+n+1;fs.append((a,b,b+1,a+1))
- mesh('Ivory fabric sail',vs,fs,'snow',True)
-# Turn the pavilion toward the foreground waterfront, clear of the bridge silhouette.
+ canopy=mesh('Tensioned sail '+str(j+1),vs,fs,'snow',True);mod=canopy.modifiers.new('Thin fabric edge','SOLIDIFY');mod.thickness=.014
+ rod('Sail mast',(x,0,1.28),(x,0,1.34+height+.10),.02,'wall')
+ for v in [.15,.5,.85]:line('Sail fabric seam',[sail(u/18,v) for u in range(19)],.006,'snow')
+ for side in [-1,1]:
+  rod('Sail rigging',(x,0,1.34+height+.08),(x+side*w*.49,side*depth*.49,1.34),.008,'wall')
+# Stepped entrance and two understated doors.
+for k in range(3):cube('Pavilion entrance step',(-1.8-k*.08,0,.68-k*.06),(.18,.65,.12),'rock',.015)
+for y in [-.15,.15]:cube('Pavilion entrance glazing',(-1.567,y,.95),(.025,.25,.38),'cityglass',.012)
 from mathutils import Matrix
-pavilion_transform=Matrix.Translation(Vector((2.4,-.75,0))) @ Matrix.Rotation(math.pi/2,4,'Z') @ Matrix.Translation(Vector((-1.10,-.12,0)))
+pavilion_transform=Matrix.Translation(Vector((2.8,-.85,0)))
 for o in set(sc.objects)-place_before:o.matrix_world=pavilion_transform @ o.matrix_world
 # A level Lions Gate bridge joins the city and forest shores. Mountains sit behind the shore.
-start=Vector((4.6,-.65,.77));end=Vector((4.6,3.65,.77));delta=end-start
+M['bridge']=mat('Lions Gate painted green steel','397d6d')
+M['road']=mat('Bridge asphalt','596769')
+start=Vector((-7.8,-.65,.77));end=Vector((-7.8,3.65,.77));delta=end-start
 angle=math.atan2(delta.y,delta.x);side=Vector((-math.sin(angle),math.cos(angle),0))
-def bridgepoint(t):
- return start+delta*t
-for i in range(36):
- p=bridgepoint(i/35);o=cube('Bridge cedar deck',p,(delta.length/35*.97,.62,.12),'wood',.014);o.rotation_euler.z=angle
-for t in [.10,.88]:
+def bridgepoint(t):return start+delta*t
+# A thin roadway, pale sidewalks and a visible stiffening truss below the deck.
+o=cube('Lions Gate continuous road deck',(start+end)/2,(delta.length,.76,.11),'road',.018);o.rotation_euler.z=angle
+for sign in [-1,1]:
+ p=(start+end)/2+side*.44*sign;o=cube('Raised bridge footway',p,(delta.length,.11,.08),'path',.012);o.rotation_euler.z=angle
+ for i in range(18):
+  a=bridgepoint(i/18)+side*.47*sign;b=bridgepoint((i+1)/18)+side*.47*sign
+  rod('Deck edge beam',a-Vector((0,0,.16)),b-Vector((0,0,.16)),.035,'bridge')
+  rod('Diagonal deck truss',a-Vector((0,0,.16)),b+Vector((0,0,.01)),.016,'bridge')
+  rod('Safety railing post',a,a+Vector((0,0,.19)),.014,'bridge')
+ rod('Bridge safety rail',start+side*.47*sign+Vector((0,0,.2)),end+side*.47*sign+Vector((0,0,.2)),.018,'bridge')
+for i in range(12):
+ p=bridgepoint((i+.5)/12)+Vector((0,0,.061));o=cube('Road centre dash',p,(.15,.018,.005),'wall',0);o.rotation_euler.z=angle
+# Open portal towers with tapered legs, crossbeams and diagonal steel bracing.
+for t in [.15,.85]:
  p=bridgepoint(t)
  for sign in [-1,1]:
-  a=p+side*.38*sign;rod('North Shore bridge tower',a,a+Vector((0,0,1.5)),.06,'fir')
- rod('Bridge tower cross beam',p-side*.38+Vector((0,0,1.35)),p+side*.38+Vector((0,0,1.35)),.045,'fir')
+  foot=p+side*.58*sign-Vector((0,0,.22));top=p+side*.47*sign+Vector((0,0,2.12))
+  rod('Tapered tower leg',foot,top,.07,'bridge');cube('Tower concrete footing',foot-Vector((0,0,.04)),(.25,.25,.18),'rock',.025)
+ for h in [.64,1.38,2.05]:
+  spread=.58-.11*(h/2.12);rod('Portal crossbeam',p-side*spread+Vector((0,0,h)),p+side*spread+Vector((0,0,h)),.045,'bridge')
+ for low,high in [(.70,1.33),(1.43,2.00)]:
+  for sign in [-1,1]:rod('Tower diagonal cross bracing',p+side*.5*sign+Vector((0,0,low)),p-side*.48*sign+Vector((0,0,high)),.023,'bridge')
+# Main cables pass over both towers and sag between them, with anchored end spans.
 for sign in [-1,1]:
  pts=[]
- for i in range(25):
-  t=i/24;p=bridgepoint(t)+side*.35*sign;top=p+Vector((0,0,.68+.92*(2*t-1)**2));pts.append(tuple(top));rod('Suspension hanger',p,top,.013,'fir')
- line('Sweeping suspension cable',pts,.024,'fir')
+ for i in range(49):
+  t=i/48
+  if t<.15:h=.32+(2.12-.32)*(t/.15)
+  elif t>.85:h=.32+(2.12-.32)*((1-t)/.15)
+  else:h=.68+1.44*((t-.5)/.35)**2
+  p=bridgepoint(t)+side*.48*sign;top=p+Vector((0,0,h));pts.append(tuple(top))
+  if i%2==0:rod('Vertical suspension hanger',p,top,.012,'bridge')
+ line('Lions Gate suspension cable',pts,.03,'bridge')
+ for t in [0,1]:cube('Concrete cable anchorage',bridgepoint(t)+side*.5*sign,(.22,.28,.2),'rock',.025)
 # Trees use Japan's exact connected, four-tier evergreen silhouettes.
-for x,y,h in [(-9,-.7,2.5),(-9,3.6,2.85),(-8.2,3.8,2.15),(-9,-2,1.9),(-9,-4.1,2.2),(-8.2,-5.1,1.8),(-3.1,-5.75,2.1),(-2,-6,1.65),(7.7,-1,2.6),(8.8,-1.0,2.7),(9,-2,2.2),(8,-4.3,2.5),(7,-5.3,1.8),(8.9,3.7,2.7),(-7.8,6.5,1.8),(1.7,4.3,2.2),(2.9,4.7,2.4),(8.8,4.5,2.1)]:fir(x,y,h)
+for x,y,h in [(-9,-.7,2.5),(-9,3.6,2.85),(-9.5,4.6,2.15),(-9,-2,1.9),(-9,-4.1,2.2),(-8.2,-5.1,1.8),(-3.1,-5.75,2.1),(-2,-6,1.65),(7.7,-1,2.6),(8.8,-1.0,2.7),(9,-2,2.2),(8,-4.3,2.5),(7,-5.3,1.8),(8.9,3.7,2.7),(-6.4,-1.0,2.0),(-6.5,3.35,1.7),(1.7,4.3,2.2),(2.9,4.7,2.4),(8.8,4.5,2.1)]:fir(x,y,h)
 for x,y,s in [(-10,-3.5,.38),(-9.8,-4,.2),(1,-6.7,.27),(8.4,-4.5,.26),(8.8,-4.6,.18),(10.8,-1.8,.3)]:sphere('Shore stone',(x,y,.67+s*.27),(s,s*.65,s*.4),'rock')
 # Small harbour details stay subordinate to the landscape.
 sphere('Water taxi hull',(1.9,1.7,-.49),(.22,.49,.13),'wood')

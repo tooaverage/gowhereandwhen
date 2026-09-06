@@ -54,6 +54,6 @@
 
 @media(max-width:599px){.world-page .sight-info{top:auto;bottom:190px;max-height:170px;width:calc(100% - 28px)}}
 
-.canada-scene-hero{background:#7eccd7}.canada-scene-hero .hero-heading h1{color:#fffbea;text-shadow:0 6px 0 #284c57}.canada-scene-hero .scene-note{color:#385a65}
+
 
 .scene-poster{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;pointer-events:none;opacity:1;transition:opacity .3s ease}.hero-scene>.map-canvas{transition:opacity .3s ease}.hero-scene.scene-ready>.scene-poster{opacity:0}@media(prefers-reduced-motion:reduce){.scene-poster,.hero-scene>.map-canvas{transition:none}}

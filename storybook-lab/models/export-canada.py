@@ -128,16 +128,15 @@ fs=[tuple(reversed(range(1+N,1+N*2)))]+[(0,1+i,1+(i+1)%N) for i in range(N)]+[(1
 land=mesh('Continuous coastal meadow',vs,fs,'grass')
 vs=[(x,y,-.12) for x,y in rim]+[(x,y,-.58) for x,y in rim]
 soil=mesh('Solid coastal foundation',vs,[tuple(range(N)),tuple(reversed(range(N,N*2)))]+[(i,(i+1)%N,N+(i+1)%N,N+i) for i in range(N)],'soil')
-# A calm inlet opens right through the front shore, between city and forest.
-bay=[(1.1,1.3),(1.8,2.1),(2.5,3.0),(2.8,5.0),(3.3,9.5),(5.1,9.5),(4.7,5.0),(4.6,3.0),(5.8,.8),(6,-.8),(5.5,-2.7),(5.9,-4.4),(6.4,-6.2),(7.2,-9.5),(4.3,-9.5),(3.4,-6.3),(3.4,-4.2),(3.7,-2.4),(3.2,-1.0),(1.6,-.5)]
-bay.reverse()
+# An uninterrupted harbour separates the front city island from the rear mountain island.
+bay=[(-14,-.15),(-8,-.05),(-3,.05),(2,.05),(7,-.15),(14,-.2),(14,3.15),(7,3.35),(2,3.3),(-3,3.1),(-8,3.0),(-14,3.2)]
 carve('Harbour inlet',bay)
 # The ocean stage itself fills the cutout, so water has one continuous level and outline.
 bpy.ops.mesh.primitive_cylinder_add(vertices=128,radius=1,depth=.16,location=(0,0,-.68));o=bpy.context.object;o.name='Turquoise ocean stage';o.scale=(13,9.9,1);o.data.materials.append(M['water'])
 # Distinct peaks rather than rounded green domes. Snow is part of each mesh.
-mountain('North Shore central summit',-2,3.65,4.1,6.7,'rock',True)
-mountain('Lions western summit',-6.15,3.65,2.7,4.3,'hill',True)
-mountain('Eastern forested shoulder',7.2,4.5,2.3,3.65,'hill',True)
+mountain('North Shore central summit',-2,5.8,2.4,6.7,'rock',True)
+mountain('Lions western summit',-6.15,5.5,2.1,4.3,'hill',True)
+mountain('Eastern forested shoulder',6.5,5.5,2.1,3.65,'hill',True)
 # Cedar homes form a small waterfront neighbourhood, with visible roof boards.
 M['cedar']=mat('Warm coastal cedar','b57d55')
 M['cityglass']=mat('Soft sea glass','609fa0')
@@ -162,8 +161,8 @@ def flat_road(name,points,width=.4):
   before=Vector(points[max(0,i-1)]);after=Vector(points[min(len(points)-1,i+1)]);d=after-before;normal=Vector((-d.y,d.x,0)).normalized()*width/2
   for sign in [-1,1]:vs.append(tuple(Vector(p)+normal*sign))
  mesh(name,vs,[(2*i,2*i+2,2*i+3,2*i+1) for i in range(len(points)-1)],'path')
-flat_road('Flat city waterfront road',[(-8,-4.7,.645),(-5,-4.6,.645),(-2.5,-4.5,.645),(0,-4.6,.645),(.55,-4.1,.645),(.65,-2.5,.645),(1.4,-1.7,.645),(2.3,-1.7,.645)],.35)
-flat_road('Forest shore path',[(6.5,-1,.645),(7.2,-1.7,.645),(7.3,-3,.645)],.28)
+flat_road('Flat city waterfront road',[(-8,-4.7,.645),(-5,-4.6,.645),(-2.5,-4.5,.645),(0,-4.6,.645),(.55,-4.1,.645),(.65,-2.5,.645),(2,-1.3,.645),(4.6,-.65,.645)],.35)
+flat_road('Forest shore path',[(4.6,3.65,.645),(3.7,4,.645),(2.8,4.2,.645)],.28)
 # Compact Vancouver towers with stepped roofs and restrained glazing.
 for x,y,w,d,h in [(-2.1,-1.5,.85,.8,2.8),(-.65,-1.25,.95,.85,3.65),(.6,-1.4,.78,.72,2.45),(-1.55,-3.25,.95,.75,2.1),(.05,-3.15,.8,.72,2.85)]:
  cube('Sea glass tower',(x,y,.66+h/2),(w,d,h),'cityglass',.055)
@@ -188,10 +187,10 @@ for i in range(5):
  mesh('Ivory fabric sail',vs,fs,'snow',True)
 # Turn the pavilion toward the foreground waterfront, clear of the bridge silhouette.
 from mathutils import Matrix
-pavilion_transform=Matrix.Translation(Vector((2.1,-3.4,0))) @ Matrix.Rotation(math.pi/2,4,'Z') @ Matrix.Translation(Vector((-1.10,-.12,0)))
+pavilion_transform=Matrix.Translation(Vector((2.4,-.75,0))) @ Matrix.Rotation(math.pi/2,4,'Z') @ Matrix.Translation(Vector((-1.10,-.12,0)))
 for o in set(sc.objects)-place_before:o.matrix_world=pavilion_transform @ o.matrix_world
 # A level Lions Gate bridge joins the city and forest shores. Mountains sit behind the shore.
-start=Vector((2.3,-1.7,.77));end=Vector((6.5,-1.0,.77));delta=end-start
+start=Vector((4.6,-.65,.77));end=Vector((4.6,3.65,.77));delta=end-start
 angle=math.atan2(delta.y,delta.x);side=Vector((-math.sin(angle),math.cos(angle),0))
 def bridgepoint(t):
  return start+delta*t
@@ -208,12 +207,12 @@ for sign in [-1,1]:
   t=i/24;p=bridgepoint(t)+side*.35*sign;top=p+Vector((0,0,.68+.92*(2*t-1)**2));pts.append(tuple(top));rod('Suspension hanger',p,top,.013,'fir')
  line('Sweeping suspension cable',pts,.024,'fir')
 # Trees use Japan's exact connected, four-tier evergreen silhouettes.
-for x,y,h in [(-9,0,2.5),(-9,1.4,2.85),(-8.2,1.7,2.15),(-9,-2,1.9),(-9,-4.1,2.2),(-8.2,-5.1,1.8),(-3.1,-5.75,2.1),(-2,-6,1.65),(7.7,-1,2.6),(8.8,-.2,2.7),(9,-2,2.2),(8,-4.3,2.5),(7,-5.3,1.8),(9,1.8,2.7)]:fir(x,y,h)
+for x,y,h in [(-9,-.7,2.5),(-9,3.6,2.85),(-8.2,3.8,2.15),(-9,-2,1.9),(-9,-4.1,2.2),(-8.2,-5.1,1.8),(-3.1,-5.75,2.1),(-2,-6,1.65),(7.7,-1,2.6),(8.8,-1.0,2.7),(9,-2,2.2),(8,-4.3,2.5),(7,-5.3,1.8),(8.9,3.7,2.7),(-7.8,6.5,1.8),(1.7,4.3,2.2),(2.9,4.7,2.4),(8.8,4.5,2.1)]:fir(x,y,h)
 for x,y,s in [(-10,-3.5,.38),(-9.8,-4,.2),(1,-6.7,.27),(8.4,-4.5,.26),(8.8,-4.6,.18),(10.8,-1.8,.3)]:sphere('Shore stone',(x,y,.67+s*.27),(s,s*.65,s*.4),'rock')
 # Small harbour details stay subordinate to the landscape.
-sphere('Water taxi hull',(4.75,-.2,-.49),(.22,.49,.13),'wood')
-cube('Water taxi cabin',(4.75,-.17,-.29),(.32,.39,.29),'wall',.06)
-cube('Water taxi windshield',(4.75,-.375,-.27),(.23,.025,.13),'glass',.01)
+sphere('Water taxi hull',(1.9,1.7,-.49),(.22,.49,.13),'wood')
+cube('Water taxi cabin',(1.9,1.73,-.29),(.32,.39,.29),'wall',.06)
+cube('Water taxi windshield',(1.9,1.525,-.27),(.23,.025,.13),'glass',.01)
 sphere('Orca back',(-.4,-8.4,-.42),(.75,.27,.21),'orca')
 mesh('Orca dorsal fin',[(-.48,-8.4,-.27),(-.11,-8.4,-.27),(-.38,-8.4,.31),(-.31,-8.33,-.25)],[(0,1,2),(0,2,3),(2,1,3),(0,3,1)],'orca',True)
 sphere('Orca eye patch',(-.85,-8.57,-.33),(.12,.035,.065),'snow')

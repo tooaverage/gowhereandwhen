@@ -53,3 +53,5 @@
 .city-jump-label{display:block;margin-top:12px;font-size:.75rem;font-weight:800}.city-jump{display:block;width:100%;min-height:40px;margin-top:4px;padding:8px 10px;border:1px solid #b6cabc;border-radius:8px;background:#f7f7ec;color:#244653;font:inherit;font-size:.875rem}
 
 @media(max-width:599px){.world-page .sight-info{top:auto;bottom:190px;max-height:170px;width:calc(100% - 28px)}}
+
+.canada-scene-hero{background:#fff}.canada-scene-hero .hero-heading h1{color:#244653;text-shadow:none}.canada-scene-hero .scene-note{color:#385a65}

@@ -1,0 +1,474 @@
+[
+  {
+    "name": "Vancouver",
+    "lat": 49.2827,
+    "lng": -123.1207,
+    "area": "British Columbia",
+    "bestTime": "June to September",
+    "visitNote": "Harbour walks, Stanley Park and the North Shore. Nearby mountain skiing is a separate winter trip.",
+    "off": [
+      0,
+      -14
+    ],
+    "hi": [
+      7,
+      8,
+      10,
+      13,
+      17,
+      20,
+      22,
+      22,
+      19,
+      14,
+      9,
+      6
+    ],
+    "lo": [
+      1,
+      2,
+      3,
+      6,
+      9,
+      12,
+      14,
+      14,
+      11,
+      7,
+      4,
+      1
+    ],
+    "pr": [
+      168,
+      105,
+      114,
+      88,
+      65,
+      54,
+      36,
+      37,
+      51,
+      121,
+      189,
+      162
+    ],
+    "source": {
+      "station": "VANCOUVER INT'L A",
+      "period": "1981–2010",
+      "url": "https://dd.weather.gc.ca/today/climate/observations/normals/csv/1981-2010/BC/climate_normals_BC_1108447_1981-2010.csv"
+    }
+  },
+  {
+    "name": "Victoria",
+    "lat": 48.4284,
+    "lng": -123.3656,
+    "area": "Vancouver Island",
+    "bestTime": "May to September",
+    "visitNote": "Gardens, the Inner Harbour and coastal walks. The island is generally milder than inland Canada.",
+    "off": [
+      -24,
+      31
+    ],
+    "hi": [
+      8,
+      9,
+      11,
+      14,
+      17,
+      20,
+      22,
+      22,
+      20,
+      14,
+      10,
+      7
+    ],
+    "lo": [
+      2,
+      1,
+      3,
+      4,
+      7,
+      10,
+      11,
+      11,
+      9,
+      6,
+      3,
+      1
+    ],
+    "pr": [
+      143,
+      89,
+      78,
+      48,
+      38,
+      31,
+      18,
+      24,
+      31,
+      88,
+      153,
+      142
+    ],
+    "source": {
+      "station": "VICTORIA INT'L A",
+      "period": "1981–2010",
+      "url": "https://dd.weather.gc.ca/today/climate/observations/normals/csv/1981-2010/BC/climate_normals_BC_1018620_1981-2010.csv"
+    }
+  },
+  {
+    "name": "Calgary",
+    "lat": 51.0447,
+    "lng": -114.0719,
+    "area": "Alberta",
+    "bestTime": "June to September",
+    "visitNote": "A city stop before the Rockies. July and August suit Lake Louise and high-country exploring; winter suits skiing.",
+    "off": [
+      17,
+      -10
+    ],
+    "hi": [
+      -1,
+      1,
+      4,
+      11,
+      16,
+      20,
+      23,
+      23,
+      18,
+      12,
+      3,
+      -1
+    ],
+    "lo": [
+      -13,
+      -11,
+      -8,
+      -2,
+      3,
+      8,
+      10,
+      9,
+      4,
+      -1,
+      -8,
+      -13
+    ],
+    "pr": [
+      9,
+      9,
+      18,
+      25,
+      57,
+      94,
+      66,
+      57,
+      45,
+      15,
+      13,
+      10
+    ],
+    "source": {
+      "station": "CALGARY INT'L A",
+      "period": "1981–2010",
+      "url": "https://dd.weather.gc.ca/today/climate/observations/normals/csv/1981-2010/AB/climate_normals_AB_3031093_1981-2010.csv"
+    }
+  },
+  {
+    "name": "Toronto",
+    "lat": 43.6532,
+    "lng": -79.3832,
+    "area": "Ontario",
+    "bestTime": "June to September",
+    "visitNote": "Waterfront days, the CN Tower and a trip to Niagara Falls. Autumn colour is another reason to visit in fall.",
+    "off": [
+      -23,
+      23
+    ],
+    "hi": [
+      -2,
+      0,
+      5,
+      12,
+      19,
+      24,
+      27,
+      26,
+      22,
+      14,
+      8,
+      1
+    ],
+    "lo": [
+      -9,
+      -9,
+      -4,
+      2,
+      7,
+      13,
+      16,
+      15,
+      11,
+      5,
+      0,
+      -6
+    ],
+    "pr": [
+      52,
+      48,
+      50,
+      68,
+      74,
+      72,
+      76,
+      78,
+      74,
+      61,
+      75,
+      58
+    ],
+    "source": {
+      "station": "TORONTO LESTER B. PEARSON INT'L A",
+      "period": "1981–2010",
+      "url": "https://dd.weather.gc.ca/today/climate/observations/normals/csv/1981-2010/ON/climate_normals_ON_6158733_1981-2010.csv"
+    }
+  },
+  {
+    "name": "Montréal",
+    "lat": 45.5019,
+    "lng": -73.5674,
+    "area": "Québec",
+    "bestTime": "June to September",
+    "visitNote": "Outdoor cafés, festivals and Old Montréal. September and October bring autumn colour to the wider region.",
+    "off": [
+      -24,
+      -13
+    ],
+    "hi": [
+      -5,
+      -3,
+      2,
+      12,
+      19,
+      24,
+      26,
+      25,
+      21,
+      13,
+      6,
+      -1
+    ],
+    "lo": [
+      -14,
+      -12,
+      -6,
+      1,
+      8,
+      13,
+      16,
+      15,
+      10,
+      4,
+      -2,
+      -9
+    ],
+    "pr": [
+      77,
+      63,
+      69,
+      82,
+      81,
+      87,
+      89,
+      94,
+      83,
+      91,
+      96,
+      87
+    ],
+    "source": {
+      "station": "MONTREAL/PIERRE ELLIOTT TRUDEAU INTL A",
+      "period": "1981–2010",
+      "url": "https://dd.weather.gc.ca/today/climate/observations/normals/csv/1981-2010/QC/climate_normals_QC_7025250_1981-2010.csv"
+    }
+  },
+  {
+    "name": "Québec City",
+    "lat": 46.8139,
+    "lng": -71.208,
+    "area": "Québec",
+    "bestTime": "June to September",
+    "visitNote": "Old Québec and Château Frontenac in warm weather. Winter is a different trip, with snowy streets and carnival season.",
+    "off": [
+      5,
+      -43
+    ],
+    "hi": [
+      -8,
+      -6,
+      0,
+      8,
+      17,
+      22,
+      25,
+      24,
+      18,
+      11,
+      3,
+      -4
+    ],
+    "lo": [
+      -18,
+      -16,
+      -9,
+      -1,
+      5,
+      10,
+      14,
+      12,
+      8,
+      2,
+      -4,
+      -13
+    ],
+    "pr": [
+      87,
+      74,
+      76,
+      84,
+      116,
+      111,
+      121,
+      104,
+      116,
+      98,
+      102,
+      100
+    ],
+    "source": {
+      "station": "QUEBEC/JEAN LESAGE INTL A",
+      "period": "1981–2010",
+      "url": "https://dd.weather.gc.ca/today/climate/observations/normals/csv/1981-2010/QC/climate_normals_QC_7016294_1981-2010.csv"
+    }
+  },
+  {
+    "name": "Halifax",
+    "lat": 44.6488,
+    "lng": -63.5752,
+    "area": "Nova Scotia",
+    "bestTime": "July to September",
+    "visitNote": "The waterfront, fishing villages and Peggy’s Cove. Atlantic weather can change quickly.",
+    "off": [
+      25,
+      22
+    ],
+    "hi": [
+      -1,
+      -1,
+      3,
+      9,
+      15,
+      20,
+      24,
+      24,
+      19,
+      13,
+      7,
+      2
+    ],
+    "lo": [
+      -10,
+      -10,
+      -6,
+      0,
+      5,
+      10,
+      14,
+      14,
+      10,
+      4,
+      0,
+      -6
+    ],
+    "pr": [
+      134,
+      106,
+      120,
+      114,
+      112,
+      96,
+      96,
+      94,
+      102,
+      125,
+      154,
+      143
+    ],
+    "source": {
+      "station": "HALIFAX STANFIELD INT'L A",
+      "period": "1981–2010",
+      "url": "https://dd.weather.gc.ca/today/climate/observations/normals/csv/1981-2010/NS/climate_normals_NS_8202250_1981-2010.csv"
+    }
+  },
+  {
+    "name": "Whitehorse",
+    "lat": 60.7212,
+    "lng": -135.0568,
+    "area": "Yukon",
+    "bestTime": "June to August",
+    "visitNote": "Long summer days for road trips. Mid-August to early April is northern-lights season when skies are dark and clear.",
+    "off": [
+      20,
+      0
+    ],
+    "hi": [
+      -11,
+      -8,
+      -1,
+      7,
+      14,
+      19,
+      21,
+      18,
+      12,
+      4,
+      -6,
+      -8
+    ],
+    "lo": [
+      -19,
+      -18,
+      -12,
+      -5,
+      1,
+      6,
+      8,
+      7,
+      2,
+      -3,
+      -13,
+      -16
+    ],
+    "pr": [
+      18,
+      12,
+      10,
+      7,
+      16,
+      32,
+      38,
+      36,
+      33,
+      23,
+      20,
+      16
+    ],
+    "source": {
+      "station": "WHITEHORSE A",
+      "period": "1981–2010",
+      "url": "https://dd.weather.gc.ca/today/climate/observations/normals/csv/1981-2010/YT/climate_normals_YT_2101300_1981-2010.csv"
+    }
+  }
+]

@@ -54,6 +54,53 @@ export function addWorldDetails(scene,{ground,data=[]}){
   tube(g,[[-1.1,.22,.355],[0,.22,.355],[1.1,.22,.355]],'#ede7d4',.009);
  },.7);
 
+ // Canadian sights use separate, deliberately spaced compositions.
+ function alpinePeak(g,x,z,w,h,seed){
+  const n=18,rings=[],levels=[0,.28,.62,.82,1],radii=[1,.81,.46,.25,0];
+  for(let j=0;j<levels.length;j++){
+   const ring=[];for(let i=0;i<n;i++){const a=i/n*Math.PI*2,crinkle=1+.10*Math.sin(i*2.4+seed)+.055*Math.cos(i*4.1-seed),snowEdge=j===2?.065*Math.sin(i*1.7+seed):0;
+    ring.push([x+Math.cos(a)*w*radii[j]*crinkle-.12*w*levels[j],.035+h*(levels[j]+snowEdge),z+Math.sin(a)*w*radii[j]*.67*crinkle]);}
+   rings.push(ring);
+  }
+  for(let j=0;j<4;j++){
+   const p=[];for(let i=0;i<n;i++){const k=(i+1)%n;p.push(...rings[j][i],...rings[j+1][i],...rings[j][k]);if(j<3)p.push(...rings[j][k],...rings[j+1][i],...rings[j+1][k]);}
+   const geo=new T.BufferGeometry();geo.setAttribute('position',new T.Float32BufferAttribute(p,3));geo.computeVertexNormals();mesh(g,geo,['#7b9a7c','#8e9c8a','#edf3ed','#fffaf0'][j]);
+  }
+ }
+ place({iso:124,name:'Lake Louise & the Canadian Rockies',x:-116.18,y:51.42,type:'rockies',description:'A turquoise glacial lake below the snow-capped Canadian Rockies, in Banff National Park.',window:'July and August for alpine lakes and hiking; winter for skiing. Snow and lake ice vary with the year and elevation.',url:'https://www.banfflakelouise.com/experiences/lake-louise'},g=>{
+  alpinePeak(g,-.70,-.48,.91,1.96,1);alpinePeak(g,.61,-.59,.79,1.61,4);alpinePeak(g,-1.19,-.10,.49,1.04,7);
+  const shape=new T.Shape();for(let i=0;i<=48;i++){const a=i/48*Math.PI*2,r=1+.07*Math.sin(a*3);const x=Math.cos(a)*.84*r,z=Math.sin(a)*.34*r;if(!i)shape.moveTo(x,z);else shape.lineTo(x,z);}
+  const lakeGeo=new T.ShapeGeometry(shape);lakeGeo.rotateX(-Math.PI/2);lakeGeo.translate(.13,0,.57);const verts=lakeGeo.attributes.position,base=ground(124,-116.18,51.42);for(let i=0;i<verts.count;i++){const x=verts.getX(i),z=verts.getZ(i);verts.setY(i,(ground(124,-116.18+x*1.25,51.42-z*1.25)-base)/1.25+.065);}lakeGeo.computeVertexNormals();mesh(g,lakeGeo,'#60cec9');
+  for(const [x,z,s] of [[-.92,.50,.47],[1.02,.18,.55],[.85,.91,.41],[-.70,.90,.37]]){const tree=new T.Group();tree.position.set(x,.02,z);tree.scale.setScalar(s);g.add(tree);fir(tree);}
+ },1.25);
+ place({iso:124,name:'CN Tower, Toronto',x:-79.387,y:43.643,type:'cn-tower',description:'Toronto’s slender skyline landmark, with a broad observation pod and a needle-like antenna above Lake Ontario.',window:'June to September for waterfront sightseeing.',url:'https://www.cntower.ca/'},g=>{
+  cylinder(g,'#b3c4b1',0,.04,0,.53,.08);cylinder(g,'#e4dcc7',0,.94,0,.105,1.80,.054);
+  for(let i=0;i<3;i++){const a=i*Math.PI*2/3; tube(g,[[Math.cos(a)*.25,.04,Math.sin(a)*.25],[Math.cos(a)*.085,1.25,Math.sin(a)*.085],[Math.cos(a)*.05,1.64,Math.sin(a)*.05]],'#dcd6c4',.046);}
+  cylinder(g,'#d6d2bd',0,1.67,0,.15,.16,.37);cylinder(g,'#e9dec8',0,1.79,0,.37,.08);cylinder(g,'#638d94',0,1.86,0,.335,.095);cylinder(g,'#f5edd9',0,1.93,0,.34,.055,.21);
+  for(let i=0;i<18;i++){const a=i*Math.PI/9;cylinder(g,'#e6ddc8',Math.cos(a)*.337,1.86,Math.sin(a)*.337,.008,.096);}
+  cylinder(g,'#e9e6d4',0,2.09,0,.05,.32,.037);cylinder(g,'#7d9b9b',0,2.29,0,.092,.075);cylinder(g,'#faf4e2',0,2.48,0,.028,.38,.013);cylinder(g,'#d77469',0,2.55,0,.021,.055);cylinder(g,'#d77469',0,2.67,0,.016,.045);
+ },.78);
+ place({iso:124,name:'Château Frontenac, Québec City',x:-71.205,y:46.812,type:'frontenac',description:'A grand red-brick château hotel above Old Québec, with copper-green roofs, dormers and pointed turrets.',window:'June to September for warm-weather exploring; winter for a snowy city break.',url:'https://www.quebec-cite.com/en/quebec-city/landmarks'},g=>{
+  const brick='#bc8c73',trim='#efd7b4',copper='#608f83';box(g,'#c9c5ab',0,.045,0,1.75,.09,1.04);
+  for(const [x,z,w,h,d] of [[0,0,.64,1.10,.55],[-.56,.13,.63,.54,.42],[.56,.13,.63,.54,.42]]){
+   box(g,brick,x,.10+h/2,z,w,h,d);box(g,trim,x,.16,z,w+.04,.10,d+.03);roof(g,copper,x,.10+h,z,w+.11,d+.10,h*.36);
+   for(let i=0;i<3;i++)for(let j=0;j<(h>.8?5:2);j++)box(g,'#567c7a',x+(i-1)*w*.26,.29+j*.15,z+d/2+.008,.067,.087,.014,.003);
+   for(const dx of [-w*.24,w*.24]){box(g,trim,x+dx,.14+h,z+d*.29,.105,.12,.11);roof(g,copper,x+dx,.20+h,z+d*.29,.13,.14,.06);}
+  }
+  for(const x of [-.85,.85]){cylinder(g,brick,x,.46,.22,.13,.71);cylinder(g,trim,x,.80,.22,.15,.05);mesh(g,new T.ConeGeometry(.19,.43,16),copper,x,1.03,.22);ball(g,'#deb66c',x,1.27,.22,.026);}
+  for(const x of [-.26,.26]){cylinder(g,brick,x,1.12,-.18,.092,.37);mesh(g,new T.ConeGeometry(.13,.30,16),copper,x,1.43,-.18);}
+  cylinder(g,'#c0b195',0,1.64,0,.009,.33);box(g,'#ed806a',.062,1.74,0,.12,.07,.009,.003);
+ },.86);
+ place({iso:124,name:'Peggy’s Cove lighthouse',x:-63.918,y:44.491,type:'peggys-cove',description:'A white octagonal lighthouse with a red lantern, standing on the rounded granite of Nova Scotia’s Atlantic coast.',window:'Summer to early autumn for a coastal trip. Stay on dry rocks, well back from the water.',url:'https://novascotia.com/listing/peggys-cove-lighthouse-and-village/'},g=>{
+  for(const [x,z,w,h,d] of [[0,0,.62,.15,.52],[-.54,.15,.32,.12,.27],[.49,.21,.31,.10,.28],[.27,-.38,.36,.12,.27]])ball(g,'#b6b6aa',x,h*.65,z,w,h,d);
+  mesh(g,new T.CylinderGeometry(.17,.25,1.05,8),'#fff4dd',0,.69,0);
+  box(g,'#5e7877',0,.37,.234,.09,.25,.015,.002);box(g,'#6a9294',0,.84,.194,.075,.12,.014,.002);
+  cylinder(g,'#cc7367',0,1.23,0,.26,.065);cylinder(g,'#517f89',0,1.35,0,.175,.20);cylinder(g,'#d98170',0,1.48,0,.24,.06);
+  for(let i=0;i<8;i++){const a=i*Math.PI/4;cylinder(g,'#d57869',Math.cos(a)*.174,1.35,Math.sin(a)*.174,.012,.22);cylinder(g,'#f4e4c8',Math.cos(a)*.248,1.30,Math.sin(a)*.248,.008,.14);}
+  const rail=Array.from({length:33},(_,i)=>[Math.cos(i*Math.PI/16)*.25,1.37,Math.sin(i*Math.PI/16)*.25]);tube(g,rail,'#f4e4c8',.009);
+  mesh(g,new T.ConeGeometry(.26,.19,8),'#d57768',0,1.605,0);ball(g,'#ca7667',0,1.72,0,.026,.055,.026);
+ },.88);
+
  function sunShape(g){ball(g,'#ffd65a',0,0,0,.34,.34,.10);for(let i=0;i<12;i++){const a=i*Math.PI/6;const o=box(g,'#ffdd74',Math.cos(a)*.53,Math.sin(a)*.53,0,.065,.17,.075,.025);o.rotation.z=a-Math.PI/2;}billboards.push(g);}
  function fir(g,snow=false){cylinder(g,'#a3825e',0,.3,0,.045,.6);for(let i=0;i<3;i++)mesh(g,new T.CylinderGeometry(.015,.25-i*.045,.34,14),snow&&i===2?'#f1f5e6':'#579776',0,.35+i*.21,0);}
  function flower(g,x,z,c){cylinder(g,'#669773',x,.10,z,.010,.20);for(let i=0;i<5;i++){const a=i*Math.PI*.4;ball(g,c,x+Math.cos(a)*.045,.21,z+Math.sin(a)*.045,.035,.016,.028);}ball(g,'#f9d376',x,.228,z,.019);}

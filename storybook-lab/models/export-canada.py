@@ -1,61 +1,228 @@
-"""Soften the approved Vancouver composition for the interactive Canada cover."""
-import bpy, math, gzip
+import bpy, math, random, sys
 from pathlib import Path
+from mathutils import Vector
 ROOT=Path(__file__).resolve().parents[2]
-SOURCE=ROOT.parent/'outputs/vancouver/vancouver-white-background.blend'
 OUT=ROOT/'storybook-lab/assets'
-bpy.ops.wm.open_mainfile(filepath=str(SOURCE))
-scene=bpy.context.scene
-for o in list(scene.objects):
- if o.type in ['CAMERA','LIGHT'] or 'background' in o.name.lower():bpy.data.objects.remove(o,do_unlink=True)
-# Replace pointed roof-like sails with continuous, softly curved fabric surfaces.
-snow=bpy.data.materials.new('Storybook sail ivory');snow.use_nodes=True
-snow.diffuse_color=(.96,.95,.86,1)
-snow.node_tree.nodes['Principled BSDF'].inputs['Base Color'].default_value=(.96,.95,.86,1)
-for o in list(scene.objects):
- if o.name.startswith('Canada Place sail'):bpy.data.objects.remove(o,do_unlink=True)
+STYLE=sys.argv[-1] if sys.argv[-1] in ['storybook','illustrated','realistic','miniature'] else 'storybook'
+random.seed(57)
+bpy.ops.wm.read_factory_settings(use_empty=True)
+sc=bpy.context.scene
+REAL=STYLE=='realistic'; WOOD=STYLE=='miniature'; INK=STYLE=='illustrated'
+def color(h):
+ c=[int(h[i:i+2],16)/255 for i in (0,2,4)]
+ return tuple(v/12.92 if v<=.04045 else ((v+.055)/1.055)**2.4 for v in c)+(1,)
+def mat(name,h,rough=.72,noise=0):
+ m=bpy.data.materials.new(name);m.use_nodes=True;m.diffuse_color=color(h)
+ n=m.node_tree.nodes;l=m.node_tree.links;p=n.get('Principled BSDF');p.inputs['Base Color'].default_value=color(h);p.inputs['Roughness'].default_value=rough
+ if noise or (REAL and name not in ['water','glass']) or WOOD:
+  tex=n.new('ShaderNodeTexNoise');tex.inputs['Scale'].default_value=5 if WOOD else 13;tex.inputs['Detail'].default_value=3
+  bump=n.new('ShaderNodeBump');bump.inputs['Strength'].default_value=.16 if REAL else .07;bump.inputs['Distance'].default_value=.075;l.new(tex.outputs['Fac'],bump.inputs['Height']);l.new(bump.outputs['Normal'],p.inputs['Normal'])
+  ramp=n.new('ShaderNodeValToRGB');c=color(h);ramp.color_ramp.elements[0].color=tuple(v*.65 for v in c[:3])+(1,);ramp.color_ramp.elements[1].color=tuple(min(1,v*1.15) for v in c[:3])+(1,);l.new(tex.outputs['Fac'],ramp.inputs[0]);l.new(ramp.outputs[0],p.inputs['Base Color'])
+  if WOOD:
+   wave=n.new('ShaderNodeTexWave');wave.wave_type='BANDS';wave.bands_direction='X';wave.inputs['Scale'].default_value=16;wave.inputs['Distortion'].default_value=7;l.new(wave.outputs['Color'],bump.inputs['Height'])
+ if INK:
+  diffuse=n.new('ShaderNodeBsdfDiffuse');diffuse.inputs['Color'].default_value=color(h)
+  rgb=n.new('ShaderNodeShaderToRGB');l.new(diffuse.outputs[0],rgb.inputs[0]);r=n.new('ShaderNodeValToRGB');r.color_ramp.interpolation='CONSTANT';c=color(h)
+  r.color_ramp.elements[0].position=.17;r.color_ramp.elements[0].color=tuple(v*.56 for v in c[:3])+(1,)
+  r.color_ramp.elements[1].position=.52;r.color_ramp.elements[1].color=c
+  e=r.color_ramp.elements.new(.8);e.color=tuple(min(1,v*1.23) for v in c[:3])+(1,)
+  l.new(rgb.outputs[0],r.inputs[0]);l.new(r.outputs[0],n.get('Material Output').inputs['Surface'])
+ return m
+palette={'grass':'83ad6a','hill':'698d68','rock':'879482','snow':'f3f3e8','soil':'d2c5a0','water':'54bcc3','wood':'795f49','wall':'f5ead4','roof':'385d60','pink':'f4b6bf','pink2':'eb9faa','fir':'396b57','leaf':'7eaa64','path':'ded3a9','red':'b65c42','glass':'567c83','foam':'b7e3db'}
+if INK: palette.update(grass='b6cd95',hill='87a591',rock='729398',water='80c9d1',roof='365c73',pink='f3b5b8',pink2='e8979f',wood='9a6551')
+if REAL: palette.update(grass='697e46',hill='5c735a',rock='707c78',water='46868a',pink='d9a6b0',pink2='b98697')
+if WOOD: palette.update(grass='9db980',hill='74937b',soil='c79c69',water='70b6c1',wood='b18154',roof='47777e',pink='e2a4af',pink2='cf909c')
+M={k:mat(k,v,.23 if (WOOD or k=='water') else .78,1 if k in ['grass','rock'] else 0) for k,v in palette.items()}
+if REAL:
+ p=M['water'].node_tree.nodes.get('Principled BSDF');p.inputs['Metallic'].default_value=.25;p.inputs['Roughness'].default_value=.18
+
+def mesh(name,vs,fs,m,smooth=False):
+ d=bpy.data.meshes.new(name);d.from_pydata(vs,[],fs);d.update();o=bpy.data.objects.new(name,d);sc.collection.objects.link(o);d.materials.append(M[m] if isinstance(m,str) else m)
+ if smooth:
+  for p in d.polygons:p.use_smooth=True
+ return o
+
+def cube(name,loc,size,m,bev=.07):
+ bpy.ops.mesh.primitive_cube_add(size=1,location=loc);o=bpy.context.object;o.name=name;o.dimensions=size;bpy.ops.object.transform_apply(location=False,rotation=False,scale=True);o.data.materials.append(M[m])
+ if bev and not INK:
+  b=o.modifiers.new('Rounded crafted edges','BEVEL');b.width=bev;b.segments=3
+  o.modifiers.new('Weighted corner normals','WEIGHTED_NORMAL')
+ return o
+
+def sphere(name,loc,size,m):
+ bpy.ops.mesh.primitive_uv_sphere_add(segments=16 if not REAL else 24,ring_count=10,location=loc);o=bpy.context.object;o.name=name;o.scale=size;o.data.materials.append(M[m]);
+ for p in o.data.polygons:p.use_smooth=True
+ if REAL and name=='Blossom cloud':
+  tex=bpy.data.textures.get('Blossom surface') or bpy.data.textures.new('Blossom surface',type='CLOUDS');tex.noise_scale=.17
+  mod=o.modifiers.new('Small blossom clusters','DISPLACE');mod.texture=tex;mod.strength=.16;mod.texture_coords='GLOBAL'
+ return o
+
+def rod(name,a,b,r,m):
+ delta=Vector(b)-Vector(a);mid=(Vector(a)+Vector(b))/2;bpy.ops.mesh.primitive_cylinder_add(vertices=12,radius=r,depth=delta.length,location=mid);o=bpy.context.object;o.name=name;o.rotation_euler=delta.to_track_quat('Z','Y').to_euler();o.data.materials.append(M[m]);return o
+
+def line(name,pts,width,m):
+ c=bpy.data.curves.new(name,'CURVE');c.dimensions='3D';c.bevel_depth=width;c.bevel_resolution=3;s=c.splines.new('POLY');s.points.add(len(pts)-1)
+ for p,v in zip(s.points,pts):p.co=(*v,1)
+ o=bpy.data.objects.new(name,c);sc.collection.objects.link(o);c.materials.append(M[m]);return o
+
+
+def mountain(name,x,y,rad,h,m,cap=False):
+ rings=30 if REAL else 22;segments=72;vs=[]
+ for j in range(rings+1):
+  u=j/rings;rr=rad*(1-u)**.86
+  for i in range(segments):
+   t=i*math.tau/segments;rid=1+.035*math.sin(9*t+u*3)+.025*math.cos(15*t-u*2);z=.62+h*u
+   if REAL:z+=(.14*math.sin(t*13)*math.sin(u*22)+.08*math.cos(t*27+u*45))*(1-u)
+   vs.append((x+rr*rid*math.cos(t),y+rr*rid*math.sin(t),z))
+ fs=[]
+ for j in range(rings):
+  for i in range(segments):a=j*segments+i;b=j*segments+(i+1)%segments;fs.append((a,b,b+segments,a+segments))
+ o=mesh(name,vs,fs,m,True)
+ if cap:
+  o.data.materials.append(M['snow'])
+  for p in o.data.polygons:
+   z=sum(o.data.vertices[i].co.z for i in p.vertices)/len(p.vertices);a=o.data.vertices[p.vertices[0]].co;threshold=.62+h*.69+.18*math.sin(math.atan2(a.y-y,a.x-x)*8)
+   if z>threshold:p.material_index=1
+ return o
+
+def carve(name,poly):
+ n=len(poly);vs=[(x,y,-1) for x,y in poly]+[(x,y,1) for x,y in poly]
+ cutter=mesh(name,vs,[tuple(reversed(range(n))),tuple(range(n,n*2))]+[(i,(i+1)%n,n+(i+1)%n,n+i) for i in range(n)],'water')
+ for target in [land,soil]:
+  bpy.context.view_layer.objects.active=target;mod=target.modifiers.new('Recessed watercourse','BOOLEAN');mod.operation='DIFFERENCE';mod.object=cutter
+  bpy.ops.object.modifier_apply(modifier=mod.name)
+ bpy.data.objects.remove(cutter,do_unlink=True)
+
+def fir(x,y,h=2.5):
+ z=ground(x,y);rod('Cedar connected trunk',(x,y,z),(x,y,z+h*.95),.07,'wood')
+ if REAL:
+  vs=[];fs=[]
+  for j in range(13):
+   zz=z+.4+j*h*.061;r=h*.28*(1-j/14)
+   for k in range(11):
+    t=k*math.tau/11+j*.87
+    a=(x,y,zz+.18);b=(x+math.cos(t)*r,y+math.sin(t)*r,zz-.06)
+    for u in range(1,10):
+     v=u/10;px=a[0]+(b[0]-a[0])*v;py=a[1]+(b[1]-a[1])*v;pz=a[2]+(b[2]-a[2])*v
+     for side in [-1,1]:
+      w=.13*(1-v)+.04;dx=math.cos(t+side*.9);dy=math.sin(t+side*.9);n=len(vs)
+      vs.extend([(px,py,pz),(px+dx*w,py+dy*w,pz-.06),(px+.015,py+.015,pz+.015)]);fs.append((n,n+1,n+2))
+  mesh('Fine evergreen branch sprays',vs,fs,'fir')
+  return
+ for j in range(4):
+  zz=z+.48+j*h*.17;r=h*(.25-j*.046)
+  bpy.ops.mesh.primitive_cone_add(vertices=32,radius1=r,radius2=.025,depth=h*.55,location=(x,y,zz+h*.22));o=bpy.context.object;o.name='Cedar layered crown';o.data.materials.append(M['fir'])
+  for p in o.data.polygons:p.use_smooth=not INK
+  if REAL:
+   for k in range(8):
+    t=k*math.tau/8;rod('Cedar branch',(x,y,zz+.25),(x+math.cos(t)*r,y+math.sin(t)*r,zz),.022,'fir')
+def ground(x,y):return .65
+
+# The same island, material palette, ridges and layered cedars as Japan's cover.
+N=112
+rim=[]
+for i in range(N):
+ t=i*math.tau/N;r=1+.035*math.sin(5*t)+.025*math.cos(7*t);rim.append((11.6*r*math.cos(t),8.4*r*math.sin(t)))
+vs=[(0,0,.62)]+[(x,y,.62) for x,y in rim]+[(x,y,-.1) for x,y in rim]
+fs=[tuple(reversed(range(1+N,1+N*2)))]+[(0,1+i,1+(i+1)%N) for i in range(N)]+[(1+i,1+N+i,1+N+(i+1)%N,1+(i+1)%N) for i in range(N)]
+land=mesh('Continuous coastal meadow',vs,fs,'grass')
+vs=[(x,y,-.12) for x,y in rim]+[(x,y,-.58) for x,y in rim]
+soil=mesh('Solid coastal foundation',vs,[tuple(range(N)),tuple(reversed(range(N,N*2)))]+[(i,(i+1)%N,N+(i+1)%N,N+i) for i in range(N)],'soil')
+# A calm inlet opens right through the front shore, between city and forest.
+bay=[(1.1,1.3),(2.6,2.0),(4.5,1.8),(5.8,.8),(6,-.8),(5.5,-2.7),(5.9,-4.4),(6.4,-6.2),(7.2,-9.5),(4.3,-9.5),(3.4,-6.3),(3.4,-4.2),(3.7,-2.4),(3.2,-1.0),(1.6,-.5)]
+bay.reverse()
+carve('Harbour inlet',bay)
+# The ocean stage itself fills the cutout, so water has one continuous level and outline.
+bpy.ops.mesh.primitive_cylinder_add(vertices=128,radius=1,depth=.16,location=(0,0,-.68));o=bpy.context.object;o.name='Turquoise ocean stage';o.scale=(13,9.9,1);o.data.materials.append(M['water'])
+# Distinct peaks rather than rounded green domes. Snow is part of each mesh.
+mountain('North Shore central summit',-2,3.65,4.1,6.7,'rock',True)
+mountain('Lions western summit',-6.15,3.65,2.7,4.3,'hill',True)
+mountain('Eastern forested shoulder',4.9,4.25,3.1,3.65,'hill',True)
+# Cedar homes form a small waterfront neighbourhood, with visible roof boards.
+M['cedar']=mat('Warm coastal cedar','b57d55')
+M['cityglass']=mat('Soft sea glass','609fa0')
+M['orca']=mat('Orca charcoal','263e47')
+def cabin(x,y,s=1):
+ z=.65;cube('Cottage foundation',(x,y,z+.08),(1.55*s,1.25*s,.16),'rock')
+ cube('Cedar cottage',(x,y,z+.58*s),(1.4*s,1.1*s,1.1*s),'cedar')
+ v=[(x-.88*s,y-.72*s,z+1.1*s),(x+.88*s,y-.72*s,z+1.1*s),(x,y-.72*s,z+1.7*s),(x-.88*s,y+.72*s,z+1.1*s),(x+.88*s,y+.72*s,z+1.1*s),(x,y+.72*s,z+1.7*s)]
+ roof=mesh('Gabled slate roof',v,[(0,3,5,2),(2,5,4,1),(0,2,1),(3,4,5)],'roof');bevel=roof.modifiers.new('Gentle eaves','BEVEL');bevel.width=.025;bevel.segments=2
+ for j in range(7):
+  yy=y-.7*s+j*.233*s
+  for side in [-1,1]:rod('Fine roof seam',(x,yy,z+1.72*s),(x+side*.88*s,yy,z+1.12*s),.012,'roof')
+ cube('Recessed front door',(x,y-.561*s,z+.38*s),(.32*s,.03,.75*s),'wood',.012)
+ for dx in [-.46,.46]:
+  cube('Cream window frame',(x+dx*s,y-.57*s,z+.65*s),(.34*s,.04,.43*s),'wall',.02)
+  cube('Window glass',(x+dx*s,y-.6*s,z+.65*s),(.25*s,.03,.34*s),'glass',.01)
+ cube('Porch step',(x,y-.78*s,z+.02),(.62*s,.4*s,.14),'rock',.03)
+for x,y,s in [(-7.3,-.9,.85),(-5.35,-1.1,.8),(-7,-3.2,.84),(-4.9,-3.4,.78)]:cabin(x,y,s)
+line('Waterfront walking trail',[(-8,-4.7,.66),(-5,-4.6,.66),(-2.5,-4.5,.66),(0,-4.6,.66),(1,-3,.66),(1.25,-1.25,.66)],.17,'path')
+# Compact Vancouver towers with stepped roofs and restrained glazing.
+for x,y,w,d,h in [(-2.1,-1.5,.85,.8,2.8),(-.65,-1.25,.95,.85,3.65),(.6,-1.4,.78,.72,2.45),(-1.55,-3.25,.95,.75,2.1),(.05,-3.15,.8,.72,2.85)]:
+ cube('Sea glass tower',(x,y,.66+h/2),(w,d,h),'cityglass',.055)
+ cube('Light stone podium',(x,y,.78),(w+.2,d+.15,.25),'wall',.035)
+ for j in range(1,int(h/.35)):
+  z=.65+j*.35;cube('Tower floor ledge',(x,y,z),(w+.025,d+.025,.035),'wall',.008)
+ for xx in [-w*.29,w*.29]:cube('Slender facade mullion',(x+xx,y-d/2-.014,.66+h/2),(.025,.025,h-.12),'wall',.005)
+ cube('Set back rooftop',(x,y,.66+h+.12),(w*.67,d*.7,.24),'roof',.025)
+# Canada Place sits along the inlet, with five tensioned fabric sails.
+place_before=set(sc.objects)
+cube('Canada Place waterside plinth',(1.10,.12,.46),(1.35,2.8,.36),'rock',.04)
+cube('Canada Place pavilion',(1.10,.12,.79),(1.12,2.65,.45),'wall',.025)
 for i in range(5):
- x=.67+i*.76;n=16;verts=[];faces=[]
+ y=-.93+i*.52;n=8;vs=[];fs=[]
  for u in range(n+1):
   for v in range(n+1):
-   xx=(u/n-.5)*.72;yy=(v/n-.5)*.96
-   z=1.23+.77*max(0,1-abs(xx)/.36)**.72*max(0,1-abs(yy)/.48)**.42
-   verts.append((x+xx,-.33+yy,z))
+   xx=(u/n-.5)*1.25;yy=(v/n-.5)*.55
+   z=1.04+.79*max(0,1-abs(xx)/.625)**.8*max(0,1-abs(yy)/.275)**.5
+   vs.append((1.10+xx,y+yy,z))
  for u in range(n):
-  for v in range(n):
-   a=u*(n+1)+v;b=a+n+1;faces.append((a,b,b+1,a+1))
- mesh=bpy.data.meshes.new('Curved sail');mesh.from_pydata(verts,[],faces);mesh.update()
- o=bpy.data.objects.new('Canada Place fabric sail '+str(i+1),mesh);scene.collection.objects.link(o)
- if snow:o.data.materials.append(snow)
- for p in mesh.polygons:p.use_smooth=True
-# Rounded edges and gentle shading, with the original connected snow surfaces.
-for o in list(scene.objects):
- if o.type!='MESH':continue
- bpy.context.view_layer.objects.active=o;o.select_set(True)
- bpy.ops.object.transform_apply(location=False,rotation=False,scale=True)
- for modifier in list(o.modifiers):bpy.ops.object.modifier_apply(modifier=modifier.name)
- if any(k in o.name for k in ['peak','ridge']):
-  for p in o.data.polygons:p.use_smooth=True
- elif 'fabric sail' not in o.name:
-  bevel=o.modifiers.new('Soft Storybook edges','BEVEL');bevel.width=.075 if ('land' in o.name.lower() or 'Stanley Park' in o.name) else .035;bevel.segments=3;bevel.limit_method='ANGLE'
-  bevel.angle_limit=.4
-  for p in o.data.polygons:p.use_smooth=True
-  normals=o.modifiers.new('Preserve broad faces','WEIGHTED_NORMAL');normals.keep_sharp=True;normals.weight=50
- o.select_set(False)
+  for v in range(n):a=u*(n+1)+v;b=a+n+1;fs.append((a,b,b+1,a+1))
+ mesh('Ivory fabric sail',vs,fs,'snow',True)
+# Turn the pavilion toward the foreground waterfront, clear of the bridge silhouette.
+from mathutils import Matrix
+pavilion_transform=Matrix.Translation(Vector((2.1,-3.4,0))) @ Matrix.Rotation(math.pi/2,4,'Z') @ Matrix.Translation(Vector((-1.10,-.12,0)))
+for o in set(sc.objects)-place_before:o.matrix_world=pavilion_transform @ o.matrix_world
+# Lions Gate connects the city shore to the North Shore mountains across the inlet.
+start=Vector((1.25,-1.25,.85));end=Vector((4.1,2.6,2.35));delta=end-start
+angle=math.atan2(delta.y,delta.x);side=Vector((-math.sin(angle),math.cos(angle),0))
+def bridgepoint(t):
+ p=start+delta*t;p.z+=.08*math.sin(t*math.pi);return p
+for i in range(36):
+ p=bridgepoint(i/35);o=cube('Bridge cedar deck',p,(delta.length/35*.97,.62,.12),'wood',.014);o.rotation_euler.z=angle
+for t in [.10,.88]:
+ p=bridgepoint(t)
+ for sign in [-1,1]:
+  a=p+side*.38*sign;rod('North Shore bridge tower',a,a+Vector((0,0,2.15)),.06,'fir')
+ rod('Bridge tower cross beam',p-side*.38+Vector((0,0,1.95)),p+side*.38+Vector((0,0,1.95)),.045,'fir')
+for sign in [-1,1]:
+ pts=[]
+ for i in range(25):
+  t=i/24;p=bridgepoint(t)+side*.35*sign;top=p+Vector((0,0,1.15+1.1*(2*t-1)**2));pts.append(tuple(top));rod('Suspension hanger',p,top,.013,'fir')
+ line('Sweeping suspension cable',pts,.024,'fir')
+# Trees use Japan's exact connected, four-tier evergreen silhouettes.
+for x,y,h in [(-9,0,2.5),(-9,1.4,2.85),(-8.2,1.7,2.15),(-9,-2,1.9),(-9,-4.1,2.2),(-8.2,-5.1,1.8),(-3.1,-5.75,2.1),(-2,-6,1.65),(7.7,-1,2.6),(8.8,-.2,2.7),(9,-2,2.2),(8,-4.3,2.5),(7,-5.3,1.8),(9,1.8,2.7)]:fir(x,y,h)
+for x,y,s in [(-10,-3.5,.38),(-9.8,-4,.2),(1,-6.7,.27),(8.4,-4.5,.26),(8.8,-4.6,.18),(10.8,-1.8,.3)]:sphere('Shore stone',(x,y,.67+s*.27),(s,s*.65,s*.4),'rock')
+# Small harbour details stay subordinate to the landscape.
+sphere('Water taxi hull',(4.75,-.2,-.49),(.22,.49,.13),'wood')
+cube('Water taxi cabin',(4.75,-.17,-.29),(.32,.39,.29),'wall',.06)
+cube('Water taxi windshield',(4.75,-.375,-.27),(.23,.025,.13),'glass',.01)
+sphere('Orca back',(-.4,-8.4,-.42),(.75,.27,.21),'orca')
+mesh('Orca dorsal fin',[(-.48,-8.4,-.27),(-.11,-8.4,-.27),(-.38,-8.4,.31),(-.31,-8.33,-.25)],[(0,1,2),(0,2,3),(2,1,3),(0,3,1)],'orca',True)
+sphere('Orca eye patch',(-.85,-8.57,-.33),(.12,.035,.065),'snow')
+for x,y in [(-.6,-8.8),(4.6,-.85),(2.9,-7.4),(10,-5),(-10,-6.5)]:line('Quiet ripple',[(x-.27,y,-.58),(x,y+.025,-.58),(x+.28,y,-.58)],.012,'foam')
+# Bake compact, colour-only geometry just like Japan's interactive asset.
 for m in bpy.data.materials:
  if not m.use_nodes:continue
  p=m.node_tree.nodes.get('Principled BSDF')
- if not p:continue
- p.inputs['Roughness'].default_value=.83
- if p.inputs['Base Color'].is_linked:
-  for link in list(p.inputs['Base Color'].links):m.node_tree.links.remove(link)
-  p.inputs['Base Color'].default_value=m.diffuse_color
-# Merge the static diorama so it stays inexpensive to draw on phones.
-bpy.ops.object.select_all(action='DESELECT')
-meshes=[o for o in scene.objects if o.type=='MESH' and not o.hide_render]
-for o in meshes:o.select_set(True)
-bpy.context.view_layer.objects.active=meshes[0];bpy.ops.object.convert(target='MESH');bpy.ops.object.join();bpy.context.object.name='Canada Storybook harbour'
-bpy.ops.export_scene.gltf(filepath=str(OUT/'canada-storybook.glb'),export_format='GLB',use_selection=True,export_extras=True,export_animations=False)
+ if p:
+  for inp in ['Base Color','Normal']:
+   for link in list(p.inputs[inp].links):m.node_tree.links.remove(link)
+  p.inputs['Base Color'].default_value=m.diffuse_color;p.inputs['Roughness'].default_value=.8
+bpy.ops.object.select_all(action='SELECT');bpy.context.view_layer.objects.active=land
+bpy.ops.object.convert(target='MESH');bpy.ops.object.join();bpy.context.object.name='Canada coastal Storybook scene'
+import gzip
+bpy.ops.export_scene.gltf(filepath=str(OUT/'canada-storybook.glb'),export_format='GLB',use_selection=True,export_animations=False)
 raw=(OUT/'canada-storybook.glb').read_bytes();(OUT/'canada-storybook.glb.gz').write_bytes(gzip.compress(raw,9));(OUT/'canada-storybook.glb').unlink()
-bpy.ops.wm.save_as_mainfile(filepath=str(ROOT.parent/'outputs/vancouver/canada-storybook.blend'))
-print('CANADA STORYBOOK',len(raw),'bytes',flush=True)
+bpy.ops.wm.save_as_mainfile(filepath=str(ROOT.parent/'outputs/vancouver/canada-storybook-v2.blend'))
+print('CANADA EXPORTED',len(raw),'compressed',len(gzip.compress(raw,9)),flush=True)

@@ -90,7 +90,7 @@ export function addWorldDetails(scene,{ground,data=[]}){
   }
  }
  place({iso:124,name:'Lake Louise & the Canadian Rockies',x:-116.18,y:51.42,type:'rockies',description:'A turquoise glacial lake below the snow-capped Canadian Rockies, in Banff National Park.',window:'July and August for alpine lakes and hiking; winter for skiing. Snow and lake ice vary with the year and elevation.',url:'https://www.banfflakelouise.com/experiences/lake-louise'},g=>{
-  alpinePeak(g,-.70,-.48,.91,1.96,1);alpinePeak(g,.61,-.59,.79,1.61,4);alpinePeak(g,-1.19,-.10,.49,1.04,7);
+  // The surrounding peaks are authored in Blender with the Canada cover's ridge geometry.
   const shape=new T.Shape();for(let i=0;i<=48;i++){const a=i/48*Math.PI*2,r=1+.07*Math.sin(a*3);const x=Math.cos(a)*.84*r,z=Math.sin(a)*.34*r;if(!i)shape.moveTo(x,z);else shape.lineTo(x,z);}
   const lakeGeo=new T.ShapeGeometry(shape);lakeGeo.rotateX(-Math.PI/2);lakeGeo.translate(.13,0,.57);const verts=lakeGeo.attributes.position,base=ground(124,-116.18,51.42);for(let i=0;i<verts.count;i++){const x=verts.getX(i),z=verts.getZ(i);verts.setY(i,(ground(124,-116.18+x*1.25,51.42-z*1.25)-base)/1.25+.065);}lakeGeo.computeVertexNormals();mesh(g,lakeGeo,'#60cec9');
   for(const [x,z,s] of [[-.92,.50,.47],[1.02,.18,.55],[.85,.91,.41],[-.70,.90,.37]]){const tree=new T.Group();tree.position.set(x,.02,z);tree.scale.setScalar(s);g.add(tree);fir(tree);}

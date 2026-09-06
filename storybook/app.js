@@ -1,4 +1,4 @@
-const createWorldMap=(...args)=>import('./map.js?v=storybook26').then(m=>m.createWorldMap(...args));
+const createWorldMap=(...args)=>import('./map.js?v=storybook27').then(m=>m.createWorldMap(...args));
 const meta=window.GAME_META,$=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)],params=new URLSearchParams(location.search);
 const months=['January','February','March','April','May','June','July','August','September','October','November','December'];
 const colors={ideal:'#40a773',great:'#a9dc67',good:'#f4d45d',fair:'#f0a45c',avoid:'#e77c75'};
@@ -45,4 +45,4 @@ async function mountCountryScene(container){const canada=meta.slug==='canada';tr
  let seasonalFrame=0;heroMap={setMonth(m){cancelAnimationFrame(seasonalFrame);const spring=m===2||m===3,winter=m===11||m<2,target=winter?.12:1;for(const {o} of crowns)o.material.color.set(spring?'#f1b0bd':winter?'#efeedd':m>=8?'#dca173':'#85b976');const start=performance.now(),from=spring?.35:target;function grow(now){const t=reduced()?1:Math.min(1,(now-start)/550),size=from+(target-from)*(1-(1-t)**3);for(const {o,scale} of crowns)o.scale.copy(scale).multiplyScalar(size);draw();if(t<1)seasonalFrame=requestAnimationFrame(grow);}grow(start);}};heroMap.setMonth(month);
  draw();}catch(e){console.error('Country scene:',e);container.classList.add('map-fallback');container.querySelector('canvas')?.remove();container.dataset.loadState='preview';}}
 const heroBoot=['japan','canada'].includes(meta.slug)?mountCountryScene($('.hero-scene')):null;
-try{data=await fetch(new URL('./data.json?v=storybook26',import.meta.url)).then(r=>{if(!r.ok)throw Error('Travel data unavailable');return r.json();});if(meta.slug)await initGuide();else await initWorld();}catch(error){console.error(error);const panel=$('#country-panel-content');if(panel)panel.innerHTML='<h1>Explore the world</h1><p>Travel data could not load. Please reload the page.</p>';}
+try{data=await fetch(new URL('./data.json?v=storybook27',import.meta.url)).then(r=>{if(!r.ok)throw Error('Travel data unavailable');return r.json();});if(meta.slug)await initGuide();else await initWorld();}catch(error){console.error(error);const panel=$('#country-panel-content');if(panel)panel.innerHTML='<h1>Explore the world</h1><p>Travel data could not load. Please reload the page.</p>';}

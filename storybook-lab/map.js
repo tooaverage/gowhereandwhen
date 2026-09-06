@@ -1,8 +1,8 @@
-import {createTraffic,travelClock} from './traffic.js?v=storybook26';
+import {createTraffic,travelClock} from './traffic.js?v=storybook27';
 import * as THREE from 'three';
 import {GLTFLoader} from '../play/vendor/GLTFLoader.js';
 import {OrbitControls} from '../play/vendor/OrbitControls.js';
-import {addWorldDetails,australiaRegions,regionalScore,heatColor} from './world-details.js?v=storybook26';
+import {addWorldDetails,australiaRegions,regionalScore,heatColor} from './world-details.js?v=storybook27';
 const reduced=()=>matchMedia('(prefers-reduced-motion: reduce)').matches;
 const palette={ideal:'#40a773',great:'#a9dc67',good:'#f4d45d',fair:'#f0a45c',avoid:'#e77c75'};
 export async function createWorldMap(container,{data,iso=null,month=10,onSelect=()=>{},onCity=()=>{},onDismiss=()=>{},compact=false,flat=false,rounded=false}={}){
@@ -13,11 +13,11 @@ export async function createWorldMap(container,{data,iso=null,month=10,onSelect=
  const labelLayer=document.createElement('div');labelLayer.className='map-labels';container.append(labelLayer);
  const labels=[],meshes=[],countryGroups=new Map(),featureMap=new Map();let selected=iso,mo=month,disposed=false,frame=0,tween=null;const byIso=new Map(data.map(r=>[r.iso,r]));
  function label(name,x,y,kind,rec){const el=document.createElement('button');el.className='map-label '+kind;el.innerHTML=kind==='city'?'<span class="dot"></span><span></span>':'';if(kind==='city')el.lastElementChild.textContent=name;else el.textContent=name;el.setAttribute('aria-label',kind==='city'?'Explore '+name:'Select '+name);el.addEventListener('click',()=>{if(kind==='city'){onCity(rec);focusCity(rec);}else{select(rec.iso,true);onSelect(rec.iso);}});labelLayer.append(el);labels.push({el,p:new THREE.Vector3(x,2,-y),kind,rec,priority:['Toronto','San Francisco','Tokyo','Manila','Kyoto','Sapporo','Naha','Cebu','Siargao'].includes(name)});}
- const response=await fetch(new URL('./assets/storybook-v1.glb.gz?v=storybook26',import.meta.url));if(!response.ok)throw new Error('World model unavailable');const bytes=await new Response(response.body.pipeThrough(new DecompressionStream('gzip'))).arrayBuffer();const asset=await new GLTFLoader().parseAsync(bytes,'');
+ const response=await fetch(new URL('./assets/storybook-v1.glb.gz?v=storybook27',import.meta.url));if(!response.ok)throw new Error('World model unavailable');const bytes=await new Response(response.body.pipeThrough(new DecompressionStream('gzip'))).arrayBuffer();const asset=await new GLTFLoader().parseAsync(bytes,'');
  const weather=[],blossoms=[],transport=[],oldSuns=[],borders=new Map();let growing=false,motion=!reduced(),regional=false,hovered=null,orbit=false,details,lastDraw=0;
  const tip=document.createElement('div');tip.className='map-hover';tip.hidden=true;container.append(tip);
  const info=document.createElement('section');info.className='sight-info';info.hidden=true;info.setAttribute('aria-live','polite');container.parentElement.append(info);
- function showSight(rec){select(rec.iso,false);info.replaceChildren();const close=document.createElement('button');close.textContent='×';close.setAttribute('aria-label','Close place information');close.onclick=()=>{info.hidden=true;};const title=document.createElement('h2');title.textContent=rec.name;const description=document.createElement('p');description.textContent=rec.description||'Regional season estimate based on local travel seasons.';info.append(close,title,description);if(rec.window){const when=document.createElement('p');when.textContent='Typical window: '+rec.window;info.append(when);}if(rec.url){const a=document.createElement('a');a.href=rec.url;a.target='_blank';a.rel='noopener';a.textContent=rec.type==='storm'?'Meteorological source ↗':'Read the local guide ↗';info.append(a);}info.hidden=false;}
+ function showSight(rec){select(rec.iso,false);info.replaceChildren();const close=document.createElement('button');close.textContent='×';close.setAttribute('aria-label','Close place information');close.onclick=()=>{info.hidden=true;};const title=document.createElement('h2');title.textContent=rec.name;const description=document.createElement('p');description.textContent=rec.description||'Regional season estimate based on local travel seasons.';info.append(close,title,description);if(rec.window){const when=document.createElement('p');when.textContent='Typical window: '+rec.window;info.append(when);}if(rec.url){const a=document.createElement('a');a.href=rec.url;a.target='_blank';a.rel='noopener';a.textContent=rec.type==='monsoon'?'Meteorological source ↗':'Read the local guide ↗';info.append(a);}info.hidden=false;}
  scene.add(asset.scene);asset.scene.updateMatrixWorld(true);
  asset.scene.traverse(o=>{
   if(['boat','airplane'].includes(o.userData.role)){o.userData.start=o.position.clone();transport.push(o);}
@@ -36,13 +36,13 @@ export async function createWorldMap(container,{data,iso=null,month=10,onSelect=
  const traffic=createTraffic(scene,transport),trafficClock=travelClock();
  const groundRay=new THREE.Raycaster();
  function ground(id,x,y){groundRay.set(new THREE.Vector3(x,80,-y),new THREE.Vector3(0,-1,0));const group=countryGroups.get(id);return group?(groundRay.intersectObject(group,true)[0]?.point.y??0):0;}
- const borderData=await fetch(new URL('./assets/borders.json?v=storybook26',import.meta.url)).then(r=>r.json());
+ const borderData=await fetch(new URL('./assets/borders.json?v=storybook27',import.meta.url)).then(r=>r.json());
  for(const [id,pts] of Object.entries(borderData)){if(!pts.length)continue;const geo=new THREE.BufferGeometry().setFromPoints(pts.map(p=>new THREE.Vector3(...p)));const line=new THREE.LineSegments(geo,new THREE.LineBasicMaterial({color:'#e2eee2',transparent:false,opacity:1,depthWrite:false,depthTest:false}));line.renderOrder=1;scene.add(line);line.userData.countries=id.split('-').map(Number);borders.set(id,line);}
- function addSight(rec,position){const el=document.createElement('button');el.className='map-label sight'+(rec.type==='storm'?' storm':'');const icon=rec.type==='beach'?'☂':rec.type==='storm'?'🌀':'✦';el.textContent=icon+' '+(rec.type==='storm'?'Typhoon season':rec.name);el.setAttribute('aria-label','Explore '+rec.name);el.onclick=()=>showSight(rec);labelLayer.append(el);labels.push({el,p:position,kind:'sight',rec,priority:rec.type==='storm'});}
+ function addSight(rec,position){const el=document.createElement('button');el.className='map-label sight'+(rec.type==='monsoon'?' monsoon':'');const icon=rec.type==='beach'?'☂':rec.type==='monsoon'?'🌧':'✦';el.textContent=icon+' '+(rec.type==='monsoon'?(rec.shortLabel||'Monsoon season'):rec.name);el.setAttribute('aria-label','Explore '+rec.name);el.onclick=()=>showSight(rec);labelLayer.append(el);labels.push({el,p:position,kind:'sight',rec,priority:rec.type==='monsoon'});}
  details=addWorldDetails(scene,{ground,data});
- for(const g of details.items.filter(g=>g.userData.type==='storm'))addSight(g.userData,g.position.clone().add(new THREE.Vector3(0,2,0)));
- const stormKey=container.parentElement.querySelector('.storm-key');
- if(stormKey)stormKey.onclick=()=>{const active=details.items.find(g=>g.userData.type==='storm'&&g.userData.months.includes(mo+1));if(active){onDismiss();move(new THREE.Vector3(134,0,-24),85);}};
+ for(const g of details.items.filter(g=>g.userData.type==='monsoon'))addSight(g.userData,g.position.clone().add(new THREE.Vector3(0,2,0)));
+ const monsoonKey=container.parentElement.querySelector('.monsoon-key');
+ if(monsoonKey)monsoonKey.onclick=()=>{const active=details.items.filter(g=>g.userData.type==='monsoon'&&g.userData.months.includes(mo+1));const target=active.find(g=>g.userData.iso===selected)||active[0];if(target){onDismiss();move(new THREE.Vector3(target.position.x,0,target.position.z),70);}};
  // Draw inland borders as a map overlay, then let scenery cover them naturally.
  scene.traverse(o=>{if(o.isMesh&&!meshes.includes(o))o.renderOrder=2;});
  container.dataset.sightCount=String(details.items.filter(g=>!g.userData.months).length);
@@ -64,7 +64,7 @@ export async function createWorldMap(container,{data,iso=null,month=10,onSelect=
   for(const o of blossoms){o.userData.target=mo===2||mo===3?1:.001;if(reduced()){o.userData.growth=o.userData.target;o.scale.copy(o.userData.fullScale).multiplyScalar(o.userData.growth);}else growing=true;}
   for(const o of australiaMeshes){const mats=Array.isArray(o.material)?o.material:[o.material];for(const m of mats){m.vertexColors=regional;if(regional)m.color.set('#ffffff');m.needsUpdate=true;}if(regional){const pos=o.geometry.attributes.position,col=[];for(let i=0;i<pos.count;i++){const v=new THREE.Vector3().fromBufferAttribute(pos,i).applyMatrix4(o.matrixWorld),c=heatColor(regionalScore(v.x,-v.z,mo));col.push(c.r,c.g,c.b);}o.geometry.setAttribute('color',new THREE.Float32BufferAttribute(col,3));}}
   for(const [id,line] of borders){line.material.color.set(line.userData.countries.includes(selected)?'#fff8c7':'#e2eee2');line.material.opacity=1;}
-  const activeStorms=details.items.filter(g=>g.userData.type==='storm'&&g.userData.months.includes(mo+1));container.dataset.typhoonCount=String(activeStorms.length);if(stormKey)stormKey.hidden=!activeStorms.length;
+  const activeMonsoons=details.items.filter(g=>g.userData.type==='monsoon'&&g.userData.months.includes(mo+1));container.dataset.monsoonCount=String(activeMonsoons.length);if(monsoonKey)monsoonKey.hidden=!activeMonsoons.length;
   container.dataset.borderPairs=String(borders.size);container.dataset.month=String(mo);container.dataset.model='storybook-v1';container.dataset.regional=String(regional);
  }
  function updateLabels(){

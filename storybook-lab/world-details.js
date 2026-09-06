@@ -4,7 +4,7 @@ export {australiaRegions,regionalScore,heatColor} from '../play/world-details.js
 // Each landmark has its own composition, silhouette, proportions and palette.
 // Small scenery uses shared materials and is merged per material for mobile rendering.
 export function addWorldDetails(scene,{ground,data=[]}){
- const materials=new Map(),items=[],interactive=[],animated=[],weather=[],billboards=[];
+ const materials=new Map(),items=[],interactive=[],monsoonRain=[],weather=[],billboards=[];
  const mat=c=>{if(!materials.has(c))materials.set(c,new T.MeshStandardMaterial({color:c,roughness:.84}));return materials.get(c);};
  function mesh(g,geo,c,x=0,y=0,z=0,sx=1,sy=1,sz=1){const m=new T.Mesh(geo,mat(c));m.position.set(x,y,z);m.scale.set(sx,sy,sz);m.castShadow=true;m.receiveShadow=true;g.add(m);return m;}
  const ball=(g,c,x,y,z,rx,ry=rx,rz=rx)=>mesh(g,new T.SphereGeometry(1,16,10),c,x,y,z,rx,ry,rz);
@@ -137,25 +137,24 @@ export function addWorldDetails(scene,{ground,data=[]}){
   if(t==='aurora'){for(let j=0;j<3;j++){const pts=Array.from({length:18},(_,i)=>[(i-8.5)*.12,1.0+Math.sin(i*.44+j)*.13,-.08*j]);tube(g,pts,['#80d7b3','#a6c8d9','#b4dfa4'][j],.027);}fir(g,true);}
  },rec.type==='herd'?.75:rec.type==='calves'?.8:1);}
  for(const rec of beachTowns)place(rec,g=>{cylinder(g,'#b49b76',0,.16,0,.012,.32);for(let i=0;i<8;i++){const geo=new T.SphereGeometry(.15,3,3,i*Math.PI/4,Math.PI/4,0,Math.PI/2);mesh(g,geo,i%2?'#f6e4b6':'#ecad80',0,.30,0,1,.38,1);}box(g,ivory,.17,.045,.03,.065,.03,.19,.008);},1);
- const storms=[
-  {iso:608,x:130,y:14,months:[7,8,9,10],name:'Philippines typhoon season',window:'July to October is the peak season.',url:'https://www.pagasa.dost.gov.ph/climate/tropical-cyclone-information'},
-  {iso:392,x:145,y:30,months:[7,8,9,10],name:'Japan typhoon season',window:'July to October has the most typhoon approaches.',url:'https://www.jma.go.jp/jma/kishou/know/typhoon/1-4.html'},
-  {iso:158,x:126,y:24,months:[7,8,9,10],name:'Taiwan typhoon season',window:'July to October is the most active period in the western North Pacific.',url:'https://climate.cwa.gov.tw/ClimatePedia/detail_page/14'}
+ const monsoons=[
+  {iso:356,x:73,y:17,months:[6,7,8,9],name:'India southwest monsoon',window:'June to September. Onset and retreat vary across India; the southeast has a separate autumn rainy season.',url:'https://mausamjournal.imd.gov.in/index.php/MAUSAM/article/view/7776'},
+  {iso:764,x:97,y:12,months:[5,6,7,8,9,10],name:'Thailand southwest monsoon',window:'About mid-May to mid-October for much of Thailand. The southern Gulf coast stays wet later in the year.',url:'https://www5.tmd.go.th/info/ฤดูกาล-ฤดูกาลของโลก-ฤดูกาลของประเทศไทย'},
+  {iso:608,x:119,y:17,months:[5,6,7,8,9],name:'Philippines southwest monsoon',window:'May to September, especially western areas exposed to Habagat. Eastern areas have different rainfall patterns.',url:'https://www.pagasa.dost.gov.ph/climate/climate-advisories'},
+  {iso:392,x:142,y:32,months:[6,7],name:'Japan Baiu rainy season',shortLabel:'Rainy season',window:'June to July across much of mainland Japan. Okinawa starts earlier; Hokkaido has no regular Baiu season.',url:'https://www.data.jma.go.jp/cpd/longfcst/en/tourist_japan.html'},
+  {iso:158,x:125,y:24,months:[5,6],name:'Taiwan Mei-yu rainy season',shortLabel:'Rainy season',window:'May to June, before the later summer rains.',url:'https://www.cwa.gov.tw/Data/service/Newsbb/EN/Newsbb_20250429112150.pdf'}
  ];
- for(const r of storms){
-  const rec={...r,type:'storm',description:'The cyclone marks recurring seasonal risk around this destination. Storms can also occur outside these months. Tap the source for local information; this is not a live storm position or forecast.'};
+ for(const r of monsoons){
+  const rec={...r,type:'monsoon',description:'Rain clouds mark the usual monsoon or seasonal rainy period. Timing and rainfall vary by region and year; the map shows a planning season, not a live forecast.'};
   const g=place(rec,g=>{
-   // Two sculpted spiral cloud bands leave a clear, dark eye in the centre.
-   cylinder(g,'#527589',0,-.09,0,.39,.10);
-   for(let arm=0;arm<2;arm++)for(let i=0;i<24;i++){
-    const t=i/23,a=arm*Math.PI+t*4.8,rr=.44+t*1.03,radius=.24-.12*t;
-    const x=Math.cos(a)*rr,z=Math.sin(a)*rr;
-    ball(g,'#8298b4',x,-.025,z,radius*1.16,.17,radius*1.16);
-    ball(g,'#fcfaf1',x,.11+Math.sin(t*Math.PI)*.06,z,radius,.15,radius);
-   }
-  },1.3,2.5);animated.push(g);
+   for(const [x,y,z,rx,ry] of [[-.68,.1,0,.48,.31],[-.22,.36,0,.57,.43],[.35,.29,0,.56,.40],[.78,.06,0,.38,.27],[.02,.03,.12,.80,.28]])
+    ball(g,z?'#bdc9d7':'#f3f1ec',x,y,z,rx,ry,.32);
+  },1.3,3.1);
+  const drops=new T.Group();g.add(drops);
+  for(let i=0;i<6;i++)ball(drops,'#528eb7',-.66+i*.25,-.4-(i%3)*.2,.10,.048,.14,.055);
+  monsoonRain.push({g,drops});
  }
  const locations=[[124,-100,57],[840,-101,36],[76,-53,-9],[826,-3,54],[156,108,35],[356,81,24],[392,141,38],[608,124,12],[36,133,-25],[710,25,-29]];
  for(const [iso,x,y] of locations){const rec=data.find(r=>r.iso===iso);if(!rec)continue;const host=new T.Group();host.position.set(x,ground(iso,x,y)+2.3,-y);scene.add(host);const cloud=new T.Group();host.add(cloud);for(const [xx,yy,r] of [[-.35,0,.26],[0,.12,.34],[.35,0,.24]])ball(cloud,'#f7f3e8',xx,yy,0,r,r*.65,r*.75);pack(cloud);const drops=new T.Group(),flakes=new T.Group(),sun=new T.Group();host.add(drops,flakes,sun);sunShape(sun);for(let i=0;i<7;i++){const x=(i%4-1.5)*.17,z=Math.floor(i/4)*.2;const drop=ball(drops,'#75b9d5',x,-.22-(i%3)*.12,z,.025,.09,.025);ball(flakes,'#fff9ed',x,-.22-(i%3)*.12,z,.046);}weather.push({host,cloud,drops,flakes,sun,rec});}
- return {items,interactive,makeSun(){},update(month,distance,time,motion,camera){for(const g of items){g.visible=(!g.userData.months||g.userData.months.includes(month+1))&&(g.userData.type!=='beach'||distance<80);if(g.userData.type==='sun')g.position.y=ground(g.userData.iso,g.userData.x,g.userData.y)+1.9;}for(const g of animated){g.scale.setScalar(g.userData.fullScale*T.MathUtils.clamp(distance/85,1,3));if(g.visible&&motion)g.rotation.y=time*.15;}for(const g of billboards)g.quaternion.copy(camera.quaternion);for(const w of weather){const rain=w.rec.pr[month]>=140,snow=w.rec.hi[month]<=5;w.cloud.visible=rain||snow;w.drops.visible=rain&&!snow;w.flakes.visible=snow;w.sun.visible=!rain&&!snow;w.host.visible=distance<180;if(motion){w.drops.position.y=-(time*.18% .22);w.flakes.position.y=-(time*.06% .18);}}}};
+ return {items,interactive,makeSun(){},update(month,distance,time,motion,camera){for(const g of items){g.visible=(!g.userData.months||g.userData.months.includes(month+1))&&(g.userData.type!=='beach'||distance<80);if(g.userData.type==='sun')g.position.y=ground(g.userData.iso,g.userData.x,g.userData.y)+1.9;}for(const {g,drops} of monsoonRain){g.scale.setScalar(g.userData.fullScale*T.MathUtils.clamp(distance/85,1,3));g.quaternion.copy(camera.quaternion);if(g.visible&&motion)drops.children.forEach((drop,i)=>{drop.position.y=-.32-((time*.48+i*.17)%.75);});}for(const g of billboards)g.quaternion.copy(camera.quaternion);for(const w of weather){const rain=w.rec.pr[month]>=140,snow=w.rec.hi[month]<=5;w.cloud.visible=rain||snow;w.drops.visible=rain&&!snow;w.flakes.visible=snow;w.sun.visible=!rain&&!snow;w.host.visible=distance<180;if(motion){w.drops.position.y=-(time*.18% .22);w.flakes.position.y=-(time*.06% .18);}}}};
 }

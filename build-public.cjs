@@ -29,6 +29,7 @@ for(const entry of fs.readdirSync(path.join(root,'storybook/country'),{withFileT
  let page=publicHTML(fs.readFileSync(src,'utf8')).replaceAll('../../../play/','../../play/').replaceAll('../../../bureau/','../../bureau/').replaceAll('../../../versions/','../../versions/')
  .replaceAll('../../game.css?v=storybook32','../../storybook/game.css?v=storybook32').replaceAll('../../app.js?v=storybook32','../../storybook/app.js?v=storybook32')
  .replaceAll('../../assets/','../../storybook/assets/').replace('storybook:true','storybook:true,public:true');
+ page=page.replaceAll('../../island-life.css?v=1','../../storybook/island-life.css?v=1').replaceAll('../../island-life.js?v=1','../../storybook/island-life.js?v=1');
  const dest=path.join(out,'country',entry.name);fs.mkdirSync(dest,{recursive:true});fs.writeFileSync(path.join(dest,'index.html'),page);count++;
 }
 const directory=path.join(out,'country/index.html');

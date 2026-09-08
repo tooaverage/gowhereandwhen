@@ -1,5 +1,6 @@
 // Publish Storybook at the established public URLs while retaining source archives.
 const fs=require('node:fs'),path=require('node:path');
+require('./scripts/build-map-cache.cjs');
 const root=__dirname,out=path.join(root,'public-dist');
 fs.rmSync(out,{recursive:true,force:true});fs.mkdirSync(out);
 for(const name of ['styles','geo','images','country','og.png','site.webmanifest','play','cartoon','storybook','bureau','prototypes','archive-v1','versions','CNAME','robots.txt','sitemap.xml','llms.txt']){
@@ -40,3 +41,5 @@ fs.copyFileSync(path.join(root,'storybook/assets/logo.svg'),path.join(out,'favic
 fs.writeFileSync(path.join(out,'.nojekyll'),'');
 if(count!==74)throw Error(`Expected 74 Storybook country guides; found ${count}`);
 console.log(`Public website built: Storybook homepage and ${count} country guides. Older editions retained.`);
+
+require('./scripts/enhance-public.cjs')(root,out);

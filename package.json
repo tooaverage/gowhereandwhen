@@ -1,0 +1,16 @@
+{
+  "name": "gowhereandwhen",
+  "private": true,
+  "scripts": {
+    "build": "node build-public.cjs",
+    "check": "node scripts/check-public.cjs",
+    "optimize:models": "node scripts/optimize-models.mjs"
+  },
+  "devDependencies": {
+    "esbuild": "0.25.9",
+    "@gltf-transform/core": "4.2.1",
+    "@gltf-transform/extensions": "4.2.1",
+    "@gltf-transform/functions": "4.2.1",
+    "meshoptimizer": "0.23.0"
+  }
+}

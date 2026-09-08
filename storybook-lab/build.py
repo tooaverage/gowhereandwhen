@@ -6,7 +6,7 @@ subprocess.run(["node", str(Path(__file__).resolve().parent/"build-usa.cjs")],ch
 r=Path(__file__).resolve().parent
 out=r.parent/'storybook'
 out.mkdir(exist_ok=True)
-for name in ['index.html','app.js','map.js','game.css','world-details.js','traffic.js','reveal.js','canada-snow.js','data.json','island-life.css','island-life.js']:
+for name in ['index.html','app.js','map.js','game.css','world-details.js','traffic.js','reveal.js','canada-snow.js','data.json','island-life.css','island-life.js','fonts.css','meshopt-decoder.js']:
  shutil.copy2(r/name,out/name)
 shutil.copytree(r/'assets',out/'assets',dirs_exist_ok=True)
 print('Built separate Storybook edition.')
@@ -28,7 +28,7 @@ for source in sorted((r.parent/'play/country').glob('*/index.html')):
   page=page.replace('class="game-hero"','class="game-hero canada-scene-hero"').replace('Drag to explore · select a country','Drag to explore Vancouver’s harbour').replace('Explore the Storybook map around Canada','Explore a Storybook scene inspired by Vancouver')
  if slug in ['japan','canada']:
   poster=f'../../assets/{slug}-hero.webp?v=storybook32'
-  page=page.replace('</head>',f'<link rel="preload" as="image" href="{poster}" fetchpriority="high"/><link rel="preload" as="fetch" href="../../assets/{slug}-storybook.glb.gz?v={9 if slug=="canada" else 6}" crossorigin/>\n</head>')
+  page=page.replace('</head>',f'<link rel="preload" as="image" href="{poster}" fetchpriority="high"/><link rel="preload" as="fetch" href="../../assets/{slug}-storybook-optimized.glb.gz?v=seo1" crossorigin/>\n</head>')
   page=re.sub(r'(<div[^>]*class="hero-scene"[^>]*>)',lambda m:m.group(1)+f'<img class="scene-poster" src="{poster}" alt="" width="1280" height="1000" fetchpriority="high" decoding="async"/>',page)
  if slug in ['canada','usa']:
   page=page.replace('<section class="guide-section" id="watch-out">',(r/(slug+'-guide.html')).read_text()+'<section class="guide-section" id="watch-out">')

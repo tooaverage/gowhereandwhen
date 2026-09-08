@@ -1,22 +1,30 @@
+import {mergeGeometries} from '../play/vendor/BufferGeometryUtils.js';
 import * as T from 'three';
 import {createReveal} from './reveal.js?v=storybook32';
 import {sights,experiences,beachTowns} from '../play/world-details.js?v=world7final';
 export {australiaRegions,regionalScore,heatColor} from '../play/world-details.js?v=world7final';
 // Each landmark has its own composition, silhouette, proportions and palette.
 // Small scenery uses shared materials and is merged per material for mobile rendering.
-export function addWorldDetails(scene,{ground,data=[],animateVisibility=()=>true}){
- const reveal=createReveal(animateVisibility);
+const yieldToMain=()=>globalThis.scheduler?.yield?globalThis.scheduler.yield():new Promise(resolve=>setTimeout(resolve,0));
+export async function addWorldDetails(scene,{ground,data=[],animateVisibility=()=>true}){
+ const reveal=createReveal(animateVisibility),geometryCache=new Map();
+ const cached=(key,create)=>{if(!geometryCache.has(key)){const geometry=create();geometry.userData.shared=true;geometryCache.set(key,geometry);}return geometryCache.get(key);};
  const materials=new Map(),items=[],interactive=[],typhoons=[],monsoonRain=[],weather=[],billboards=[];
  const mat=c=>{if(!materials.has(c))materials.set(c,new T.MeshStandardMaterial({color:c,roughness:.84}));return materials.get(c);};
  function mesh(g,geo,c,x=0,y=0,z=0,sx=1,sy=1,sz=1){const m=new T.Mesh(geo,mat(c));m.position.set(x,y,z);m.scale.set(sx,sy,sz);m.castShadow=true;m.receiveShadow=true;g.add(m);return m;}
- const ball=(g,c,x,y,z,rx,ry=rx,rz=rx)=>mesh(g,new T.SphereGeometry(1,16,10),c,x,y,z,rx,ry,rz);
- function box(g,c,x,y,z,w,h,d,r=.025){r=Math.min(r,w/5,h/5,d/5);const s=new T.Shape();s.moveTo(-w/2+r,-h/2);s.lineTo(w/2-r,-h/2);s.quadraticCurveTo(w/2,-h/2,w/2,-h/2+r);s.lineTo(w/2,h/2-r);s.quadraticCurveTo(w/2,h/2,w/2-r,h/2);s.lineTo(-w/2+r,h/2);s.quadraticCurveTo(-w/2,h/2,-w/2,h/2-r);s.lineTo(-w/2,-h/2+r);s.quadraticCurveTo(-w/2,-h/2,-w/2+r,-h/2);const geo=new T.ExtrudeGeometry(s,{depth:d-2*r,bevelEnabled:r>0,bevelSize:r,bevelThickness:r,bevelSegments:2,steps:1,curveSegments:2});geo.translate(0,0,-(d-2*r)/2);return mesh(g,geo,c,x,y,z);}
- const cylinder=(g,c,x,y,z,r,h,rt=r)=>mesh(g,new T.CylinderGeometry(rt,r,h,16),c,x,y,z);
+ const ball=(g,c,x,y,z,rx,ry=rx,rz=rx)=>mesh(g,cached('sphere',()=>new T.SphereGeometry(1,16,10)),c,x,y,z,rx,ry,rz);
+ function box(g,c,x,y,z,w,h,d,r=.025){r=Math.min(r,w/5,h/5,d/5);const key='box:'+w+':'+h+':'+d+':'+r;if(geometryCache.has(key))return mesh(g,geometryCache.get(key),c,x,y,z);const s=new T.Shape();s.moveTo(-w/2+r,-h/2);s.lineTo(w/2-r,-h/2);s.quadraticCurveTo(w/2,-h/2,w/2,-h/2+r);s.lineTo(w/2,h/2-r);s.quadraticCurveTo(w/2,h/2,w/2-r,h/2);s.lineTo(-w/2+r,h/2);s.quadraticCurveTo(-w/2,h/2,-w/2,h/2-r);s.lineTo(-w/2,-h/2+r);s.quadraticCurveTo(-w/2,-h/2,-w/2+r,-h/2);const geo=new T.ExtrudeGeometry(s,{depth:d-2*r,bevelEnabled:r>0,bevelSize:r,bevelThickness:r,bevelSegments:2,steps:1,curveSegments:2});geo.translate(0,0,-(d-2*r)/2);geo.userData.shared=true;geometryCache.set(key,geo);return mesh(g,geo,c,x,y,z);}
+ const cylinder=(g,c,x,y,z,r,h,rt=r)=>mesh(g,cached('cylinder:'+rt+':'+r+':'+h,()=>new T.CylinderGeometry(rt,r,h,16)),c,x,y,z);
  function tube(g,pts,c,r=.035){return mesh(g,new T.TubeGeometry(new T.CatmullRomCurve3(pts.map(p=>new T.Vector3(...p))),24,r,6,false),c);}
- function arch(g,c,x,y,z,w,h,d){const s=new T.Shape();s.moveTo(-w/2,0);s.lineTo(w/2,0);s.lineTo(w/2,h);s.lineTo(-w/2,h);s.closePath();const r=w*.31,shoulder=h*.51;const p=new T.Path();p.moveTo(-r,0);p.lineTo(-r,shoulder);p.absarc(0,shoulder,r,Math.PI,0,true);p.lineTo(r,0);p.closePath();s.holes.push(p);const geo=new T.ExtrudeGeometry(s,{depth:d,bevelEnabled:true,bevelSize:.006,bevelThickness:.006,bevelSegments:1,curveSegments:8});geo.translate(0,0,-d/2);return mesh(g,geo,c,x,y,z);}
+ function arch(g,c,x,y,z,w,h,d){const key='arch:'+w+':'+h+':'+d;if(geometryCache.has(key))return mesh(g,geometryCache.get(key),c,x,y,z);const s=new T.Shape();s.moveTo(-w/2,0);s.lineTo(w/2,0);s.lineTo(w/2,h);s.lineTo(-w/2,h);s.closePath();const r=w*.31,shoulder=h*.51;const p=new T.Path();p.moveTo(-r,0);p.lineTo(-r,shoulder);p.absarc(0,shoulder,r,Math.PI,0,true);p.lineTo(r,0);p.closePath();s.holes.push(p);const geo=new T.ExtrudeGeometry(s,{depth:d,bevelEnabled:true,bevelSize:.006,bevelThickness:.006,bevelSegments:1,curveSegments:8});geo.translate(0,0,-d/2);geo.userData.shared=true;geometryCache.set(key,geo);return mesh(g,geo,c,x,y,z);}
  function dome(g,c,x,y,z,r,h){const profile=[[0,0],[.68,.02],[.88,.18],[1,.43],[.91,.66],[.65,.82],[.31,.92],[.08,1.07],[0,1.11]].map(([a,b])=>new T.Vector2(a*r,b*h));return mesh(g,new T.LatheGeometry(profile,24),c,x,y,z);}
  function roof(g,c,x,y,z,w,d,h){const v=[-w/2,0,-d/2,w/2,0,-d/2,w/2,0,d/2,-w/2,0,d/2,0,h,-d/2,0,h,d/2];const geo=new T.BufferGeometry();geo.setAttribute('position',new T.Float32BufferAttribute(v,3));geo.setIndex([0,4,1,3,2,5,0,3,5,0,5,4,1,4,5,1,5,2]);geo.computeVertexNormals();return mesh(g,geo,c,x,y,z);}
- function pack(g){g.updateMatrixWorld(true);const inv=g.matrixWorld.clone().invert(),bins=new Map(),old=[];g.traverse(o=>{if(!o.isMesh)return;old.push(o);const geom=o.geometry.index?o.geometry.toNonIndexed():o.geometry.clone();geom.applyMatrix4(inv.clone().multiply(o.matrixWorld));const key=o.material;if(!bins.has(key))bins.set(key,{p:[],n:[]});const b=bins.get(key);b.p.push(...geom.attributes.position.array);b.n.push(...geom.attributes.normal.array);geom.dispose();});for(const o of old){o.removeFromParent();o.geometry.dispose();}for(const [m,b] of bins){const geo=new T.BufferGeometry();geo.setAttribute('position',new T.Float32BufferAttribute(b.p,3));geo.setAttribute('normal',new T.Float32BufferAttribute(b.n,3));const o=new T.Mesh(geo,m);o.castShadow=true;o.receiveShadow=true;g.add(o);}}
+ function pack(g){g.updateMatrixWorld(true);const inv=g.matrixWorld.clone().invert(),bins=new Map(),old=[];
+  g.traverse(o=>{if(!o.isMesh)return;old.push(o);const geom=o.geometry.index?o.geometry.toNonIndexed():o.geometry.clone();geom.applyMatrix4(inv.clone().multiply(o.matrixWorld));for(const key of Object.keys(geom.attributes))if(!['position','normal'].includes(key))geom.deleteAttribute(key);if(!bins.has(o.material))bins.set(o.material,[]);bins.get(o.material).push(geom);});
+  for(const o of old){o.removeFromParent();if(!o.geometry.userData.shared)o.geometry.dispose();}
+  for(const [material,geometries] of bins){const geometry=mergeGeometries(geometries,false);for(const geom of geometries)geom.dispose();const o=new T.Mesh(geometry,material);o.castShadow=true;o.receiveShadow=true;g.add(o);}
+ }
+
  function place(rec,build,scale=1,alt=null){const g=new T.Group();build(g);pack(g);g.scale.setScalar(scale);g.position.set(rec.x,alt??ground(rec.iso,rec.x,rec.y)+.025,-rec.y);g.userData={...rec,fullScale:scale};g.name=rec.name;scene.add(g);items.push(g);g.traverse(o=>{if(o.isMesh){o.userData.sight=rec;interactive.push(o);}});return g;}
  const ivory='#f5ead3',stone='#d1b895',shadow='#746551',gold='#d8b465',leaf='#76ad70';
  const builders={
@@ -36,8 +44,9 @@ export function addWorldDetails(scene,{ground,data=[],animateVisibility=()=>true
  function elephant(g,x,z,s){const a=new T.Group();g.add(a);a.position.set(x,0,z);a.scale.setScalar(s);const c='#a6aba0';ball(a,c,0,.43,0,.36,.30,.22);ball(a,c,-.32,.49,0,.22,.23,.20);for(const dz of [-.21,.21])ball(a,'#b7b9ac',-.24,.52,dz,.16,.19,.037);for(const xx of [-.22,.22])for(const zz of [-.14,.14]){cylinder(a,c,xx,.19,zz,.075,.35);ball(a,'#d8d3bf',xx,.04,zz,.07,.026,.076);}tube(a,[[-.49,.48,0],[-.54,.26,0],[-.51,.10,0],[-.42,.09,0]],c,.064);for(const dz of [-.15,.15]){ball(a,'#334c48',-.45,.55,dz,.019);tube(a,[[-.43,.39,dz],[-.53,.28,dz],[-.57,.31,dz]],'#f7edd5',.02);}tube(a,[[.31,.46,0],[.45,.33,0],[.44,.22,0]],'#858d83',.018);}
  function wildebeest(g,x,z,s){const a=new T.Group();a.position.set(x,0,z);a.scale.setScalar(s);g.add(a);ball(a,'#948975',0,.36,0,.28,.17,.13);ball(a,'#7c7668',-.22,.42,0,.12,.16,.11);ball(a,'#5e645b',-.32,.34,0,.11,.075,.08);for(const xx of [-.17,.17])for(const zz of [-.085,.085]){tube(a,[[xx,.34,zz],[xx+.018,.16,zz],[xx-.014,.025,zz]],'#6d6b5e',.027);box(a,'#454e47',xx-.018,.024,zz,.071,.04,.051,.006);}for(const dz of [-1,1]){tube(a,[[-.23,.5,dz*.055],[-.22,.55,dz*.16],[-.26,.65,dz*.17]],'#ede1c7',.019);ball(a,'#4b5147',-.31,.45,dz*.081,.012);}tube(a,[[.25,.39,0],[.36,.25,0],[.40,.20,0]],'#645d50',.02);}
  const scales={taj:.68,angkor:.68,rome:.54,petra:.73,inca:.90,wall:.80,pyramids:.83,canyon:.95,safari:1,reef:1.25};
- for(const rec of sights)place(rec,builders[rec.type],scales[rec.type],rec.type==='reef'?-.47:null);
+ for(const rec of sights){await yieldToMain();place(rec,builders[rec.type],scales[rec.type],rec.type==='reef'?-.47:null);}
  // Two braced orange towers, paired suspension cables and a slender roadway.
+ await yieldToMain();
  place({iso:840,name:'Golden Gate Bridge, San Francisco',x:-122.4783,y:37.8199,type:'golden-gate',description:'San Francisco’s International Orange suspension bridge across the Golden Gate strait.',window:'September and October often bring warm days. Coastal wind and fog can arrive in any season.',url:'https://www.goldengate.org/bridge/visiting-the-bridge/'},g=>{
   const orange='#d77754',edge='#eea27b';
   box(g,'#b7b5a0',0,.10,0,2.9,.09,.33,.01);box(g,'#777f79',0,.17,0,2.88,.08,.29,.008);
@@ -59,6 +68,7 @@ export function addWorldDetails(scene,{ground,data=[],animateVisibility=()=>true
 
  // Vancouver's waterfront is anchored by Canada Place's five tensioned white sails.
  const vancouverDeck=-.32;
+ await yieldToMain();
  place({iso:124,name:'Canada Place, Vancouver',x:-123.111,y:49.288,type:'vancouver',description:'Vancouver’s waterfront landmark, with five white sails overlooking the harbour.',url:'https://www.canadaplace.ca/'},g=>{
   // A solid quay meets the water directly, with no exposed stilts.
   box(g,'#b8bba4',0,-.22,0,2.36,.46,.84,.035);
@@ -92,12 +102,14 @@ export function addWorldDetails(scene,{ground,data=[],animateVisibility=()=>true
    const geo=new T.BufferGeometry();geo.setAttribute('position',new T.Float32BufferAttribute(p,3));geo.computeVertexNormals();mesh(g,geo,['#7b9a7c','#8e9c8a','#edf3ed','#fffaf0'][j]);
   }
  }
+ await yieldToMain();
  place({iso:124,name:'Lake Louise & the Canadian Rockies',x:-116.18,y:51.42,type:'rockies',description:'A turquoise glacial lake below the snow-capped Canadian Rockies, in Banff National Park.',window:'July and August for alpine lakes and hiking; winter for skiing. Snow and lake ice vary with the year and elevation.',url:'https://www.banfflakelouise.com/experiences/lake-louise'},g=>{
   // The surrounding peaks are authored in Blender with the Canada cover's ridge geometry.
   const shape=new T.Shape();for(let i=0;i<=48;i++){const a=i/48*Math.PI*2,r=1+.07*Math.sin(a*3);const x=Math.cos(a)*.84*r,z=Math.sin(a)*.34*r;if(!i)shape.moveTo(x,z);else shape.lineTo(x,z);}
   const lakeGeo=new T.ShapeGeometry(shape);lakeGeo.rotateX(-Math.PI/2);lakeGeo.translate(.13,0,.57);const verts=lakeGeo.attributes.position,base=ground(124,-116.18,51.42);for(let i=0;i<verts.count;i++){const x=verts.getX(i),z=verts.getZ(i);verts.setY(i,(ground(124,-116.18+x*1.25,51.42-z*1.25)-base)/1.25+.065);}lakeGeo.computeVertexNormals();mesh(g,lakeGeo,'#60cec9');
   for(const [x,z,s] of [[-.92,.50,.47],[1.02,.18,.55],[.85,.91,.41],[-.70,.90,.37]]){const tree=new T.Group();tree.position.set(x,.02,z);tree.scale.setScalar(s);g.add(tree);fir(tree);}
  },1.25);
+ await yieldToMain();
  place({iso:124,name:'CN Tower, Toronto',x:-79.387,y:43.643,type:'cn-tower',description:'Toronto’s slender skyline landmark, with a broad observation pod and a needle-like antenna above Lake Ontario.',window:'June to September for waterfront sightseeing.',url:'https://www.cntower.ca/'},g=>{
   cylinder(g,'#b3c4b1',0,.04,0,.53,.08);cylinder(g,'#e4dcc7',0,.94,0,.105,1.80,.054);
   for(let i=0;i<3;i++){const a=i*Math.PI*2/3; tube(g,[[Math.cos(a)*.25,.04,Math.sin(a)*.25],[Math.cos(a)*.085,1.25,Math.sin(a)*.085],[Math.cos(a)*.05,1.64,Math.sin(a)*.05]],'#dcd6c4',.046);}
@@ -105,6 +117,7 @@ export function addWorldDetails(scene,{ground,data=[],animateVisibility=()=>true
   for(let i=0;i<18;i++){const a=i*Math.PI/9;cylinder(g,'#e6ddc8',Math.cos(a)*.337,1.86,Math.sin(a)*.337,.008,.096);}
   cylinder(g,'#e9e6d4',0,2.09,0,.05,.32,.037);cylinder(g,'#7d9b9b',0,2.29,0,.092,.075);cylinder(g,'#faf4e2',0,2.48,0,.028,.38,.013);cylinder(g,'#d77469',0,2.55,0,.021,.055);cylinder(g,'#d77469',0,2.67,0,.016,.045);
  },.78);
+ await yieldToMain();
  place({iso:124,name:'Château Frontenac, Québec City',x:-71.205,y:46.812,type:'frontenac',description:'A grand red-brick château hotel above Old Québec, with copper-green roofs, dormers and pointed turrets.',window:'June to September for warm-weather exploring; winter for a snowy city break.',url:'https://www.quebec-cite.com/en/quebec-city/landmarks'},g=>{
   const brick='#bc8c73',trim='#efd7b4',copper='#608f83';box(g,'#c9c5ab',0,.045,0,1.75,.09,1.04);
   for(const [x,z,w,h,d] of [[0,0,.64,1.10,.55],[-.56,.13,.63,.54,.42],[.56,.13,.63,.54,.42]]){
@@ -116,6 +129,7 @@ export function addWorldDetails(scene,{ground,data=[],animateVisibility=()=>true
   for(const x of [-.26,.26]){cylinder(g,brick,x,1.12,-.18,.092,.37);mesh(g,new T.ConeGeometry(.13,.30,16),copper,x,1.43,-.18);}
   cylinder(g,'#c0b195',0,1.64,0,.009,.33);box(g,'#ed806a',.062,1.74,0,.12,.07,.009,.003);
  },.86);
+ await yieldToMain();
  place({iso:124,name:'Peggy’s Cove lighthouse',x:-63.918,y:44.491,type:'peggys-cove',description:'A white octagonal lighthouse with a red lantern, standing on the rounded granite of Nova Scotia’s Atlantic coast.',window:'Summer to early autumn for a coastal trip. Stay on dry rocks, well back from the water.',url:'https://novascotia.com/listing/peggys-cove-lighthouse-and-village/'},g=>{
   for(const [x,z,w,h,d] of [[0,0,.62,.15,.52],[-.54,.15,.32,.12,.27],[.49,.21,.31,.10,.28],[.27,-.38,.36,.12,.27]])ball(g,'#b6b6aa',x,h*.65,z,w,h,d);
   mesh(g,new T.CylinderGeometry(.17,.25,1.05,8),'#fff4dd',0,.69,0);
@@ -129,7 +143,7 @@ export function addWorldDetails(scene,{ground,data=[],animateVisibility=()=>true
  function sunShape(g){ball(g,'#ffd65a',0,0,0,.34,.34,.10);for(let i=0;i<12;i++){const a=i*Math.PI/6;const o=box(g,'#ffdd74',Math.cos(a)*.53,Math.sin(a)*.53,0,.065,.17,.075,.025);o.rotation.z=a-Math.PI/2;}billboards.push(g);}
  function fir(g,snow=false){cylinder(g,'#a3825e',0,.3,0,.045,.6);for(let i=0;i<3;i++)mesh(g,new T.CylinderGeometry(.015,.25-i*.045,.34,14),snow&&i===2?'#f1f5e6':'#579776',0,.35+i*.21,0);}
  function flower(g,x,z,c){cylinder(g,'#669773',x,.10,z,.010,.20);for(let i=0;i<5;i++){const a=i*Math.PI*.4;ball(g,c,x+Math.cos(a)*.045,.21,z+Math.sin(a)*.045,.035,.016,.028);}ball(g,'#f9d376',x,.228,z,.019);}
- for(const original of experiences){const rec=original.type==='autumn'?{...original,x:134.95,y:35.4}:original;if(rec.type==='blossom')continue;place(rec,g=>{
+ for(const original of experiences){await yieldToMain();const rec=original.type==='autumn'?{...original,x:134.95,y:35.4}:original;if(rec.type==='blossom')continue;place(rec,g=>{
   const t=rec.type;if(t==='sun'){sunShape(g);g.userData.float=true;}
   if(t==='tulips'||t==='flowers'){for(let i=0;i<6;i++)for(let j=0;j<4;j++){const x=(i-2.5)*.13,z=(j-1.5)*.12;if(t==='flowers')flower(g,x,z,(i+j)%2?'#eca88b':'#f5d67c');else{cylinder(g,'#619875',x,.12,z,.009,.24);for(let k=0;k<3;k++){const a=k*2.094;ball(g,['#f2a4aa','#ffe6a0','#d998be'][j%3],x+Math.cos(a)*.025,.27,z+Math.sin(a)*.025,.03,.049,.026);}}}}
   if(t==='puffin'){for(const x of [-.18,.18]){ball(g,'#526365',x,.22,0,.10,.18,.10);ball(g,'#f8f4e6',x,.20,.064,.073,.13,.045);ball(g,'#3b4c50',x,.40,0,.087);ball(g,'#f9f0dc',x,.42,.057,.069,.065,.032);const b=mesh(g,new T.ConeGeometry(.064,.14,3),'#edaa64',x,.38,.13);b.rotation.x=Math.PI/2;for(const dx of [-.05,.05])ball(g,'#efb269',x+dx,.025,.035,.037,.025,.062);ball(g,'#34464b',x-.03,.435,.082,.012);}}
@@ -138,7 +152,7 @@ export function addWorldDetails(scene,{ground,data=[],animateVisibility=()=>true
   if(t==='summer'||t==='autumn'){cylinder(g,'#a18464',0,.25,0,.037,.5);for(const [x,y,z] of [[-.12,.40,0],[.12,.44,.02],[0,.55,0]]){tube(g,[[0,.23,0],[x,y,z]],'#a18464',.018);ball(g,t==='autumn'?'#edb278':'#76b981',x,y,z,.17,.14,.16);}if(t==='summer')for(let i=0;i<4;i++)flower(g,.25+i*.09,.18,'#aaa4dc');}
   if(t==='aurora'){for(let j=0;j<3;j++){const pts=Array.from({length:18},(_,i)=>[(i-8.5)*.12,1.0+Math.sin(i*.44+j)*.13,-.08*j]);tube(g,pts,['#80d7b3','#a6c8d9','#b4dfa4'][j],.027);}fir(g,true);}
  },rec.type==='herd'?.75:rec.type==='calves'?.8:1);}
- for(const rec of beachTowns)place(rec,g=>{cylinder(g,'#b49b76',0,.16,0,.012,.32);for(let i=0;i<8;i++){const geo=new T.SphereGeometry(.15,3,3,i*Math.PI/4,Math.PI/4,0,Math.PI/2);mesh(g,geo,i%2?'#f6e4b6':'#ecad80',0,.30,0,1,.38,1);}box(g,ivory,.17,.045,.03,.065,.03,.19,.008);},1);
+ for(const rec of beachTowns){await yieldToMain();place(rec,g=>{cylinder(g,'#b49b76',0,.16,0,.012,.32);for(let i=0;i<8;i++){const geo=new T.SphereGeometry(.15,3,3,i*Math.PI/4,Math.PI/4,0,Math.PI/2);mesh(g,geo,i%2?'#f6e4b6':'#ecad80',0,.30,0,1,.38,1);}box(g,ivory,.17,.045,.03,.065,.03,.19,.008);},1);}
  const monsoons=[
   {iso:356,x:73,y:17,months:[6,7,8,9],name:'India southwest monsoon',window:'June to September. Onset and retreat vary across India; the southeast has a separate autumn rainy season.',url:'https://mausamjournal.imd.gov.in/index.php/MAUSAM/article/view/7776'},
   {iso:764,x:97,y:12,months:[5,6,7,8,9,10],name:'Thailand southwest monsoon',window:'About mid-May to mid-October for much of Thailand. The southern Gulf coast stays wet later in the year.',url:'https://www5.tmd.go.th/info/ฤดูกาล-ฤดูกาลของโลก-ฤดูกาลของประเทศไทย'},
@@ -146,7 +160,7 @@ export function addWorldDetails(scene,{ground,data=[],animateVisibility=()=>true
   {iso:392,x:142,y:32,months:[6,7],name:'Japan Baiu rainy season',shortLabel:'Rainy season',window:'June to July across much of mainland Japan. Okinawa starts earlier; Hokkaido has no regular Baiu season.',url:'https://www.data.jma.go.jp/cpd/longfcst/en/tourist_japan.html'},
   {iso:158,x:125,y:24,months:[5,6],name:'Taiwan Mei-yu rainy season',shortLabel:'Rainy season',window:'May to June, before the later summer rains.',url:'https://www.cwa.gov.tw/Data/service/Newsbb/EN/Newsbb_20250429112150.pdf'}
  ];
- for(const r of monsoons){
+ for(const r of monsoons){await yieldToMain();
   const rec={...r,type:'monsoon',description:'Rain clouds mark the usual monsoon or seasonal rainy period. Timing and rainfall vary by region and year; the map shows a planning season, not a live forecast.'};
   const g=place(rec,g=>{
    // Overlapping rounded lobes create a full cloud with a scalloped silhouette.
@@ -172,7 +186,7 @@ export function addWorldDetails(scene,{ground,data=[],animateVisibility=()=>true
   {iso:392,x:149,y:29,months:[7,8,9,10],name:'Japan typhoon season',window:'July to October has the most typhoon approaches.',url:'https://www.jma.go.jp/jma/kishou/know/typhoon/1-4.html'},
   {iso:158,x:130,y:24,months:[7,8,9,10],name:'Taiwan typhoon season',window:'July to October is the most active period in the western North Pacific.',url:'https://climate.cwa.gov.tw/ClimatePedia/detail_page/14'}
  ];
- for(const r of typhoonSeasons){
+ for(const r of typhoonSeasons){await yieldToMain();
   const rec={...r,type:'typhoon',description:'The spiral marks recurring typhoon risk. This can overlap with monsoon rain. It represents a typical season, not a live storm position or forecast.'};
   const g=place(rec,g=>{
    for(let arm=0;arm<2;arm++)for(let i=0;i<24;i++){
@@ -184,7 +198,8 @@ export function addWorldDetails(scene,{ground,data=[],animateVisibility=()=>true
   },.9,2.5);typhoons.push(g);
  }
  const locations=[[124,-100,57],[840,-101,36],[76,-53,-9],[826,-3,54],[156,108,35],[356,81,24],[392,141,38],[608,124,12],[36,133,-25],[710,25,-29]];
- for(const [iso,x,y] of locations){const rec=data.find(r=>r.iso===iso);if(!rec)continue;const host=new T.Group();host.position.set(x,ground(iso,x,y)+2.3,-y);scene.add(host);const cloud=new T.Group();host.add(cloud);for(const [xx,yy,r] of [[-.35,0,.26],[0,.12,.34],[.35,0,.24]])ball(cloud,'#f7f3e8',xx,yy,0,r,r*.65,r*.75);pack(cloud);const drops=new T.Group(),flakes=new T.Group(),sun=new T.Group();host.add(drops,flakes,sun);sunShape(sun);for(let i=0;i<7;i++){const x=(i%4-1.5)*.17,z=Math.floor(i/4)*.2;const drop=ball(drops,'#75b9d5',x,-.22-(i%3)*.12,z,.025,.09,.025);ball(flakes,'#fff9ed',x,-.22-(i%3)*.12,z,.046);}weather.push({host,cloud,drops,flakes,sun,rec});}
+ for(const [iso,x,y] of locations){await yieldToMain();const rec=data.find(r=>r.iso===iso);if(!rec)continue;const host=new T.Group();host.position.set(x,ground(iso,x,y)+2.3,-y);scene.add(host);const cloud=new T.Group();host.add(cloud);for(const [xx,yy,r] of [[-.35,0,.26],[0,.12,.34],[.35,0,.24]])ball(cloud,'#f7f3e8',xx,yy,0,r,r*.65,r*.75);pack(cloud);const drops=new T.Group(),flakes=new T.Group(),sun=new T.Group();host.add(drops,flakes,sun);sunShape(sun);for(let i=0;i<7;i++){const x=(i%4-1.5)*.17,z=Math.floor(i/4)*.2;const drop=ball(drops,'#75b9d5',x,-.22-(i%3)*.12,z,.025,.09,.025);ball(flakes,'#fff9ed',x,-.22-(i%3)*.12,z,.046);}weather.push({host,cloud,drops,flakes,sun,rec});}
+ for(const geometry of geometryCache.values())geometry.dispose();geometryCache.clear();
  return {items,interactive,makeSun(){},update(month,distance,time,motion,camera){
   let transitioning=false;
   for(const g of items){

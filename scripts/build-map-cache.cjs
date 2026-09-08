@@ -1,0 +1,3 @@
+const fs=require('node:fs'),os=require('node:os'),path=require('node:path'),{buildSync}=require('esbuild'),{execFileSync}=require('node:child_process');
+const root=path.resolve(__dirname,'..'),temp=fs.mkdtempSync(path.join(os.tmpdir(),'gowhere-map-'));
+try{const outfile=path.join(temp,'precompute.mjs');buildSync({entryPoints:[path.join(__dirname,'precompute-map.mjs')],outfile,bundle:true,platform:'node',format:'esm',alias:{three:path.join(root,'play/vendor/three.module.js')},logLevel:'silent'});process.stdout.write(execFileSync(process.execPath,[outfile,root]));}finally{fs.rmSync(temp,{recursive:true,force:true});}

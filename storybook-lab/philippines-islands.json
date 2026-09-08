@@ -53,6 +53,21 @@
         "Bohol Beach Club",
         "https://boholbeachclub.com.ph/"
       ]
+    ],
+    "rank": 1,
+    "ratings": {
+      "swim": 5,
+      "outdoors": 4,
+      "quiet": 4,
+      "value": 3,
+      "work": 3,
+      "scooter": 5
+    },
+    "recommendation": "Best balance",
+    "whyRank": "An easy sandy-beach routine with airport access and plenty nearby. Secure a tested room connection first.",
+    "roomPHP": [
+      2200,
+      2800
     ]
   },
   {
@@ -109,6 +124,92 @@
         "Siquijor travel guide",
         "https://philippines.travel/destinations/siquijor"
       ]
+    ],
+    "rank": 2,
+    "ratings": {
+      "swim": 3,
+      "outdoors": 4,
+      "quiet": 5,
+      "value": 4,
+      "work": 2,
+      "scooter": 5
+    },
+    "recommendation": "Best slower island rhythm",
+    "whyRank": "A strong fit for coastal rides, waterfalls and value. Swimming depends on the exact shore and tide; calls need checking.",
+    "roomPHP": [
+      1800,
+      3000
+    ]
+  },
+  {
+    "id": "boracay",
+    "name": "Boracay",
+    "area": "White Beach · Station 3 & Angol",
+    "line": "The famous beach, from its quieter end.",
+    "tags": [
+      "Long sandy beach",
+      "Walkable beach life",
+      "Quieter Station 3"
+    ],
+    "vibe": "Boracay can be a swimming-and-walking stay rather than a party holiday. Station 3 and Angol are the starting points for a quieter base, with busier restaurants and nightlife farther along White Beach.",
+    "beach": "White Beach is the standout for a long sandy shoreline. Its western side is generally more sheltered during the northeast monsoon, but always check the day’s sea conditions.",
+    "work": "Book around a tested room connection and a quiet place to take calls. A larger hotel inventory gives you options, not a guarantee that every beachfront room has dependable Wi-Fi.",
+    "food": "You have plenty of choice, but the beachfront restaurant routine adds up. Look inland as well as along the sand when comparing meals and rooms.",
+    "move": "Think beach walks and e-trikes rather than a scooter-and-mountain routine. Caticlan is the nearby mainland gateway, followed by a short boat transfer.",
+    "social": "Easy access to company, restaurants and water activities without staying in the busiest stretch. Check current local dance events; no recurring salsa night is verified in this guide.",
+    "catch": "It is still a popular holiday island. Strong for beach access, weaker for solitude, mountain hikes and a very cheap month right on the water.",
+    "cost": "₱2,500–5,000",
+    "costLabel": "Room planning allowance / night",
+    "costNote": "An editorial allowance for comparing simpler Station 3 stays, not a live quote or guaranteed range. A recent Surfside listing started around ₱2,500 before taxes; your dates and room type can cost more.",
+    "waterfront": "Station 3 has accommodation beside the sand, but the least expensive category may face the garden. Confirm whether ‘beachfront’ describes the property or your room.",
+    "extraCost": "Allow for arrival transfers and island fees. Holiday dates and peak-season weekends can exceed the room allowance above.",
+    "season": "boracay",
+    "map": "Angol Station 3 Boracay Philippines",
+    "activities": [
+      [
+        "White Beach",
+        "Swim & long walk",
+        "Build an ordinary day around the beach, not just a boat excursion."
+      ],
+      [
+        "Station 3 to Station 1",
+        "Beach walk",
+        "Explore the different stretches on foot, with a swim where conditions suit."
+      ],
+      [
+        "Sunset shoreline walk",
+        "Easy evening",
+        "Walk toward the livelier stations, then return to a quieter base."
+      ]
+    ],
+    "sources": [
+      [
+        "Tourism guide to Boracay",
+        "https://app.philippines.travel/articles/intro-to-boracay"
+      ],
+      [
+        "Station 3 accommodation",
+        "https://app.philippines.travel/destinations/boracay/places-to-stay/station-3"
+      ],
+      [
+        "Surfside rate example",
+        "https://www.expedia.com.ph/Boracay-Island-Hotels-Surfside-Boracay-Resort-Spa.h5075543.Hotel-Information"
+      ]
+    ],
+    "rank": 3,
+    "ratings": {
+      "swim": 5,
+      "outdoors": 2,
+      "quiet": 3,
+      "value": 3,
+      "work": 3,
+      "scooter": 2
+    },
+    "recommendation": "Best for everyday swimming",
+    "whyRank": "Start at Station 3 or Angol for long beach walks and easier swimming. Less compelling for hikes and scooter adventures.",
+    "roomPHP": [
+      2500,
+      5000
     ]
   },
   {
@@ -169,230 +270,21 @@
         "White Island access",
         "https://philippines.travel/beaches/white-island-camiguin/index"
       ]
-    ]
-  },
-  {
-    "id": "boracay",
-    "name": "Boracay",
-    "area": "White Beach · Station 3 & Angol",
-    "line": "The famous beach, from its quieter end.",
-    "tags": [
-      "Long sandy beach",
-      "Walkable beach life",
-      "Quieter Station 3"
     ],
-    "vibe": "Boracay can be a swimming-and-walking stay rather than a party holiday. Station 3 and Angol are the starting points for a quieter base, with busier restaurants and nightlife farther along White Beach.",
-    "beach": "White Beach is the standout for a long sandy shoreline. Its western side is generally more sheltered during the northeast monsoon, but always check the day’s sea conditions.",
-    "work": "Book around a tested room connection and a quiet place to take calls. A larger hotel inventory gives you options, not a guarantee that every beachfront room has dependable Wi-Fi.",
-    "food": "You have plenty of choice, but the beachfront restaurant routine adds up. Look inland as well as along the sand when comparing meals and rooms.",
-    "move": "Think beach walks and e-trikes rather than a scooter-and-mountain routine. Caticlan is the nearby mainland gateway, followed by a short boat transfer.",
-    "social": "Easy access to company, restaurants and water activities without staying in the busiest stretch. Check current local dance events; no recurring salsa night is verified in this guide.",
-    "catch": "It is still a popular holiday island. Strong for beach access, weaker for solitude, mountain hikes and a very cheap month right on the water.",
-    "cost": "₱2,500–5,000",
-    "costLabel": "Room planning allowance / night",
-    "costNote": "An editorial allowance for comparing simpler Station 3 stays, not a live quote or guaranteed range. A recent Surfside listing started around ₱2,500 before taxes; your dates and room type can cost more.",
-    "waterfront": "Station 3 has accommodation beside the sand, but the least expensive category may face the garden. Confirm whether ‘beachfront’ describes the property or your room.",
-    "extraCost": "Allow for arrival transfers and island fees. Holiday dates and peak-season weekends can exceed the room allowance above.",
-    "season": "boracay",
-    "map": "Angol Station 3 Boracay Philippines",
-    "activities": [
-      [
-        "White Beach",
-        "Swim & long walk",
-        "Build an ordinary day around the beach, not just a boat excursion."
-      ],
-      [
-        "Bulabog Beach",
-        "Watersports outing",
-        "A different wind-facing shore, particularly associated with wind sports."
-      ],
-      [
-        "Sunset shoreline walk",
-        "Easy evening",
-        "Walk toward the livelier stations, then return to a quieter base."
-      ]
-    ],
-    "sources": [
-      [
-        "Tourism guide to Boracay",
-        "https://app.philippines.travel/articles/intro-to-boracay"
-      ],
-      [
-        "Station 3 accommodation",
-        "https://app.philippines.travel/destinations/boracay/places-to-stay/station-3"
-      ],
-      [
-        "Surfside rate example",
-        "https://www.expedia.com.ph/Boracay-Island-Hotels-Surfside-Boracay-Resort-Spa.h5075543.Hotel-Information"
-      ]
-    ]
-  },
-  {
-    "id": "siargao",
-    "name": "Siargao",
-    "area": "General Luna · Libertad & Santa Fe",
-    "line": "Surf, café life, and a community to work alongside.",
-    "tags": [
-      "Coliving options",
-      "Surf culture",
-      "Cafés & community"
-    ],
-    "vibe": "The clearest fit here for someone who wants a social work routine. General Luna is the busy hub; Libertad and Santa Fe offer quieter bases within riding distance. Santa Fe here is on Siargao, not Bantayan.",
-    "beach": "This is a surf destination with reefs and tide-dependent swimming spots. Do not equate an oceanfront room with an easy, calm swimming beach.",
-    "work": "Coco Space advertises call booths, Starlink plus a backup ISP, and solar plus generator backup. Its listed pass is ₱500/day or ₱7,500/month. Confirm opening hours and call-booth availability for your schedule.",
-    "food": "General Luna has a strong café scene. Local meals and imported-ingredient café menus create very different daily budgets, so compare the meals you would actually eat.",
-    "move": "A scooter can connect your room, workspace and surf spots. Staying farther from General Luna buys quiet but adds daily riding.",
-    "social": "Communal Coliving lists private rooms and studios with Coco Space access, utilities and community activities. A current recurring salsa night is not verified here.",
-    "catch": "The work community is appealing, but calm swimming and winter sunshine are weaker reasons to choose it. November–January is a wetter eastern-coast window.",
-    "cost": "₱2,900–3,200",
-    "costLabel": "Published room examples / night",
-    "costNote": "Emerald House’s Sapphire rooms have ocean views and ceiling fans. This range is for those rooms, not air-conditioned beachfront accommodation or an island-wide average.",
-    "waterfront": "Communal lists private rooms at ₱50,000 and studios at ₱60,000 for 30 days / 29 nights, including coworking. These are inland coliving alternatives, not waterfront quotes.",
-    "extraCost": "Do not add a separate coworking membership if your stay already includes it. Scooter hire, food and surf activities still need their own allowance.",
-    "season": "siargao",
-    "map": "General Luna Siargao Philippines",
-    "activities": [
-      [
-        "Local surf breaks",
-        "Surf lesson",
-        "Choose a break and instructor suited to your experience and the day’s conditions."
-      ],
-      [
-        "Sugba Lagoon",
-        "Paddling day trip",
-        "An excursion away from the General Luna work base; confirm transfers and access."
-      ],
-      [
-        "Island road outing",
-        "Explore by scooter",
-        "A day away from the café strip, with stops chosen around weather and daylight."
-      ]
-    ],
-    "sources": [
-      [
-        "Coco Space facilities & passes",
-        "https://cocospace.io/coco-v4/"
-      ],
-      [
-        "Communal rooms & inclusions",
-        "https://www.communalcoliving.com/spaces-rates"
-      ],
-      [
-        "Emerald House room rates",
-        "https://www.emeraldhousevillage.com/sapphire"
-      ],
-      [
-        "Siargao tourism guide",
-        "https://philippines.travel/destinations/siargao-island/index"
-      ]
-    ]
-  },
-  {
-    "id": "el-nido",
-    "name": "El Nido",
-    "area": "Northern Palawan · town, Corong Corong & Lio",
-    "line": "Limestone scenery, with a different beach for each kind of day.",
-    "tags": [
-      "Lagoon outings",
-      "Dramatic coast",
-      "Choose your neighbourhood"
-    ],
-    "vibe": "A scenic, popular travel hub. Compare town convenience, Corong Corong sunsets and Lio beach access rather than treating them as one interchangeable base.",
-    "beach": "Use Lio or Maremegmeg as beach starting points. A waterfront address in the town or bay is not automatically the swim-out beach in the photos.",
-    "work": "Before a working stay, establish the exact room connection, backup power and a second place to work. This guide has no independently tested call-ready accommodation here.",
-    "food": "Town offers more choice within walking distance. Remote beach accommodation may leave you relying on one restaurant, so check its menu before choosing a cheap room.",
-    "move": "El Nido has an airport. Arriving through Puerto Princesa adds a substantial road journey; the two are not neighbouring towns.",
-    "social": "Tours and hostels make meeting other travellers straightforward. A recurring salsa night or tested coliving base is not verified here.",
-    "catch": "Choose it for scenery and outings. A cheap waterfront working month requires more checking than a short holiday.",
-    "cost": "₱3,500–6,000",
-    "costLabel": "Tourism-guide room estimate / night",
-    "costNote": "The tourism guide estimates this for private air-conditioned boutique rooms or beachfront cottages. This is a planning range, not an available room or a guarantee of beach access. Food and tours are extra.",
-    "waterfront": "Compare the room’s exact beach with the property’s location. An affordable bay view may still mean travelling elsewhere for a swim.",
-    "extraCost": "Boat outings can become a major expense. Get the full price including entry fees, equipment and transfers.",
-    "season": "palawan",
-    "map": "Lio Beach El Nido Palawan Philippines",
-    "activities": [
-      [
-        "Bacuit Bay lagoons",
-        "Boat day",
-        "An excursion from your base, subject to access rules and sea conditions."
-      ],
-      [
-        "Lio Beach",
-        "Beach outing",
-        "A mainland alternative to a full boat-tour day."
-      ],
-      [
-        "Maremegmeg Beach",
-        "Beach & sunset",
-        "A coastal outing south of town."
-      ]
-    ],
-    "sources": [
-      [
-        "El Nido guide & budget estimates",
-        "https://www.philippines.travel/destinations/palawan-el-nido/index"
-      ],
-      [
-        "Palawan destination guide",
-        "https://app.philippines.travel/destinations/palawan"
-      ]
-    ]
-  },
-  {
-    "id": "coron",
-    "name": "Coron",
-    "area": "Palawan province · Coron town on Busuanga",
-    "line": "A harbour base for lakes, reefs and boat adventures.",
-    "tags": [
-      "Island outings",
-      "Diving",
-      "Town-based stays"
-    ],
-    "vibe": "Think of town as the launch point. The landscapes people come for are often a boat ride away rather than outside an inexpensive room.",
-    "beach": "Coron town is a harbour base, not a long sandy swimming beach. The beaches and lakes on island excursions are a separate experience from staying in town.",
-    "work": "Check the actual room and backup arrangements. Do not assume a remote island resort is a dependable call location because it advertises Wi-Fi.",
-    "food": "Staying near town gives you restaurant choices. A remote resort may require meal packages and boat transfers, changing the true cost of a stay.",
-    "move": "Fly to Busuanga and transfer to town. Boats open up the headline sights; a scooter cannot replace those trips.",
-    "social": "Dive operators and shared outings provide ways to meet people. A recurring salsa night or verified coliving base is not listed here.",
-    "catch": "Excellent as an adventure stop, less suited to a simple swim-before-work routine on a cheap beach.",
-    "cost": "₱3,000–5,000",
-    "costLabel": "Tourism-guide room estimate / night",
-    "costNote": "The tourism guide’s allowance for a private mid-range hotel room in town. Simpler rooms can be cheaper. This is not a beachfront-resort quote and excludes food, transport and activities.",
-    "waterfront": "A harbour view and a private-island beach are different products. Confirm where swimming happens and whether transfers cost extra.",
-    "extraCost": "Budget for boat days and dive activities separately. Keep weather-dependent outings clear of essential onward connections.",
-    "season": "palawan",
-    "map": "Coron Town Busuanga Palawan Philippines",
-    "activities": [
-      [
-        "Mount Tapyas",
-        "Viewpoint walk",
-        "A stepped climb above town, rather than a remote mountain expedition."
-      ],
-      [
-        "Kayangan Lake & Twin Lagoons",
-        "Boat outing",
-        "Island stops to visit from town, with current access checked by the operator."
-      ],
-      [
-        "Wreck diving",
-        "Guided dive",
-        "Choose sites and an operator appropriate to your certification and experience."
-      ]
-    ],
-    "sources": [
-      [
-        "Coron guide & budget estimates",
-        "https://philippines.travel/destinations/coron/index"
-      ],
-      [
-        "Coron geography & access",
-        "https://app.philippines.travel/interests/coron"
-      ],
-      [
-        "Department of Tourism: Coron",
-        "https://www.tourism.gov.ph/destination/mimaropa/coron/"
-      ]
+    "rank": 4,
+    "ratings": {
+      "swim": 2,
+      "outdoors": 5,
+      "quiet": 5,
+      "value": 5,
+      "work": 2,
+      "scooter": 5
+    },
+    "recommendation": "Best for hiking",
+    "whyRank": "Mountains, waterfalls and good-value coastal stays. The tradeoff is fewer easy sandy swimming spots and unproven call setups.",
+    "roomPHP": [
+      1650,
+      3000
     ]
   },
   {
@@ -449,6 +341,234 @@
         "Kota Beach official site",
         "https://www.kotabeachresort.com/"
       ]
+    ],
+    "rank": 5,
+    "ratings": {
+      "swim": 4,
+      "outdoors": 2,
+      "quiet": 4,
+      "value": 4,
+      "work": 2,
+      "scooter": 5
+    },
+    "recommendation": "Best simple beach routine",
+    "whyRank": "A relaxed alternative with sandy shores and scooter outings. Dedicated work options are less established in this guide.",
+    "roomPHP": [
+      3400,
+      5600
+    ]
+  },
+  {
+    "id": "el-nido",
+    "name": "El Nido",
+    "area": "Northern Palawan · town, Corong Corong & Lio",
+    "line": "Limestone scenery, with a different beach for each kind of day.",
+    "tags": [
+      "Lagoon outings",
+      "Dramatic coast",
+      "Choose your neighbourhood"
+    ],
+    "vibe": "A scenic, popular travel hub. Compare town convenience, Corong Corong sunsets and Lio beach access rather than treating them as one interchangeable base.",
+    "beach": "Use Lio or Maremegmeg as beach starting points. A waterfront address in the town or bay is not automatically the swim-out beach in the photos.",
+    "work": "Before a working stay, establish the exact room connection, backup power and a second place to work. This guide has no independently tested call-ready accommodation here.",
+    "food": "Town offers more choice within walking distance. Remote beach accommodation may leave you relying on one restaurant, so check its menu before choosing a cheap room.",
+    "move": "El Nido has an airport. Arriving through Puerto Princesa adds a substantial road journey; the two are not neighbouring towns.",
+    "social": "Tours and hostels make meeting other travellers straightforward. A recurring salsa night or tested coliving base is not verified here.",
+    "catch": "Choose it for scenery and outings. A cheap waterfront working month requires more checking than a short holiday.",
+    "cost": "₱3,500–6,000",
+    "costLabel": "Tourism-guide room estimate / night",
+    "costNote": "The tourism guide estimates this for private air-conditioned boutique rooms or beachfront cottages. This is a planning range, not an available room or a guarantee of beach access. Food and tours are extra.",
+    "waterfront": "Compare the room’s exact beach with the property’s location. An affordable bay view may still mean travelling elsewhere for a swim.",
+    "extraCost": "Boat outings can become a major expense. Get the full price including entry fees, equipment and transfers.",
+    "season": "palawan",
+    "map": "Lio Beach El Nido Palawan Philippines",
+    "activities": [
+      [
+        "Bacuit Bay lagoons",
+        "Boat day",
+        "An excursion from your base, subject to access rules and sea conditions."
+      ],
+      [
+        "Lio Beach",
+        "Beach outing",
+        "A mainland alternative to a full boat-tour day."
+      ],
+      [
+        "Maremegmeg Beach",
+        "Beach & sunset",
+        "A coastal outing south of town."
+      ]
+    ],
+    "sources": [
+      [
+        "El Nido guide & budget estimates",
+        "https://www.philippines.travel/destinations/palawan-el-nido/index"
+      ],
+      [
+        "Palawan destination guide",
+        "https://app.philippines.travel/destinations/palawan"
+      ]
+    ],
+    "rank": 6,
+    "ratings": {
+      "swim": 4,
+      "outdoors": 4,
+      "quiet": 3,
+      "value": 2,
+      "work": 2,
+      "scooter": 4
+    },
+    "recommendation": "Best scenery splurge",
+    "whyRank": "You can enjoy the beaches and limestone scenery without diving. Higher costs and property-dependent work setups reduce its fit for a long stay.",
+    "roomPHP": [
+      3500,
+      6000
+    ]
+  },
+  {
+    "id": "siargao",
+    "name": "Siargao",
+    "area": "General Luna · Libertad & Santa Fe",
+    "line": "Surf, café life, and a community to work alongside.",
+    "tags": [
+      "Coliving options",
+      "Surf culture",
+      "Cafés & community"
+    ],
+    "vibe": "The clearest fit here for someone who wants a social work routine. General Luna is the busy hub; Libertad and Santa Fe offer quieter bases within riding distance. Santa Fe here is on Siargao, not Bantayan.",
+    "beach": "This is a surf destination with reefs and tide-dependent swimming spots. Do not equate an oceanfront room with an easy, calm swimming beach.",
+    "work": "Coco Space advertises call booths, Starlink plus a backup ISP, and solar plus generator backup. Its listed pass is ₱500/day or ₱7,500/month. Confirm opening hours and call-booth availability for your schedule.",
+    "food": "General Luna has a strong café scene. Local meals and imported-ingredient café menus create very different daily budgets, so compare the meals you would actually eat.",
+    "move": "A scooter can connect your room, workspace and surf spots. Staying farther from General Luna buys quiet but adds daily riding.",
+    "social": "Communal Coliving lists private rooms and studios with Coco Space access, utilities and community activities. A current recurring salsa night is not verified here.",
+    "catch": "The work community is appealing, but calm swimming and winter sunshine are weaker reasons to choose it. November–January is a wetter eastern-coast window.",
+    "cost": "₱2,900–3,200",
+    "costLabel": "Published room examples / night",
+    "costNote": "Emerald House’s Sapphire rooms have ocean views and ceiling fans. This range is for those rooms, not air-conditioned beachfront accommodation or an island-wide average.",
+    "waterfront": "Communal lists private rooms at ₱50,000 and studios at ₱60,000 for 30 days / 29 nights, including coworking. These are inland coliving alternatives, not waterfront quotes.",
+    "extraCost": "Do not add a separate coworking membership if your stay already includes it. Scooter hire, food and surf activities still need their own allowance.",
+    "season": "siargao",
+    "map": "General Luna Siargao Philippines",
+    "activities": [
+      [
+        "Cafés & community events",
+        "Social outing",
+        "Meet people through coworking events or café life without needing to surf."
+      ],
+      [
+        "Sugba Lagoon",
+        "Paddling day trip",
+        "An excursion away from the General Luna work base; confirm transfers and access."
+      ],
+      [
+        "Island road outing",
+        "Explore by scooter",
+        "A day away from the café strip, with stops chosen around weather and daylight."
+      ]
+    ],
+    "sources": [
+      [
+        "Coco Space facilities & passes",
+        "https://cocospace.io/coco-v4/"
+      ],
+      [
+        "Communal rooms & inclusions",
+        "https://www.communalcoliving.com/spaces-rates"
+      ],
+      [
+        "Emerald House room rates",
+        "https://www.emeraldhousevillage.com/sapphire"
+      ],
+      [
+        "Siargao tourism guide",
+        "https://philippines.travel/destinations/siargao-island/index"
+      ]
+    ],
+    "rank": 7,
+    "ratings": {
+      "swim": 2,
+      "outdoors": 3,
+      "quiet": 3,
+      "value": 2,
+      "work": 4,
+      "scooter": 5
+    },
+    "recommendation": "Best work community, with tradeoffs",
+    "whyRank": "Coliving and coworking are its strengths. With no surfing, calm swimming as a priority and a possible winter visit, other islands fit better.",
+    "roomPHP": [
+      2900,
+      3200
+    ]
+  },
+  {
+    "id": "coron",
+    "name": "Coron",
+    "area": "Palawan province · Coron town on Busuanga",
+    "line": "A harbour base for lakes, reefs and boat adventures.",
+    "tags": [
+      "Island outings",
+      "Diving",
+      "Town-based stays"
+    ],
+    "vibe": "Think of town as the launch point. The landscapes people come for are often a boat ride away rather than outside an inexpensive room.",
+    "beach": "Coron town is a harbour base, not a long sandy swimming beach. The beaches and lakes on island excursions are a separate experience from staying in town.",
+    "work": "Check the actual room and backup arrangements. Do not assume a remote island resort is a dependable call location because it advertises Wi-Fi.",
+    "food": "Staying near town gives you restaurant choices. A remote resort may require meal packages and boat transfers, changing the true cost of a stay.",
+    "move": "Fly to Busuanga and transfer to town. Boats open up the headline sights; a scooter cannot replace those trips.",
+    "social": "Dive operators and shared outings provide ways to meet people. A recurring salsa night or verified coliving base is not listed here.",
+    "catch": "Excellent as an adventure stop, less suited to a simple swim-before-work routine on a cheap beach.",
+    "cost": "₱3,000–5,000",
+    "costLabel": "Tourism-guide room estimate / night",
+    "costNote": "The tourism guide’s allowance for a private mid-range hotel room in town. Simpler rooms can be cheaper. This is not a beachfront-resort quote and excludes food, transport and activities.",
+    "waterfront": "A harbour view and a private-island beach are different products. Confirm where swimming happens and whether transfers cost extra.",
+    "extraCost": "Budget for boat days and dive activities separately. Keep weather-dependent outings clear of essential onward connections.",
+    "season": "palawan",
+    "map": "Coron Town Busuanga Palawan Philippines",
+    "activities": [
+      [
+        "Mount Tapyas",
+        "Viewpoint walk",
+        "A stepped climb above town, rather than a remote mountain expedition."
+      ],
+      [
+        "Kayangan Lake & Twin Lagoons",
+        "Boat outing",
+        "Island stops to visit from town, with current access checked by the operator."
+      ],
+      [
+        "Maquinit Hot Springs",
+        "Land outing",
+        "A soak outside town, with current access and opening hours checked locally."
+      ]
+    ],
+    "sources": [
+      [
+        "Coron guide & budget estimates",
+        "https://philippines.travel/destinations/coron/index"
+      ],
+      [
+        "Coron geography & access",
+        "https://app.philippines.travel/interests/coron"
+      ],
+      [
+        "Department of Tourism: Coron",
+        "https://www.tourism.gov.ph/destination/mimaropa/coron/"
+      ]
+    ],
+    "rank": 8,
+    "ratings": {
+      "swim": 1,
+      "outdoors": 3,
+      "quiet": 3,
+      "value": 3,
+      "work": 2,
+      "scooter": 3
+    },
+    "recommendation": "Better as a short adventure stop",
+    "whyRank": "Lakes, viewpoints and boat trips still work without diving. Town lacks the easy beach-outside-your-door routine.",
+    "roomPHP": [
+      3000,
+      5000
     ]
   }
 ]

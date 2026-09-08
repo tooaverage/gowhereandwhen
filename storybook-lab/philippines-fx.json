@@ -1,0 +1,8 @@
+{
+  "date": "2026-09-07",
+  "cadPerPHP": 0.022062883751596818,
+  "phpPerCAD": 45.3249906611879,
+  "source": "https://www.banque-france.fr/en/statistics/rates-and-prices/exchange-rates-daily-parities-2026-09-07",
+  "sourceLabel": "Banque de France reference rates",
+  "basis": "EUR/CAD 1.6062 and EUR/PHP 72.8010; cross-rate conversion, rounded to whole Canadian dollars."
+}

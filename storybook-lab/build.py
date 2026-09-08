@@ -34,10 +34,10 @@ for source in sorted((r.parent/'play/country').glob('*/index.html')):
   page=page.replace('<section class="guide-section" id="watch-out">',(r/(slug+'-guide.html')).read_text()+'<section class="guide-section" id="watch-out">')
   page=page.replace('<a href="#months">By month</a>','<a href="#months">By month</a><a href="#cities">By city</a>')
  if slug=='philippines':
-  page=page.replace('../../app.js?v=storybook32','../../app.js?v=storybook32-islands1')
+  page=page.replace('../../app.js?v=storybook32','../../app.js?v=storybook32-islands2')
   page=page.replace('<a href="#seasons">Seasons</a>','<a href="#island-life">Island life</a><a href="#seasons">Seasons</a>')
   page=page.replace('<section class="guide-section" id="months">',(r/'philippines-guide.html').read_text()+'<section class="guide-section" id="months">')
-  page=page.replace('</head>','<link rel="stylesheet" href="../../island-life.css?v=1"/><script defer src="../../island-life.js?v=1"></script></head>')
+  page=page.replace('</head>','<link rel="stylesheet" href="../../island-life.css?v=2"/><script defer src="../../island-life.js?v=2"></script></head>')
   page=page.replace('Go in the <strong>dry season, December to May</strong>, for sunny days and calm seas across the islands. The <strong>wet season, June to November</strong>, brings the rains and overlaps the typhoon season, which peaks from July to October.','<strong>Choose the island as well as the month.</strong> Manila’s drier December–May pattern is a starting point, not a promise for every coast. Siargao is wetter in winter; beach conditions also depend on wind and tides. <a href="#island-life">Explore island life below ↓</a>')
   page=page.replace('The Philippines is over seven thousand islands, hot and tropical, with a clear dry and wet season. We rate on Manila, where the dry months from December to May are the time for the beaches, diving and island hopping.','The Philippines has thousands of islands with different rainfall patterns. The weather scores on this page use Manila; use the island portraits and city comparison for a more local picture.')
   page=page.replace('The best time to visit the Philippines is the dry season, December to May, with sunny weather and calm seas for the islands and beaches.','Explore Philippines islands by season, beach conditions, local vibe and room costs. Compare bases in Bohol, Palawan, Siquijor, Camiguin and beyond.')

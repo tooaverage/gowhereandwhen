@@ -65,6 +65,13 @@ if (section) {
       tabs[next].focus();
     });
   });
+  section.querySelectorAll('[data-island-jump]').forEach(link => link.addEventListener('click', () => {
+    choose(link.dataset.islandJump);
+  }));
+  window.addEventListener('hashchange', () => {
+    const id = location.hash.replace('#island-', '');
+    if (tabs.some(tab => tab.dataset.island === id)) choose(id);
+  });
   selectors.forEach(select => select.addEventListener('change', () => {
     updateMonth(Number(select.value));
     const url = new URL(location.href);
@@ -79,6 +86,6 @@ if (section) {
     updateMonth(Number(url.searchParams.get('m')));
   });
   updateMonth(month);
-  choose(params.get('island'), false);
+  choose(params.get('island') || location.hash.replace('#island-', ''), false);
   section.classList.add('enhanced');
 }

@@ -15,7 +15,9 @@ Production remains the existing GitHub Pages workflow for gowhereandwhen.com. Th
 
 Original scene assets remain available. Optimized assets use Meshopt compression with 16-bit positions and 12-bit normals; every scene node name and semantic extras record is preserved. Run `npm run optimize:models` when the original assets change, then regenerate Storybook.
 
-The build precomputes 324 terrain queries from the exact optimized world model using the same Three.js code as the browser. `scripts/build-map-cache.cjs` regenerates that cache for every public build. The browser retains a raycast fallback for unknown positions or failed cache delivery. This removes repeated expensive work without moving landmarks or removing map features.
+The build precomputes 526 terrain queries from the exact optimized world model using the same Three.js code as the browser. `scripts/build-map-cache.cjs` regenerates that cache for every public build. The browser retains a raycast fallback for unknown positions or failed cache delivery. This removes repeated expensive work without moving landmarks or removing map features. Country labels use interior anchors from each country's largest Natural Earth polygon, with a capital fallback when a centroid is offshore.
+
+The boundary repair corrects 249 missing height samples from the original Blender export while preserving every longitude/latitude endpoint and border connection. Nearby country labels stay visible at closer zooms, avoid the guide title, and point near the terrain. Baked snow material on country terrain follows the weather colour; decorative snowy scenery stays intact.
 
 Procedural scenery reuses identical primitive geometries and merges typed buffers. Map initialization yields between landmarks and shader compilation. Labels avoid repeated forced layout, and animation pauses when the map is offscreen. Compressed geometry can decode in two Web Workers, with the synchronous decoder retained if workers are unavailable.
 

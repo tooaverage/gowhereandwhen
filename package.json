@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "build": "node build-public.cjs",
-    "check": "node scripts/check-public.cjs",
+    "check": "node scripts/check-public.cjs && node scripts/check-map-boundaries.mjs && node scripts/check-analytics.cjs",
     "optimize:models": "node scripts/optimize-models.mjs"
   },
   "devDependencies": {

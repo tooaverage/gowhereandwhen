@@ -27,6 +27,8 @@ jobs:
           node-version: 24
       - run: npm ci --ignore-scripts
       - name: Build Storybook public website
+        env:
+          GA_MEASUREMENT_ID: ${{ vars.GA_MEASUREMENT_ID }}
         run: npm run build && npm run check
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3

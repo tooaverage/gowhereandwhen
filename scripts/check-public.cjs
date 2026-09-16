@@ -16,6 +16,6 @@ for(const dir of ['storybook','play','cartoon','bureau','prototypes','archive-v1
 assert(read(path.join(root,'404.html')).includes('noindex'));
 const sourceData=JSON.parse(read(path.resolve(__dirname,'../storybook/data.json'))),publicData=JSON.parse(read(path.join(root,'storybook/data.json')));
 assert.deepEqual(publicData.map(({lead,...record})=>record),sourceData.map(({lead,...record})=>record),'Weather data, scores, cities and map destinations preserved');
-const philippines=read(path.join(root,'country/philippines/index.html'));assert(philippines.includes('id="island-life"'));assert(philippines.includes('island-life.js'));assert(philippines.includes('affiliates.js'));
+const philippines=read(path.join(root,'country/philippines/index.html'));assert(philippines.includes('id="island-life"'));assert(philippines.includes('island-life.js'));assert(philippines.includes('data-booking-type="accommodation"'));
 assert(read(path.join(root,'country/austria/index.html')).includes('late December to early March'));
 console.log('Passed: 89 canonical pages, unique metadata, crawlable internal links/assets/fragments, schema JSON, archive noindex, 404 and retained island/booking surfaces.');

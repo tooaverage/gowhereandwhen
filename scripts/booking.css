@@ -1,0 +1,9 @@
+.booking-checklist{padding:24px;border:1px solid #b4ceca;border-radius:12px;background:#edf5f0}
+.booking-checklist ul{padding-left:22px;line-height:1.8;margin:14px 0}.booking-checklist p{font-size:.9rem}
+.island-booking{padding:22px 24px;margin:24px 0;border:1px solid #ccdcd3;border-radius:12px;background:#f0f5ec}
+.island-booking h4{margin:0 0 8px;font-size:1.05rem}.island-booking p{margin:8px 0}
+.booking-link{display:inline-flex;align-items:center;min-height:44px;padding:8px 0;color:#205e53;font-weight:800;text-underline-offset:4px}
+.booking-disclosure{font-size:.8125rem;color:#465e60;line-height:1.6;margin:12px 0 20px;max-width:85ch}
+.booking-islands{display:flex;gap:8px 24px;flex-wrap:wrap;margin:20px 0}.booking-islands .booking-link{border-bottom:1px solid #9dbcb4;text-decoration:none}
+.booking-secondary{margin-top:24px;font-size:.9rem}.booking-activities{margin:24px 0}
+@media(max-width:600px){.island-booking{padding:18px}.booking-islands{gap:6px 18px}}

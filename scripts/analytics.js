@@ -62,7 +62,10 @@ if (/^G-[A-Z0-9]+$/.test(id || '') && ['gowhereandwhen.com', 'www.gowhereandwhen
     if (a) {
       const url = new URL(a.href), guide = url.pathname.match(/^\/country\/([a-z-]+)\/$/);
       if (url.origin === location.origin && guide) track('open_guide', {destination:guide[1]});
-      else if (['hotellook.com','getyourguide.com','aviasales.com','booking.com'].some(host => url.hostname === host || url.hostname.endsWith('.' + host))) track('booking_click', {provider:url.hostname, booking_type:url.hostname.endsWith('aviasales.com')?'flights':url.hostname.endsWith('getyourguide.com')?'activities':'accommodation'});
+      else if (['stay22.com','getyourguide.com','aviasales.com','booking.com'].some(host => url.hostname === host || url.hostname.endsWith('.' + host))) {
+        const safe = value => /^[a-z0-9_\/-]{1,80}$/.test(value || '') ? value : '';
+        track('booking_click', {provider:safe(a.dataset.bookingProvider) || url.hostname, booking_type:safe(a.dataset.bookingType) || (url.hostname.endsWith('aviasales.com')?'flights':url.hostname.endsWith('getyourguide.com')?'activities':'accommodation'), destination:safe(location.pathname.split('/')[2]), placement:safe(a.dataset.bookingPlacement), island:safe(a.dataset.bookingIsland)});
+      }
     }
     const island = e.target.closest('[data-island]')?.dataset.island;
     if (/^[a-z-]+$/.test(island || '')) track('select_island', {island});

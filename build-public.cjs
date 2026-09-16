@@ -43,3 +43,4 @@ if(count!==74)throw Error(`Expected 74 Storybook country guides; found ${count}`
 console.log(`Public website built: Storybook homepage and ${count} country guides. Older editions retained.`);
 
 require('./scripts/enhance-public.cjs')(root,out);
+require('./scripts/monetize-public.cjs')(root,out);

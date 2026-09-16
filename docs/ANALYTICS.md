@@ -1,6 +1,6 @@
 # PostHog analytics
 
-Prepared but inactive until the owner chooses the PostHog organization and a dedicated GoWhereAndWhen project is configured. Configuration lives in `analytics.config.json`: `projectToken` is the public ingestion token, and `apiHost` is the matching US/EU ingestion host. GitHub Actions variables `POSTHOG_PROJECT_TOKEN` and `POSTHOG_API_HOST` can override these. Never put a personal API key in the repository or browser code. An empty token disables integration entirely.
+Configured for the separate GoWhereAndWhen organization and project 613152 (US region): https://us.posthog.com/project/613152. It does not send data to Design Recap or Get Thy Bread. Configuration lives in `analytics.config.json`: `projectToken` is the public ingestion token, and `apiHost` is the matching US/EU ingestion host. GitHub Actions variables `POSTHOG_PROJECT_TOKEN` and `POSTHOG_API_HOST` can override these. Never put a personal API key in the repository or browser code. An empty token disables integration entirely.
 
 The deferred first-party consent controller dynamically imports a separate, locally bundled PostHog SDK only after opt-in. The pinned SDK uses `module.no-external` to prevent loading extension scripts. Session replay, autocapture, person profiles, feature flags, heatmaps, surveys, error capture, performance capture and advertising integrations are disabled. No SDK or third-party request is made before consent. Localhost and every hostname other than the two production domains are excluded.
 

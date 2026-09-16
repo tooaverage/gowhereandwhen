@@ -28,7 +28,8 @@ jobs:
       - run: npm ci --ignore-scripts
       - name: Build Storybook public website
         env:
-          GA_MEASUREMENT_ID: ${{ vars.GA_MEASUREMENT_ID }}
+          POSTHOG_PROJECT_TOKEN: ${{ vars.POSTHOG_PROJECT_TOKEN }}
+          POSTHOG_API_HOST: ${{ vars.POSTHOG_API_HOST }}
           STAY22_AID: ${{ vars.STAY22_AID }}
           GETYOURGUIDE_PARTNER_ID: ${{ vars.GETYOURGUIDE_PARTNER_ID }}
         run: npm run build && npm run check

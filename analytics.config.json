@@ -1,3 +1,4 @@
 {
-  "measurementId": ""
+  "projectToken": "",
+  "apiHost": "https://us.i.posthog.com"
 }

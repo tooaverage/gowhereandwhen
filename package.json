@@ -7,10 +7,11 @@
     "optimize:models": "node scripts/optimize-models.mjs"
   },
   "devDependencies": {
-    "esbuild": "0.25.9",
     "@gltf-transform/core": "4.2.1",
     "@gltf-transform/extensions": "4.2.1",
     "@gltf-transform/functions": "4.2.1",
-    "meshoptimizer": "0.23.0"
+    "esbuild": "0.25.9",
+    "meshoptimizer": "0.23.0",
+    "posthog-js": "1.433.6"
   }
 }

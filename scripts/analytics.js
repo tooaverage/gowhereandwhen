@@ -1,33 +1,39 @@
-// Basic consent mode: do not load Google or send any analytics before opt-in.
+// The consent controller is independent of the SDK and sends nothing before opt-in.
 const id = document.querySelector('meta[name="gww-analytics"]')?.content;
-if (/^G-[A-Z0-9]+$/.test(id || '') && ['gowhereandwhen.com', 'www.gowhereandwhen.com'].includes(location.hostname)) {
-  const key = 'gww-analytics-choice-v1';
+const host = document.querySelector('meta[name="gww-analytics-host"]')?.content;
+if (/^phc_[a-zA-Z0-9]+$/.test(id || '') && ['https://us.i.posthog.com','https://eu.i.posthog.com'].includes(host) && ['gowhereandwhen.com', 'www.gowhereandwhen.com'].includes(location.hostname)) {
+  const key = 'gww-analytics-choice-v2-posthog';
   let choice = null, started = false;
   try { const saved = JSON.parse(localStorage.getItem(key)); if (saved && ['yes','no'].includes(saved.value) && Date.now() < saved.expires) choice = saved.value; } catch {}
   if (navigator.globalPrivacyControl) choice = 'no';
   const cleanURL = value => { if (!value) return ''; try { const u = new URL(value, location.href); return u.origin + u.pathname.replace(/\/index\.html$/, '/'); } catch { return ''; } };
-  const denied = {analytics_storage:'denied', ad_storage:'denied', ad_user_data:'denied', ad_personalization:'denied'};
-  function gtag() { window.dataLayer.push(arguments); }
+  const allowed = () => choice === 'yes' && !navigator.globalPrivacyControl;
+  let client, loading, generation = 0;
   function track(name, parameters = {}) {
-    if (choice !== 'yes' || !started || navigator.globalPrivacyControl) return;
-    gtag('event', name, {...parameters, page_location:cleanURL(location.href), page_referrer:cleanURL(document.referrer)});
+    if (!allowed() || !client) return;
+    client.capture(name, {...parameters, $current_url:cleanURL(location.href), $pathname:new URL(cleanURL(location.href)).pathname, $referrer:cleanURL(document.referrer), $referring_domain:document.referrer ? new URL(document.referrer).hostname : '$direct', $title:document.title});
   }
-  function start() {
-    if (started || choice !== 'yes' || navigator.globalPrivacyControl) return;
-    started = true; window['ga-disable-' + id] = false;
-    window.dataLayer = window.dataLayer || [];
-    gtag('consent', 'default', denied);
-    gtag('consent', 'update', {...denied, analytics_storage:'granted'});
-    gtag('js', new Date());
-    gtag('config', id, {send_page_view:false, allow_google_signals:false, allow_ad_personalization_signals:false, cookie_expires:15552000, page_location:cleanURL(location.href), page_referrer:cleanURL(document.referrer)});
-    track('page_view', {page_title:document.title});
-    const script = document.createElement('script'); script.async = true;
-    script.src = 'https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(id);
-    document.head.append(script);
+  async function start() {
+    if (started || !allowed()) return;
+    started = true;
+    const run = ++generation;
+    try {
+      // Separate chunk: no SDK download, storage, or requests before consent.
+      loading ||= import('./posthog-client.js');
+      const {startClient} = await loading;
+      if (run !== generation || !allowed()) return;
+      client ||= startClient(id, host, allowed);
+      client.opt_in_capturing({captureEventName:false});
+      track('$pageview');
+    } catch { started = false; loading = null; }
+  }
+  function stop() {
+    started = false; generation++;
+    client?.opt_out_capturing();
   }
   const panel = document.createElement('section');
   panel.className = 'analytics-choice'; panel.setAttribute('aria-label', 'Optional analytics');
-  panel.innerHTML = '<p><strong>Help improve these travel guides?</strong> Allow Google Analytics cookies to measure visits and use of the site. Advertising features are off.</p><p><a href="/methodology/#privacy">Privacy details</a></p><div><button type="button" data-choice="no">No thanks</button><button type="button" data-choice="yes">Allow analytics</button></div>';
+  panel.innerHTML = '<p><strong>Help improve these travel guides?</strong> Allow PostHog analytics to measure visits and use of the site. It saves a random visitor ID in your browser. Session recording is off.</p><p><a href="/methodology/#privacy">Privacy details</a></p><div><button type="button" data-choice="no">No thanks</button><button type="button" data-choice="yes">Allow analytics</button></div>';
   document.body.append(panel);
   const preferences = document.createElement('button'); preferences.type = 'button'; preferences.className = 'analytics-preferences'; preferences.textContent = 'Analytics preferences';
   (document.querySelector('footer') || document.body).append(preferences);
@@ -39,15 +45,13 @@ if (/^G-[A-Z0-9]+$/.test(id || '') && ['gowhereandwhen.com', 'www.gowhereandwhen
     try { localStorage.setItem(key, JSON.stringify({value:choice, expires:Date.now() + 15552000000})); } catch {}
     panel.hidden = true;
     if (choice === 'yes') start();
-    else {
-      window['ga-disable-' + id] = true;
-      if (started) gtag('consent', 'update', denied);
-      for (const cookie of document.cookie.split(';')) {
-        const name = cookie.split('=')[0].trim(); if (!/^_ga(?:_|$)/.test(name)) continue;
-        for (const domain of ['', ';domain=' + location.hostname, ';domain=.gowhereandwhen.com']) document.cookie = name + '=;Max-Age=0;path=/' + domain;
-      }
-    }
+    else stop();
     preferences.focus();
+  });
+  window.addEventListener('storage', e => {
+    if (e.key !== key) return;
+    try { const saved = JSON.parse(e.newValue); choice = saved?.value === 'yes' && saved.expires > Date.now() ? 'yes' : 'no'; } catch { choice = 'no'; }
+    if (allowed()) start(); else stop();
   });
   document.addEventListener('gww:month', e => {
     const {month, country} = e.detail || {};

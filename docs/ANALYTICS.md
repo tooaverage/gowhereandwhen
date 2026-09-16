@@ -1,16 +1,16 @@
-# Analytics setup
+# PostHog analytics
 
-The integration is ready but inactive until the owner's real GA4 measurement ID is supplied. No placeholder tracking ID is published. Set the GitHub Actions repository variable `GA_MEASUREMENT_ID`, or the public `measurementId` in `analytics.config.json`, then deploy. The ID is public, not an API credential.
+Prepared but inactive until the owner chooses the PostHog organization and a dedicated GoWhereAndWhen project is configured. Configuration lives in `analytics.config.json`: `projectToken` is the public ingestion token, and `apiHost` is the matching US/EU ingestion host. GitHub Actions variables `POSTHOG_PROJECT_TOKEN` and `POSTHOG_API_HOST` can override these. Never put a personal API key in the repository or browser code. An empty token disables integration entirely.
 
-In the owner's Google Analytics account, create or choose the GoWhereAndWhen property and its web stream for `https://gowhereandwhen.com`. Disable Enhanced Measurement for this stream: the integration sends explicit canonical page views and events, while map month changes use `history.replaceState` and must not create extra page views. Keep Google Signals and advertising links off. Confirm the preferred account reporting timezone, currency and retention settings in that account.
+The deferred first-party consent controller dynamically imports a separate, locally bundled PostHog SDK only after opt-in. The pinned SDK uses `module.no-external` to prevent loading extension scripts. Session replay, autocapture, person profiles, feature flags, heatmaps, surveys, error capture, performance capture and advertising integrations are disabled. No SDK or third-party request is made before consent. Localhost and every hostname other than the two production domains are excluded.
 
-After activation, verify an opted-in real production visit in Realtime and verify refusal sends no Google requests. Never send a test event from localhost to the production property. Local previews are excluded even if a real ID is configured. The initial default is no tracking until the visitor opts in. Advertising storage, user data and personalization remain denied. Visitors can withdraw through Analytics preferences in the footer; Global Privacy Control is respected.
+Visitors can decline or withdraw using Analytics preferences in the footer. Global Privacy Control is respected. The consent choice expires after six months; the SDK is not loaded on expired consent. Withdrawal calls the SDK opt-out and clears its persistence (with `opt_out_persistence_by_default`). Consent changes synchronize between open tabs. Provider-specific consent uses a new key so any earlier Google Analytics consent is not reused. No Google Analytics tag is installed alongside PostHog.
 
-Events: `page_view`, `open_guide`, `select_month`, `search_destination`, `booking_click`, `select_island`, and `map_control`. Custom events use recognized destination slugs, numeric months, provider hostnames and predefined control values. They do not send typed search text, hotel booking parameters or URL queries/fragments. Add event-scoped dimensions for `destination`, `month`, `provider`, `booking_type`, `island` and `control` when configuring the property. Booking clicks can be marked as a key event; they are referral intent, not completed bookings or revenue.
+Events: `$pageview`, `open_guide`, `select_month`, `search_destination`, `booking_click`, `select_island`, `map_control`. Month changes do not create extra pageviews. Properties include recognized destination/island slugs, numeric month, provider hostname, booking type, control name and boolean state. Page and referring URLs exclude query strings and fragments. Automatic campaign/referrer persistence is off, and an event/property allowlist strips unexpected SDK enrichment and person properties. No raw search input or booking details are sent. IP geolocation enrichment is disabled; PostHog still receives network connections. Booking clicks represent referral intent, not completed bookings or revenue.
 
-The small first-party consent controller is deferred and the Google script loads asynchronously only after consent. Test both first-time and returning opted-in performance after activation; an audit without consent does not measure the cost of the loaded Google library.
+Run `npm run build && npm run check`. The analytics checks cover pre-consent isolation, opt-out, GPC, local exclusion, redaction, SDK configuration, invalid input and consent races. After deploying a configured project, verify an opted-in visit and a few named interactions in PostHog Activity, plus Web Analytics page views. Test a declined visit separately. Initial-load audits without consent do not measure the cost of the asynchronously loaded SDK for returning opted-in visitors.
 
-Google documentation checked 8 September 2026:
-- https://support.google.com/analytics/answer/14183469
-- https://developers.google.com/tag-platform/security/concepts/consent-mode
-- https://developers.google.com/analytics/devguides/collection/ga4/reference/config
+Official documentation reviewed 16 September 2026:
+- https://posthog.com/docs/libraries/js
+- https://posthog.com/docs/libraries/js/config
+- https://posthog.com/docs/libraries/js/privacy

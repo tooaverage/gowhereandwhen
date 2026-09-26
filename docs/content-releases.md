@@ -16,3 +16,10 @@
 - Corrected a historical spring-lavender claim and unsupported snow certainty. Kept the shared Storybook design system. Fixed clipped camera labels at 320px.
 - Lighthouse baseline: home 67 performance, France 59; both 100 accessibility/best practices/SEO in one simulated-mobile run. These are lab baselines, not rankings. Heavy 3D loading remains a performance backlog item. Added automatic post-deploy Lighthouse reports for home/France/Japan.
 - Pilot is a manual execution of the workflow. The standalone Sol scheduler is configured separately and has not yet completed its first scheduled batch.
+
+## 2026-09-26: France backpacker route expansion
+
+- Added /country/france/#route with the existing shared route component used by Japan: geographic outline, numbered stops, 3/7/14/30-day selector and stop-specific night totals.
+- Three days stays in Paris; one week adds Lyon; two weeks continues to Nice; the month adds Bordeaux before Lyon. Each leg links to SNCF route information, with no invented fixed fares or train times. Nights are editorial allocations and total trip length minus one.
+- Removed the earlier brief route paragraph to avoid duplication. Added a separate Backpacker routes navigation link. Source geography comes from the existing Natural Earth/world-atlas topology.
+- Browser-tested all four selectors, map stop counts and night totals. This is a researched rail itinerary, not a verified cheapest-trip claim or a complete rural-France route.

@@ -61,9 +61,9 @@ module.exports=function enhancePublic(root,out){
    html=html.replace('Spring brings lavender fields and gentler heat.','Lavender flowers in summer; dates vary by altitude and the season.');
    html=html.replace('far shorter queues than the July to August peak','a different balance of weather and seasonal demand');
    html=html.replace(/(<div class="guide-intro"><p class="lead">)[\s\S]*?(<\/p>)/,'$1<strong>May–June or September is a useful starting point for sightseeing.</strong> Compare Paris, the Atlantic coast and the Riviera before choosing: France has no single best season for cities, beaches and mountains.$2');
-   html=html.replace('<section class="guide-section" id="months">',require('./france-season-guide.cjs')(r,esc)+'<section class="guide-section" id="months">');
+   html=html.replace('<section class="guide-section" id="months">',require('./france-season-guide.cjs')(r,esc)+require('./france-backpacker-route.cjs')()+'<section class="guide-section" id="months">');
    html=html.replace('France month by month','France weather by month: Paris');
-   html=html.replace('<a href="#months">By month</a>','<a href="#regional-weather">Regional weather &amp; rail route</a><a href="#months">By month</a>');
+   html=html.replace('<a href="#months">By month</a>','<a href="#regional-weather">Regional weather</a><a href="#route">Backpacker routes</a><a href="#months">By month</a>');
    html=html.replace('December to April in the Alps, with the most reliable snow in January and February.','Winter is the ski season, but opening dates and snow vary by resort and altitude. Check the resort’s current lift and snow reports.');
    html=html.replace("June and September for warm seas without the peak August crush along the Cote d'Azur.",'Compare June and September for a coastal trip. Air-temperature scores do not measure sea warmth or beach conditions.');
    html=html.replace(/"dateModified":"[^" ]+"/g,'"dateModified":"2026-09-26"');

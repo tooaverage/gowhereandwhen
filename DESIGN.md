@@ -35,3 +35,5 @@ Build with node game-lab/build-data.cjs, python3 game-lab/build.py, python3 bure
 ## Country guide standard
 
 Japan is the reference for city-by-month and route maps. Less is more: grade 6 reading level, short decision-led copy, labelled icons where helpful, sources under disclosure controls, consistent space between headings and content. Reuse shared components across countries as their local data becomes available. No wall-of-text source disclaimers. Keep material score limitations visible in plain language.
+
+The maintained editorial contract is [docs/COPY-RULES.md](docs/COPY-RULES.md). No emojis. Use the shared Lucide SVG helper with visible text labels. The initial France card emojis have been replaced.

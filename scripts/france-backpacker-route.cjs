@@ -1,3 +1,4 @@
+const guideIcon=require('./guide-icon.cjs');
 // Reuse the existing Japan-style route map, trip-length buttons and stop list.
 const maps=require('../gen-maps.js');
 module.exports=function franceRoute(){
@@ -21,5 +22,5 @@ module.exports=function franceRoute(){
  .replaceAll('Backpacker route','Travel itinerary').replaceAll('backpacker route map','travel route map')
  .replace(' Lines show the order of stops, not the roads or ferry tracks.',' Suggested stop order.')
  .replace(/<p class="disc" style="margin:18px 0 0">([\s\S]*?)<\/p>/,'<details class="guide-sources"><summary>Train links &amp; planning notes</summary><p>$1</p><p>Suggested nights. Compare tickets and rail passes for your dates.</p></details>');
- return section.replace('    <div class="cmapgrid">','<p class="route-season"><span aria-hidden="true">☀</span> <strong>Try May–June or September.</strong> Summer can be hot.</p><div class="cmapgrid">');
+ return section.replace('    <div class="cmapgrid">',`<p class="route-season">${guideIcon('sun')} <strong>Try May–June or September.</strong> Summer can be hot.</p><div class="cmapgrid">`);
 };

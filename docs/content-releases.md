@@ -7,8 +7,9 @@
 - Public UI clarifies travel weather comfort rather than temperature. Fixed-scale interpolation is explicitly regression-tested.
 - City selection joins the consent-based analytics event set. Real traffic totals remain unverified until dashboard access succeeds.
 
-## 2026-09-26: France pilot, prepared for release
+## 2026-09-26: France pilot, published
 
+- Deployment 36257801307 succeeded for commit 94f36e8; live six-city section and route verified.
 - Updated /country/france/ with a compact six-city September/October comparison, a Paris–Lyon–Nice suggested rail route, source links, and clearer coastal/Alpine limitations. Existing canonical URL retained; no new competing page.
 - Added NASA POWER daily-derived 2001–2020 climate for Lyon, Nice, Bordeaux, Brest and Strasbourg; Paris already existed. Full 12-month validation passes. Exact requests are in climate/france.json. These are regional samples, not complete mountain/Corsica/overseas coverage. The older Paris-only chart remains explicitly distinguished from the new sourced table.
 - Sources: France.fr climate/geography and lavender guidance, SNCF Connect Paris–Lyon and Lyon–Nice route pages, NASA POWER daily API.

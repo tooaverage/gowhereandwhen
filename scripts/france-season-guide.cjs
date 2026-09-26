@@ -1,7 +1,8 @@
 const maps=require('../gen-maps.js');
 module.exports=function franceGuide(record){
- maps.PLACES[250]={clip:{minLon:-6,maxLon:10,minLat:41,maxLat:52},cities:record.cities.map(c=>({...c,off:undefined,lab:c.name==='Nice'?'l':undefined}))};
+ maps.PLACES[250]={clip:{minLon:-6,maxLon:10,minLat:41,maxLat:52},cities:record.cities.map(c=>({...c,off:undefined,lab:undefined}))};
  return maps.citySection({iso:250,name:'France'},record,{best:8})
+ .replace(/(<text class="lab"[^>]*)(>Avignon<\/text>)/,'$1 dy="-12"$2')
  .replace('class="section--tight"','class="guide-section"')
  .replace('Which city, which month','France, city by city')
  .replace(/The strip above rates[^<]+/,'Pick a month. Compare eight travel bases on the map.')

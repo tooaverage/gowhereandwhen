@@ -30,9 +30,9 @@ module.exports=record=>{
  route=route.replace(/<p class="lead" style="margin:12px 0 20px">Pick a month\.[\s\S]*?<\/p>/,'');
  route=route.replace(/<div class="mpick" id="mpick"[\s\S]*?<\/div>/,monthPicker=>`<div class="trip-controls"><div class="trip-control-group"><p class="control-label" id="trip-length-label">Trip length</p>${lengthPicker}</div><div class="trip-control-group"><div class="month-control-heading"><p class="control-label" id="trip-month-label">Travel month</p><p class="control-tip">Try May–June or September</p></div>${monthPicker}<p class="control-key">Best time to go: weather, seasonal activities and events.</p></div></div>`);
  const map=route.match(/<svg class="cmap"[\s\S]*?<\/svg>/)[0];
- const cityCards=record.cities.map(c=>`<div class="heat-city-card" data-extra-card="${c.name}"><div class="extra-place-title"><strong>${c.name}</strong><span data-city-temperature="${c.name}"></span></div><small class="seasonal-reason" data-seasonal-reason="${c.name}"></small><small data-route-city="${c.name}" hidden></small></div>`).join('');
+ const cityCards=record.cities.map(c=>`<div class="heat-city-card" data-extra-card="${c.name}"><div class="extra-place-title"><strong>${c.name}${({Bayeux:', Normandy',Tours:', Loire Valley',Avignon:', Provence'})[c.name]||''}</strong><span data-city-temperature="${c.name}"></span></div><small class="seasonal-reason" data-seasonal-reason="${c.name}"></small><small data-route-city="${c.name}" hidden></small></div>`).join('');
  route=route.replace(map,require('./france-heat-sample.cjs')(map,record,engine)+`<div class="heat-legend"><span>Less suited</span><span class="heat-ramp" aria-hidden="true"></span><span>Great time to go</span></div><p class="heat-note">Travel rating: weather + activities + events.</p><div class="extra-places"><h3>Extra spots <small>Off your route</small></h3><div class="heat-city-cards">${cityCards}</div></div>`);
- const method=`<details class="guide-sources timing-method"><summary>What the rating includes</summary><p>Weather, seasonal activities and events. Each place shows a reason to go and a trade-off.</p><p>These are editorial recommendations. Event dates vary. Crowds, prices and closures are not rated yet.</p><p>Map colours blend eight city samples. They do not describe every mountain or coast. Grey means limited data.</p><p>Sources checked 26 September 2026: ${Object.entries(timing.sources).map(([name,url])=>`<a href="${url}">${name}</a>`).join(' · ')}.</p></details>`;
+ const method=`<details class="guide-sources timing-method"><summary>What the rating includes</summary><p>Weather, seasonal activities and events. Each place shows a reason to go and a trade-off.</p><p>Great: mild to warm sightseeing days, or a special seasonal event. Good: cooler, hotter or wetter conditions. These are editorial recommendations. Event dates vary. Crowds, prices and closures are not rated yet.</p><p>Map colours blend eight city samples. They do not describe every mountain or coast. Grey means limited data.</p><p>Sources checked 26 September 2026: ${Object.entries(timing.sources).map(([name,url])=>`<a href="${url}">${name}</a>`).join(' · ')}.</p></details>`;
  const notes=[];
  route=route.replace(/<details class="guide-sources">[\s\S]*?<\/details>/g,n=>{notes.push(n);return '';});
  route=route.replace('<summary>Sources &amp; weather notes</summary>','<summary>Weather sources</summary>');
@@ -47,12 +47,12 @@ module.exports=record=>{
  const climate=Object.fromEntries(record.cities.map(c=>[c.name,{hi:c.hi,advice:c.hi.map((_,m)=>timing.assess(c.name,m,engine.score(c,m),c)),scores:c.hi.map((_,m)=>timing.rating(c.name,m,engine.score(c,m),c))}]));
  const bands=Array.from({length:101},(_,i)=>engine.band(i).key);
  return route+`<script>(function(){
- const climate=${JSON.stringify(climate)},bands=${JSON.stringify(bands)},names=['January','February','March','April','May','June','July','August','September','October','November','December'];
+ const climate=${JSON.stringify(climate)},bands=${JSON.stringify(bands)},mapNames={Bayeux:'Normandy'},regions={Bayeux:'Normandy',Tours:'Loire Valley',Avignon:'Provence'},names=['January','February','March','April','May','June','July','August','September','October','November','December'];
  function update(){
   const stops=Array.from(document.querySelectorAll('#rt-list>li')).filter(li=>!li.hidden);
   const cities=stops.map(li=>climate[li.dataset.name]);
   const routeNames=stops.map(li=>li.dataset.name);
-  document.querySelectorAll('#cities .city').forEach((el,i)=>{const name=Object.keys(climate)[i],extra=!routeNames.includes(name);el.classList.toggle('extra-city',extra);el.querySelector('.lab').textContent=name+(extra?' +':'');});
+  document.querySelectorAll('#cities .city').forEach((el,i)=>{const name=Object.keys(climate)[i],extra=!routeNames.includes(name);el.classList.toggle('extra-city',extra);el.querySelector('.lab').textContent=(mapNames[name]||name)+(extra?' +':'');});
   document.querySelectorAll('[data-extra-card]').forEach(el=>el.hidden=routeNames.includes(el.dataset.extraCard));
   document.querySelector('.extra-places').hidden=routeNames.length===Object.keys(climate).length;
   document.querySelectorAll('[data-route-city]').forEach(el=>el.textContent=routeNames.includes(el.dataset.routeCity)?'On your route':'Extra spot · off route');
@@ -71,6 +71,7 @@ module.exports=record=>{
   document.querySelectorAll('[data-city-temperature]').forEach(el=>el.textContent=climate[el.dataset.cityTemperature].hi[m]+'°C high');
   document.querySelectorAll('#rt-list>li[data-name]').forEach(li=>{
    const heading=li.querySelector('h3');if(!heading)return;
+   if(regions[li.dataset.name])heading.firstChild.textContent=li.dataset.name+', '+regions[li.dataset.name]+' ';
    let temperature=heading.querySelector('.route-temperature');
    if(!temperature){temperature=document.createElement('span');temperature.className='route-temperature';heading.insertBefore(temperature,heading.querySelector('.nt'));}
    temperature.textContent=climate[li.dataset.name].hi[m]+'°C';

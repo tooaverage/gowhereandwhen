@@ -2,6 +2,10 @@ const assert=require('node:assert/strict'),timing=require('./france-travel-timin
 const cities=require('../storybook-lab/data.json').find(c=>c.iso===250).cities;
 const get=(name,m)=>{const c=cities.find(c=>c.name===name);return timing.assess(name,m,engine.score(c,m),c);};
 assert.equal(get('Strasbourg',11).label,'Great');
+assert.equal(get('Paris',6).label,'Great','Comfortable July sightseeing is not capped by missing event tags');
+assert.match(get('Paris',6).tradeoff,/Mild to warm days/);
+assert.equal(timing.assess('Paris',0,65,{hi:Array(12).fill(15),pr:Array(12).fill(50)}).label,'Good');
+assert.equal(timing.assess('Paris',0,20,{hi:Array(12).fill(5),pr:Array(12).fill(100)}).label,'Poor');
 assert.notEqual(get('Strasbourg',0).label,'Great');
 assert.equal(get('Nice',1).reason,'Nice Carnival');
 assert.equal(get('Nice',1).label,'Great');
@@ -34,3 +38,8 @@ for(const city of require('../climate/france-route.json')){
  assert(city.source.url.startsWith('https://power.larc.nasa.gov/'));
 }
 console.log('Passed France routes: explicit stays, complete legs, traveller-selected bases and sourced climate.');
+
+assert.equal(timing.assess('Avignon',6,90,{hi:Array(12).fill(31.6),pr:Array(12).fill(20)}).label,'Good','Hot months retain their heat trade-off');
+
+assert.equal(get('Paris',9).label,'Good','An ordinary autumn activity does not override cooler conditions');
+assert.match(get('Paris',9).tradeoff,/Cool days/);

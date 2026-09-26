@@ -41,3 +41,7 @@ The maintained editorial contract is [docs/COPY-RULES.md](docs/COPY-RULES.md). N
 ### Spacing ratchet, France sample pending review
 
 Use 4px for label-to-heading, 8px for closely related content, 24px between control/content groups, and 48px between sections. Opening disclosures must not move adjacent score badges. Keep route and map together. Avoid stacking component margins to create accidental gaps. Inspect desktop and mobile before expanding this sample.
+
+### Map-label ratchet, 26 September 2026
+
+City names sit to the right of their marker by default. Do not retain a place-specific left-side override after changing neighbouring destinations. An exception needs a documented clipping or collision reason. After adding places or changing map layout, check actual rendered label boxes against other labels, markers and the SVG bounds on desktop and narrow screens, including extra-place suffixes and every trip length. Keep geographic coordinates fixed; use a labelled leader line if a marker ever needs a visual offset. The read-only browser check is `scripts/check-map-label-layout.js`.

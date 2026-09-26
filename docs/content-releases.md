@@ -59,3 +59,11 @@ Destination selection was cross-checked against three user-supplied traveller di
 Added traceable NASA POWER 2001–2020 daily-derived climate for Bayeux, Tours and Avignon after selecting these travel bases. Only the France guide uses the new destination set. Source links flag longer train legs, station changes, and local transport needs; return travel remains a separate booking choice. The map line shows stop order, not a railway track.
 
 Previous release 243b415 verified in mobile Lighthouse: performance 66, accessibility 100, best practices 100, SEO 100. France-only route checks cover night totals, unique bases, deliberate 2–5-night stays, all legs and climate completeness.
+
+## 2026-09-26: map-label and recommendation ratchets
+
+Removed Nice's legacy left-side label and raised Avignon's text slightly without moving either geographic marker. The new rendered-bounds check caught the extra-place suffix touching Nice; the corrected layout passed all four trip lengths on desktop and both narrow viewport settings. The check verifies label collisions, marker collisions and SVG clipping. Normandy is now named on the map, with Bayeux, Normandy in the itinerary; Tours/Loire Valley and Avignon/Provence are also explicit in stop headings.
+
+France editorial rating correction: suitable sightseeing months no longer need an event tag to earn Great. The current rule requires weather comfort at least 74 and average highs 18–28°C for that weather-based category. Verified special events may also earn Great, with their weather trade-off shown; heat above 28°C caps the rating at Good, and extreme heat/storm overrides remain. Ordinary autumn activity copy does not boost ratings by itself. Paris July is Great with mild/warm outdoor conditions; October is Good with a cool-day note. This is a stated editorial rule, not a validated universal preference or a visitor/cost/crowd index. Removed Paris's unsupported association with the generic autumn-city source.
+
+Installed the personal correction-ratchet skill and added project AGENTS.md linking the maintained rules. Further calibration should use a country Jaycee knows; Germany is the proposed next sample, with Japan and Canada useful cross-checks. No other country was changed.

@@ -9,7 +9,7 @@ Read the ratchet log first. New entries update earlier style rules within their 
 ## Priorities
 
 1. **Useful search answers.** Help people pick a month, place or route. Keep the local detail that makes this page worth visiting.
-2. **Clear and concise.** Explain it simply, at about grade 6 reading level. No jargon or baby talk.
+2. **Clear and concise.** Explain it simply, at grade 5–6 reading level. No jargon or baby talk.
 3. **Visual first.** Show comparisons and routes. Keep labels and key facts readable as text.
 4. **Neutral voice.** This is a website, not a chat. Be specific to the place, not generic.
 
@@ -124,9 +124,22 @@ Treat corrections as evidence. Do not defend stylistic habits. Flag a conflict w
 
 - **2026-09-26, all site copy and UI:** “no emojis!!” Use labelled Lucide SVG icons. Decorative icons beside labels are hidden from screen readers. Check changed pages for emoji and Unicode pictographs before publishing.
 
+- **2026-09-26, source notes and footer:** Avoid scientific phrasing such as “gridded climate averages”, “reference dataset” and “climate normals”. Use plain words such as “past weather averages”. Keep the source name, years and material differences in a short source disclosure. Do not repeat the full method in the footer.
+- **2026-09-26, shared UI:** Month panels need closed rounded borders and score badges that stay in place when opened. Footer groups need clear spacing. Icons should feel round and playful through SVG strokes and soft backgrounds, never emojis.
+
 ## Evidence behind the SEO rule
 
 - [Google: helpful, reliable content](https://developers.google.com/search/docs/fundamentals/creating-helpful-content)
 - [Google: optimizing for generative AI search](https://developers.google.com/search/docs/fundamentals/ai-optimization-guide)
 
 Reviewed 26 September 2026. Recheck when evidence or guidance changes; do not promise results.
+
+- **2026-09-26, France sample only:** Group related content with 4px between label and heading, 8px between heading and supporting text, 24px between groups, and 48px between sections. Keep route stops beside the map on desktop and directly below on mobile. Colour route-month controls by the same fixed weather score scale; show numbers and explain that the score averages the selected stops. Review before applying elsewhere.
+
+- **2026-09-26, France sample controls:** Related choices belong in one compact panel with matching labels. Remove inherited picker margins and padding before adding group gaps. Keep the season tip beside the month label; do not repeat weather explanations beside the route.
+
+- **2026-09-26, France sample:** Show selected-month daytime highs beside itinerary city names. Month buttons use deep shadows in a darker shade of their own colour. “Best time to go” is the product goal, but current numeric scores cover weather only. Do not relabel them as overall travel scores without sourced crowd, cost and activity inputs and an explained method.
+
+- **2026-09-26, France sample recommendation model:** Use “Travel rating: weather + activities + events” beside recommendation controls and map legends. Explain the seasonal reason and trade-off at each place. Keep weather-only charts explicitly labelled weather. Do not imply crowds, prices or closures are rated until supported. Use categorical recommendations instead of false-precision overall numbers. These instructions supersede the earlier weather-only map direction for this sample; no global rollout is authorized.
+
+- **2026-09-26, France travel ratings:** Use the same ordered labels everywhere: Great, Good, Fair, Poor. Do not mix actions (“Go”, “Plan”) with rating adjectives. Every rating needs a plain reason; demand-season labels are a separate concept.

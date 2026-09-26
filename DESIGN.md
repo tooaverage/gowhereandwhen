@@ -37,3 +37,7 @@ Build with node game-lab/build-data.cjs, python3 game-lab/build.py, python3 bure
 Japan is the reference for city-by-month and route maps. Less is more: grade 6 reading level, short decision-led copy, labelled icons where helpful, sources under disclosure controls, consistent space between headings and content. Reuse shared components across countries as their local data becomes available. No wall-of-text source disclaimers. Keep material score limitations visible in plain language.
 
 The maintained editorial contract is [docs/COPY-RULES.md](docs/COPY-RULES.md). No emojis. Use the shared Lucide SVG helper with visible text labels. The initial France card emojis have been replaced.
+
+### Spacing ratchet, France sample pending review
+
+Use 4px for label-to-heading, 8px for closely related content, 24px between control/content groups, and 48px between sections. Opening disclosures must not move adjacent score badges. Keep route and map together. Avoid stacking component margins to create accidental gaps. Inspect desktop and mobile before expanding this sample.

@@ -27,3 +27,23 @@
 ### France visual and writing pass, 26 September 2026
 
 Replaced the September/October table with Japan's shared 12-month city map for six French cities. Shortened itinerary copy, renamed it Travel itinerary, grouped sources under disclosures, added activity and travel-note cards, and fixed shared prose spacing. Added less-is-more and grade-6 writing rules to the factory and design contract.
+
+### France-only design sample, pending review
+
+The combined city-weather/route map, closed month cards with stable badge positions, spaced footer and round icon tiles are LOCAL PREVIEW ONLY. Jaycee explicitly requested a sample, not rollout. Do not publish or apply these changes to other countries without her go-ahead. Preview: http://localhost:8765/country/france/#route. Copy rules now specify grade 5–6 language and plain source notes. The shared components remain unchanged for other countries.
+
+France sample refinement: route stops now share the desktop map row and follow the map on mobile. City rankings and the year grid remain available under a disclosure. Month buttons show rounded mean comfort scores for visible route stops, using the existing fixed score bands. Tested month switching and four-stop route selection; narrow preview has no horizontal overflow. Added 4/8/24/48 spacing rules. Still local-only, pending review.
+
+France heatmap experiment, local only: fixed 0–100 continuous colour scale blended between six climate samples, clipped to France, with route overlay. City cards show daytime highs and best-weather months. Non-route cities have + markers and an Extra spots key; Brest and Strasbourg remain outside the itinerary. Month controls now use bold existing weather bands. Verified January temperatures and map colours update, four-stop route preserves Brest/Strasbourg as extras, and no horizontal overflow in current preview. This is broad interpolation, not detailed mountain weather. Await sample review before publishing.
+
+Travel-timing prototype, France only and unpublished: December Strasbourg gets an explicitly editorial 85 rating for Christmas markets, supported by Strasbourg tourism's Christmas-market FAQ. This is not a measured all-factor index. A local green highlight replaces the weather-only reading near Strasbourg; other cities remain weather-based. Temperature stays visible. January does not inherit the event highlight; route averages exclude off-route cities. Costs and real demand seasons are not yet scored. Existing engine high/shoulder/low labels are weather ranks and must not be reused as independent demand evidence. Pending research: real regional tourism seasonality plus activity windows, with transparent trade-offs rather than treating high demand as automatically better.
+
+France recommendation revision, sample only: replaced the one-off Strasbourg boost with a shared editorial rule table for all six cities. Sources cover spring walks, autumn city breaks, Bordeaux harvest visits, Brest summer outings, Nice Carnival and Strasbourg Christmas markets. Labels are categorical, not an alleged measured overall score. Seasonal draws can lift recommendations; extreme heat/storm inputs still take precedence. Each stop/extra place now shows a reason and trade-off. Crowds, cost and closures remain explicitly unrated. Removed weather-derived demand-season summary from the France sample, clarified weather-only comparisons, consolidated source notes and reduced duplicated city cards. Tests: node scripts/check-france-timing.cjs and existing build/check. Do not roll out or publish until France sample is approved.
+
+## 2026-09-26: France sample approved for release
+
+Jaycee approved shipping the current France sample. This supersedes the earlier France-only hold above; other countries remain outside this rollout. Includes the combined city/route map, bold month controls, temperatures beside stops, extra-place labels, compact spacing, and sourced seasonal reasons. Ratings cover weather, activities and events; crowds, price and closures are explicitly not rated. Seasonal recommendations are editorial, not measured all-factor scores.
+
+Build, site checks and France timing regressions passed. France regressions now run in the deployment check suite. Desktop and narrow-screen checks were completed during the sample review; production and automated mobile Lighthouse verification follow deployment.
+
+Next research: source real high/shoulder/low tourism seasons. The old weather-derived season ranks are not visitor data. Skiing and other seasonal draws should be assessed for the activity; crowds and price are trade-offs rather than automatic reasons to downgrade a worthwhile trip. Do not infer lastminute.com's methodology from its season legend.

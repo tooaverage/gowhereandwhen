@@ -1,3 +1,7 @@
+## Production contract (26 September 2026)
+
+The live site uses Storybook, built from storybook-lab through build-public.cjs. Older directions below are historical, not permission to mix styles. Reuse Lilita One headings, Nunito Sans text, shared game.css and seo.css tokens, established components and semantic weather colours. Country content uses guide-section/wrap, weather-table/table-scroll and existing navigation. Verify 320px, 390px and desktop; tables may scroll inside their container but the whole page must not overflow. No per-country theme, fonts or invented card system.
+
 # When to go design exploration
 
 ## Active direction

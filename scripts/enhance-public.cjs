@@ -46,7 +46,7 @@ module.exports=function enhancePublic(root,out){
  fs.writeFileSync(path.join(out,'index.html'),home);
  for(const r of guides){
   const file=path.join(out,'country',r.slug,'index.html');let html=common(fs.readFileSync(file,'utf8'));
-  const title=r.slug==='austria'?'Best Time to Visit Austria: Cities, Alps & Skiing':`Best Time to Visit ${r.name}: Weather by Month`;
+  const title=r.slug==='france'?'Best Time to Visit France: Paris, Riviera & Regional Weather':r.slug==='austria'?'Best Time to Visit Austria: Cities, Alps & Skiing':`Best Time to Visit ${r.name}: Weather by Month`;
   html=html.replace(/<title>.*?<\/title>/,`<title>${esc(title)} | GoWhereAndWhen</title>`);
   html=html.replace('Find your best time to visit','Best time to visit');
   html=html.replace(/(<div class="guide-intro">[\s\S]*?<\/div>)/,`$1<p class="rating-context">Weather scores use ${esc(r.city)} as a reference. They are not forecasts or measures of snow, prices or crowds. ${link('/methodology/','How to use these ratings')}</p>`);
@@ -57,6 +57,17 @@ module.exports=function enhancePublic(root,out){
   // A visible breadcrumb matches the existing BreadcrumbList data.
   html=html.replace('<div class="guide-opening">',`<nav class="seo-breadcrumb" aria-label="Breadcrumb">${link('/','Home')} / ${link('/country/','Country guides')} / <span aria-current="page">${esc(r.name)}</span></nav><div class="guide-opening">`);
   html=html.replace('</main>',`<section class="guide-section"><div class="wrap"><h2>Plan another month or destination</h2>${monthLinks()}<p>${link('/country/','Browse all '+guides.length+' country guides')} · ${link('/methodology/','Sources, editorial approach and weather methodology')}</p></div></section></main>`);
+  if(r.slug==='france'){
+   html=html.replace('Spring brings lavender fields and gentler heat.','Lavender flowers in summer; dates vary by altitude and the season.');
+   html=html.replace('far shorter queues than the July to August peak','a different balance of weather and seasonal demand');
+   html=html.replace(/(<div class="guide-intro"><p class="lead">)[\s\S]*?(<\/p>)/,'$1<strong>May–June or September is a useful starting point for sightseeing.</strong> Compare Paris, the Atlantic coast and the Riviera before choosing: France has no single best season for cities, beaches and mountains.$2');
+   html=html.replace('<section class="guide-section" id="months">',require('./france-season-guide.cjs')(r,esc)+'<section class="guide-section" id="months">');
+   html=html.replace('France month by month','France weather by month: Paris');
+   html=html.replace('<a href="#months">By month</a>','<a href="#regional-weather">Regional weather &amp; rail route</a><a href="#months">By month</a>');
+   html=html.replace('December to April in the Alps, with the most reliable snow in January and February.','Winter is the ski season, but opening dates and snow vary by resort and altitude. Check the resort’s current lift and snow reports.');
+   html=html.replace("June and September for warm seas without the peak August crush along the Cote d'Azur.",'Compare June and September for a coastal trip. Air-temperature scores do not measure sea warmth or beach conditions.');
+   html=html.replace(/"dateModified":"[^" ]+"/g,'"dateModified":"2026-09-26"');
+  }
   if(r.slug==='austria'){
    html=html.replace(/(<div class="guide-intro"><p class="lead">)[\s\S]*?(<\/p>)/,'$1<strong>Choose spring or autumn for a city break, June–September for lakes and mountain holidays, or winter for skiing.</strong> Austria has no single best month for every trip: Vienna weather does not describe conditions on an Alpine ski slope.$2');
    html=html.replace('Austria month by month','Austria weather by month: Vienna');
@@ -76,7 +87,7 @@ module.exports=function enhancePublic(root,out){
  save('/methodology/',shell('How Our Travel Weather Ratings Work','Understand GoWhereAndWhen weather scores, source limitations, regional differences and the editorial approach behind the country guides.','/methodology/',fs.readFileSync(path.join(root,'scripts/methodology.html'),'utf8')));
  const urls=['/','/country/',...guides.map(r=>'/country/'+r.slug+'/'),...months.map(m=>'/when/'+m.toLowerCase()+'/'),'/methodology/'];
  require('./add-analytics.cjs')(root,out,urls);
- fs.writeFileSync(path.join(out,'sitemap.xml'),`<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.map(url=>`  <url><loc>${origin+url}</loc><lastmod>${reviewed}</lastmod></url>`).join('\n')}\n</urlset>\n`);
+ fs.writeFileSync(path.join(out,'sitemap.xml'),`<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.map(url=>`  <url><loc>${origin+url}</loc><lastmod>${url==='/country/france/'?'2026-09-26':reviewed}</lastmod></url>`).join('\n')}\n</urlset>\n`);
  fs.writeFileSync(path.join(out,'robots.txt'),`User-agent: *\nAllow: /\n\nSitemap: ${origin}/sitemap.xml\n`);
  fs.writeFileSync(path.join(out,'404.html'),shell('Page Not Found','Find a destination guide or return to the world map.','/404.html','<h1>That page could not be found</h1><p>'+link('/','Open the world map')+' or '+link('/country/','browse country guides')+'.</p>').replace('index,follow,max-image-preview:large','noindex,follow').replace(/<link rel="canonical"[^>]*>/,''));
  fs.writeFileSync(path.join(out,'llms.txt'),`# GoWhereAndWhen\n\nSeasonal travel planning with an interactive map and ${guides.length} country guides. Weather values are representative-city estimates, not forecasts, snow reports, crowd or price measurements.\n\n- [Country guides](${origin}/country/)\n- [Methodology and limitations](${origin}/methodology/)\n${guides.map(r=>`- [${r.name}](${origin}/country/${r.slug}/)`).join('\n')}\n`);

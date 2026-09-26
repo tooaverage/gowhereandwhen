@@ -1,0 +1,18 @@
+{
+  "metric": "International tourist arrivals, 2024",
+  "source": "UN Tourism, International Tourism Highlights 2025 edition, figure 16, data as of January 2026",
+  "url": "https://mekongtourism.org/wp-content/uploads/2026/05/2026-international-tourism-highlights-2025-edition.pdf",
+  "note": "Queue priority, not a public ranking product. China is estimated. Do not mix overnight arrivals, border crossings, domestic trips or different years. Unlisted destinations are unranked pending comparable evidence.",
+  "orderedIso": [
+    250,
+    724,
+    840,
+    792,
+    380,
+    484,
+    826,
+    276,
+    392,
+    156
+  ]
+}

@@ -3,10 +3,11 @@ import shutil, subprocess
 subprocess.run(["python3", str(Path(__file__).resolve().parent/"build-islands.py")],check=True)
 subprocess.run(["node", str(Path(__file__).resolve().parent/"build-canada.cjs")],check=True,cwd=Path(__file__).resolve().parent.parent)
 subprocess.run(["node", str(Path(__file__).resolve().parent/"build-usa.cjs")],check=True,cwd=Path(__file__).resolve().parent.parent)
+subprocess.run(['node', str(Path(__file__).resolve().parent.parent/'scripts/build-city-climate.cjs')],check=True)
 r=Path(__file__).resolve().parent
 out=r.parent/'storybook'
 out.mkdir(exist_ok=True)
-for name in ['index.html','app.js','map.js','game.css','world-details.js','traffic.js','reveal.js','canada-snow.js','data.json','island-life.css','island-life.js','fonts.css','meshopt-decoder.js']:
+for name in ['index.html','app.js','map.js','game.css','world-details.js','traffic.js','reveal.js','canada-snow.js','data.json','island-life.css','island-life.js','fonts.css','meshopt-decoder.js','travel-heat.mjs']:
  shutil.copy2(r/name,out/name)
 shutil.copytree(r/'assets',out/'assets',dirs_exist_ok=True)
 print('Built separate Storybook edition.')

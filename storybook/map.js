@@ -1,3 +1,4 @@
+import {climateSamples,travelScore} from './travel-heat.mjs';
 import {MeshoptDecoder} from './meshopt-decoder.js';
 import {addCanadaSnow} from './canada-snow.js?v=storybook32';
 import {createReveal} from './reveal.js?v=storybook32';
@@ -18,7 +19,7 @@ export async function createWorldMap(container,{data,iso=null,month=10,onSelect=
  const controls=new OrbitControls(camera,renderer.domElement);controls.enableDamping=false;controls.zoomSpeed=2.5;controls.minDistance=18;controls.maxDistance=1200;controls.minPolarAngle=.01;controls.maxPolarAngle=1.1;controls.enablePan=true;controls.mouseButtons={LEFT:THREE.MOUSE.PAN,MIDDLE:THREE.MOUSE.DOLLY,RIGHT:THREE.MOUSE.ROTATE};controls.touches={ONE:THREE.TOUCH.PAN,TWO:THREE.TOUCH.DOLLY_PAN};controls.target.set(10,0,-12);if(flat){controls.enableRotate=false;controls.minPolarAngle=0;controls.maxPolarAngle=.001;}
  const labelLayer=document.createElement('div');labelLayer.className='map-labels';container.append(labelLayer);
  const labels=[],meshes=[],countryGroups=new Map(),featureMap=new Map();let selected=iso,mo=month,disposed=false,frame=0,tween=null;const byIso=new Map(data.map(r=>[r.iso,r]));
- function label(name,x,y,kind,rec){const el=document.createElement('button');el.className='map-label '+kind;el.innerHTML=kind==='city'?'<span class="dot"></span> <span></span>':'';if(kind==='city')el.lastElementChild.textContent=name;else el.textContent=name;el.setAttribute('aria-label',kind==='city'?'Explore '+name:'Select '+name);el.addEventListener('click',()=>{if(kind==='city'){onCity(rec);focusCity(rec);}else if(rec.mapOnly){showSight(rec);}else{select(rec.iso,true);onSelect(rec.iso);}});labelLayer.append(el);labels.push({el,p:new THREE.Vector3(x,2,-y),kind,rec,priority:['Vancouver','San Francisco'].includes(name)?3:['Toronto','San Francisco','Tokyo','Manila','Kyoto','Sapporo','Naha','Cebu','Siargao'].includes(name)});}
+ function label(name,x,y,kind,rec){const el=document.createElement('button');el.className='map-label '+kind;el.innerHTML=kind==='city'?'<span class="dot"></span> <span></span>':'';if(kind==='city')el.lastElementChild.textContent=name;else el.textContent=name;el.setAttribute('aria-label',kind==='city'?'Explore '+name:'Select '+name);el.addEventListener('click',()=>{if(kind==='city'){onCity(rec);focusCity(rec);}else if(rec.mapOnly){showSight(rec);}else{select(rec.iso,true);onSelect(rec.iso);}});labelLayer.append(el);labels.push({el,p:new THREE.Vector3(x,2,-y),kind,rec,priority:rec.featuredOrder?5:['Vancouver','San Francisco'].includes(name)?3:['Toronto','San Francisco','Tokyo','Manila','Kyoto','Sapporo','Naha','Cebu','Siargao'].includes(name)});}
  const response=await fetch(new URL('./assets/storybook-v1-optimized.glb.gz?v=seo1',import.meta.url));if(!response.ok)throw new Error('World model unavailable');const bytes=await new Response(response.body.pipeThrough(new DecompressionStream('gzip'))).arrayBuffer();const asset=await new GLTFLoader().setMeshoptDecoder(MeshoptDecoder).parseAsync(bytes,'');
  const weather=[],blossoms=[],transport=[],oldSuns=[],borders=new Map();let growing=false,motion=!reduced(),regional=false,hovered=null,orbit=false,details,lastDraw=0;
  const tip=document.createElement('div');tip.className='map-hover';tip.hidden=true;container.append(tip);
@@ -61,7 +62,21 @@ export async function createWorldMap(container,{data,iso=null,month=10,onSelect=
 
  for(const sun of oldSuns)details.makeSun(sun.getWorldPosition(new THREE.Vector3()),Array.from(sun.userData.months));
 
- const australiaMeshes=[];countryGroups.get(36)?.traverse(o=>{if(o.isMesh){o.geometry=o.geometry.clone();o.material=Array.isArray(o.material)?o.material.map(m=>m.clone()):o.material.clone();australiaMeshes.push(o);}});
+ const heatMeshes=[];
+ for(const [id,group] of countryGroups){
+  const record=byIso.get(id);if(!record)continue;
+  const samples=climateSamples(record,australiaRegions);
+  group.traverse(o=>{if(!o.isMesh)return;
+   o.geometry=o.geometry.clone();
+   o.material=Array.isArray(o.material)?o.material.map(m=>m.clone()):o.material.clone();
+   const materials=(Array.isArray(o.material)?o.material:[o.material]).filter(m=>/Monthly heat|Heatmap facet/.test(m.name));
+   if(!materials.length)return;
+   const pos=o.geometry.attributes.position,points=[];
+   for(let i=0;i<pos.count;i++){const v=new THREE.Vector3().fromBufferAttribute(pos,i).applyMatrix4(o.matrixWorld);points.push([v.x,-v.z]);}
+   heatMeshes.push({mesh:o,materials,points,samples,record,cache:new Map()});
+  });
+ }
+
 
  await yieldToMain();
  for(const rec of data)for(const city of rec.cities||[])label(city.name,city.lng,city.lat,'city',{...city,iso:rec.iso});
@@ -76,7 +91,16 @@ export async function createWorldMap(container,{data,iso=null,month=10,onSelect=
   }
 
   for(const o of blossoms){o.userData.target=mo===2||mo===3?1:.001;if(reduced()){o.userData.growth=o.userData.target;o.scale.copy(o.userData.fullScale).multiplyScalar(o.userData.growth);}else growing=true;}
-  for(const o of australiaMeshes){const mats=Array.isArray(o.material)?o.material:[o.material];for(const m of mats){m.vertexColors=regional;if(regional)m.color.set('#ffffff');m.needsUpdate=true;}if(regional){const pos=o.geometry.attributes.position,col=[];for(let i=0;i<pos.count;i++){const v=new THREE.Vector3().fromBufferAttribute(pos,i).applyMatrix4(o.matrixWorld),c=heatColor(regionalScore(v.x,-v.z,mo));col.push(c.r,c.g,c.b);}o.geometry.setAttribute('color',new THREE.Float32BufferAttribute(col,3));}}
+  for(const item of heatMeshes){
+   for(const m of item.materials){if(m.vertexColors!==regional){m.vertexColors=regional;m.needsUpdate=true;}if(regional)m.color.set('#ffffff');}
+   if(!regional)continue;
+   if(!item.cache.has(mo)){
+    const colors=new Float32Array(item.points.length*3);
+    item.points.forEach(([lng,lat],i)=>{const c=heatColor(travelScore(item.samples,lng,lat,mo,item.record.months[mo].score));colors.set([c.r,c.g,c.b],i*3);});
+    item.cache.set(mo,new THREE.BufferAttribute(colors,3));
+   }
+   item.mesh.geometry.setAttribute('color',item.cache.get(mo));
+  }
   for(const [id,line] of borders){line.material.color.set(line.userData.countries.includes(selected)?'#fff8c7':'#345c57');line.material.opacity=1;}
   for(const type of ['monsoon','typhoon'])container.dataset[type+'Count']=String(details.items.filter(g=>g.userData.type===type&&g.userData.months.includes(mo+1)).length);
   container.dataset.borderPairs=String(borders.size);container.dataset.month=String(mo);container.dataset.model='storybook-v1';container.dataset.regional=String(regional);
@@ -93,9 +117,9 @@ export async function createWorldMap(container,{data,iso=null,month=10,onSelect=
   if(labelSizesDirty){for(const l of labels){l.el.hidden=false;l.el.style.visibility='hidden';}for(const l of labels){const rect=l.el.getBoundingClientRect();l.width=rect.width;l.height=rect.height;}labelSizesDirty=false;}
   const labelPriority=l=>Number(l.kind==='country')*4+Number(l.kind==='country'&&l.rec.iso===selected)*10+Number(l.priority);
   for(const l of rankedLabels.slice().sort((a,b)=>labelPriority(b)-labelPriority(a))){
-   let show=l.kind==='sight'?distance<125&&(!l.rec.months||l.rec.months.includes(mo+1))&&(l.rec.type!=='region'||regional):l.kind==='city'?(distance<(['Vancouver','San Francisco'].includes(l.rec.name)?180:[124,840].includes(l.rec.iso)&&l.rec.iso===selected?180:95)&&(!compact||l.rec.iso===selected)):true;
+   let show=l.kind==='sight'?distance<125&&(!l.rec.months||l.rec.months.includes(mo+1))&&(l.rec.type!=='region'||regional):l.kind==='city'?(distance<(l.rec.featuredOrder?210:['Vancouver','San Francisco'].includes(l.rec.name)?180:[124,840].includes(l.rec.iso)&&l.rec.iso===selected?180:95)&&(!compact||l.rec.iso===selected)):true;
    if(l.rec.type==='beach'&&distance>75)show=false;
-   if(l.kind==='city'&&distance>65&&!l.priority&&!([124,840].includes(l.rec.iso)&&l.rec.iso===selected))show=false;
+   if(l.kind==='city'&&distance>65&&!l.rec.featuredOrder&&!l.priority&&!([124,840].includes(l.rec.iso)&&l.rec.iso===selected))show=false;
    const p=l.p.clone();if(flat)p.y=.9;p.project(camera);
    show&&=p.z>-1&&p.z<1&&p.x>-1&&p.x<1&&p.y>-1&&p.y<1;
    // Measure every label in CSS pixels before hiding it, including after font or viewport changes.

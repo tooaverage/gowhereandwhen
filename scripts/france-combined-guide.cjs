@@ -57,9 +57,9 @@ module.exports=record=>{
   document.querySelectorAll('#mpick button').forEach(b=>{
    const m=+b.dataset.m,score=Math.round(cities.reduce((n,c)=>n+c.scores[m],0)/cities.length);
    b.style.setProperty('--month-colour','var(--s-'+bands[score]+')');
-   b.style.setProperty('--month-ink',['ideal','avoid'].includes(bands[score])?'#fff':'#17313b');
+   b.style.setProperty('--month-ink',bands[score]==='avoid'?'#fff':'#17313b');
    const label=score>=82?'Great':score>=65?'Good':score>=44?'Fair':'Poor';
-   b.setAttribute('aria-label',names[m]+': '+label+' for this route');
+   b.setAttribute('aria-label',names[m].slice(0,3)+' '+label+' for this route ('+names[m]+')');
    b.title=cities.map(c=>c.advice[m].reason).filter((v,i,a)=>a.indexOf(v)===i).join('; ');
    let value=b.querySelector('.month-score');if(!value){value=document.createElement('small');value.className='month-score';b.append(value);}value.textContent=label;
   });

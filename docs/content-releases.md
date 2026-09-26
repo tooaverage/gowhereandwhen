@@ -47,3 +47,5 @@ Jaycee approved shipping the current France sample. This supersedes the earlier 
 Build, site checks and France timing regressions passed. France regressions now run in the deployment check suite. Desktop and narrow-screen checks were completed during the sample review; production and automated mobile Lighthouse verification follow deployment.
 
 Next research: source real high/shoulder/low tourism seasons. The old weather-derived season ranks are not visitor data. Skiing and other seasonal draws should be assessed for the activity; crowds and price are trade-offs rather than automatic reasons to downgrade a worthwhile trip. Do not infer lastminute.com's methodology from its season legend.
+
+Production follow-up: mobile Lighthouse found white-on-green month text and mismatched accessible button names. Changed green-month text to dark ink and aligned accessible names with the visible month abbreviation and rating. Initial France scores: performance 67, accessibility 96, best practices 100, SEO 100.

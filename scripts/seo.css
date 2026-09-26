@@ -4,3 +4,6 @@
 
 .map-label .dot{color:#102a32}
 .island-tabs .island-tab-rank{color:#40513f;opacity:1}.hgrid td.k-ideal,.hgrid td.k-avoid{color:#102a32}
+
+/* Shared guide rhythm: short copy, clear groups, room to scan. */
+.game-guide .guide-section h2{margin-bottom:24px}.game-guide .wrap.prose>div>h3:not(:first-child){margin-top:32px}.game-guide .wrap.prose>div>h3+p{margin-top:10px}.guide-section .lead{max-width:58ch}.route-season{margin:8px 0 24px}.guide-sources{margin-top:28px;border-top:1px solid var(--line);padding-top:18px;font-size:.875rem;color:var(--muted)}.guide-sources summary{cursor:pointer;font-weight:800;min-height:44px}.guide-sources p{max-width:65ch;margin:12px 0}.trip-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr));gap:28px}.trip-grid article{padding:24px;background:var(--paper);border:1px solid var(--line);border-radius:14px}.trip-grid article>span{display:block;font-size:1.6rem;margin-bottom:16px}.trip-grid h3{margin-bottom:12px}.trip-grid p+p{margin-top:10px}#watch-out .trip-grid article{background:var(--surface)}.route-section .route p{max-width:48ch}.route-section .cmapgrid{margin-top:24px}

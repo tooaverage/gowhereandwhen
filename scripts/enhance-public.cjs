@@ -60,12 +60,15 @@ module.exports=function enhancePublic(root,out){
   if(r.slug==='france'){
    html=html.replace('Spring brings lavender fields and gentler heat.','Lavender flowers in summer; dates vary by altitude and the season.');
    html=html.replace('far shorter queues than the July to August peak','a different balance of weather and seasonal demand');
-   html=html.replace(/(<div class="guide-intro"><p class="lead">)[\s\S]*?(<\/p>)/,'$1<strong>May–June or September is a useful starting point for sightseeing.</strong> Compare Paris, the Atlantic coast and the Riviera before choosing: France has no single best season for cities, beaches and mountains.$2');
+   html=html.replace(/(<div class="guide-intro"><p class="lead">)[\s\S]*?(<\/p>)/,'$1<strong>Try May–June or September.</strong> Explore cities, coast and wine country. Use the map below to choose your stops.$2');
    html=html.replace('<section class="guide-section" id="months">',require('./france-season-guide.cjs')(r,esc)+require('./france-backpacker-route.cjs')()+'<section class="guide-section" id="months">');
    html=html.replace('France month by month','France weather by month: Paris');
-   html=html.replace('<a href="#months">By month</a>','<a href="#regional-weather">Regional weather</a><a href="#route">Backpacker routes</a><a href="#months">By month</a>');
+   html=html.replace('<a href="#months">By month</a>','<a href="#cities">By city</a><a href="#route">Itineraries</a><a href="#months">By month</a>');
    html=html.replace('December to April in the Alps, with the most reliable snow in January and February.','Winter is the ski season, but opening dates and snow vary by resort and altitude. Check the resort’s current lift and snow reports.');
    html=html.replace("June and September for warm seas without the peak August crush along the Cote d'Azur.",'Compare June and September for a coastal trip. Air-temperature scores do not measure sea warmth or beach conditions.');
+   html=html.replace(/<section class="guide-section"><div class="wrap prose">\s*<h2>Best time to visit France for<\/h2>[\s\S]*?<\/section>/,`<section class="guide-section"><div class="wrap"><h2>When to go, by trip</h2><div class="trip-grid"><article><span aria-hidden="true">🏙</span><h3>City walks</h3><p class="visit-window">April–June · September</p><p>Explore Paris and Lyon in mild weather.</p></article><article><span aria-hidden="true">☀</span><h3>The coast</h3><p class="visit-window">June · September</p><p>Try the Riviera. Sea warmth varies.</p></article><article><span aria-hidden="true">🍇</span><h3>Wine country</h3><p class="visit-window">September–October</p><p>Harvest time in the vineyards.</p></article><article><span aria-hidden="true">❄</span><h3>Skiing</h3><p class="visit-window">Winter</p><p>Check snow and lift openings before you book.</p></article></div></div></section>`);
+   html=html.replace(/<section class="guide-section" id="watch-out">[\s\S]*?<\/section>/,`<section class="guide-section" id="watch-out"><div class="wrap"><h2>Before you go</h2><div class="trip-grid"><article><span aria-hidden="true">❄</span><h3>Winter chill</h3><p>Pack warm layers for Paris in December and January.</p></article><article><span aria-hidden="true">☂</span><h3>Autumn rain</h3><p>Keep a rainy-day plan for Nice in October.</p></article></div></div></section>`);
+   html=html.replace('>Watch out</a>','>Before you go</a>');
    html=html.replace(/"dateModified":"[^" ]+"/g,'"dateModified":"2026-09-26"');
   }
   if(r.slug==='austria'){

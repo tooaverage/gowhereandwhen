@@ -31,3 +31,7 @@ Original lead, introduction, region prose, activity advice, events, warnings, mo
 Both maps recolor country surfaces for the selected month. Explorer keeps faceted shading with fewer trees, small cities, selected lakes and shore detail. Bureau uses flat fills, thin geographic boundaries and a coordinate grid. Date-line clipping preserves Russia and Alaska. Measured label boxes control collisions, and map wheel capture handles trackpad pinch without scaling the page. City filters leave the expanded monthly prose untouched to preserve reading position.
 
 Build with node game-lab/build-data.cjs, python3 game-lab/build.py, python3 bureau-lab/build.py, then node build-preview.cjs. Generated play and bureau pages are built from the unchanged original country articles. /versions/ links current and archived rounds.
+
+## Country guide standard
+
+Japan is the reference for city-by-month and route maps. Less is more: grade 6 reading level, short decision-led copy, labelled icons where helpful, sources under disclosure controls, consistent space between headings and content. Reuse shared components across countries as their local data becomes available. No wall-of-text source disclaimers. Keep material score limitations visible in plain language.

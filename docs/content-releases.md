@@ -23,3 +23,7 @@
 - Three days stays in Paris; one week adds Lyon; two weeks continues to Nice; the month adds Bordeaux before Lyon. Each leg links to SNCF route information, with no invented fixed fares or train times. Nights are editorial allocations and total trip length minus one.
 - Removed the earlier brief route paragraph to avoid duplication. Added a separate Backpacker routes navigation link. Source geography comes from the existing Natural Earth/world-atlas topology.
 - Browser-tested all four selectors, map stop counts and night totals. This is a researched rail itinerary, not a verified cheapest-trip claim or a complete rural-France route.
+
+### France visual and writing pass, 26 September 2026
+
+Replaced the September/October table with Japan's shared 12-month city map for six French cities. Shortened itinerary copy, renamed it Travel itinerary, grouped sources under disclosures, added activity and travel-note cards, and fixed shared prose spacing. Added less-is-more and grade-6 writing rules to the factory and design contract.

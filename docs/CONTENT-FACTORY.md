@@ -51,3 +51,11 @@ Use the active Storybook design system documented in DESIGN.md. Reuse existing t
 Lighthouse audits run in .github/workflows/lighthouse.yml after production deployment and on manual request. Review reports for the homepage, France and Japan; substitute or add a changed template in future. Scores are lab measurements, not field Core Web Vitals or ranking guarantees. Track performance regressions; the current heavy 3D map is a known performance issue. Build/source checks and visual review still happen before publishing. A post-deploy audit is a detection mechanism, not a pre-publish gate.
 
 Notify after EVERY successful page publication or substantive update, with all changed public URLs and a one-sentence description, so the owner can review afterward. Include any material remaining gaps. Notify failed deployment or checks. Do not silently launch a country batch. Keep notifications concise and add one plain-language explanation of a technical step when useful.
+
+## Writing and design rule: less is more
+
+Use Japan as the country-page reference: shared city-by-month map, trip-length route map, typography and controls. Roll these components into each country as sourced local data is added. Do not invent climate data to fill a template.
+
+Aim for grade 6 reading level. Use plain words, short sentences and one useful idea per paragraph. Lead with the answer. Prefer a map, month badge, short stop list or labelled icon when it makes a decision easier. Remove repeated caveats and filler. Keep sources and detailed methods in an accessible expandable note; keep any limitation needed to interpret a score next to it. Say “Travel itinerary” or “Travel route”, not “Backpacker”, unless the content is specifically about backpacking. Check heading spacing and card rhythm on mobile and desktop. Country-specific advice must remain accurate after shortening.
+
+Future backlog: genuinely seasonal itineraries by month, using existing country pages first. Do not create twelve near-duplicate pages. Monetization changes are separate future work. AI-search referrals are an outcome to measure, never a promised result.

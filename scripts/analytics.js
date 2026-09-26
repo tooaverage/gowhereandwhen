@@ -57,6 +57,10 @@ if (/^phc_[a-zA-Z0-9]+$/.test(id || '') && ['https://us.i.posthog.com','https://
     const {month, country} = e.detail || {};
     if (Number.isInteger(month) && month >= 0 && month < 12) track('select_month', {month:month + 1, destination:/^[a-z-]+$/.test(country || '') ? country : 'world'});
   });
+  document.addEventListener('gww:city', e => {
+    const {city,country}=e.detail||{};
+    if(/^[a-z0-9-]{1,80}$/.test(city||'')&&/^[a-z0-9-]{1,80}$/.test(country||''))track('select_city',{city,destination:country});
+  });
   document.addEventListener('gww:search', e => {
     const country = e.detail?.country;
     if (/^[a-z-]+$/.test(country || '')) track('search_destination', {destination:country});

@@ -12,3 +12,7 @@ assert.equal(travelScore([],0,0,0,37),37);assert.equal(travelScore([{lng:179,lat
 for(const rec of data){const p=climateSamples(rec);for(let m=0;m<12;m++){const score=travelScore(p,rec.hub?.lng||0,rec.hub?.lat||0,m,rec.months[m].score);assert(Number.isFinite(score)&&score>=0&&score<=100);}}
 assert(featured.find(c=>c.name==='Dubai').months[0].score>featured.find(c=>c.name==='Dubai').months[6].score,'Dubai winter is more comfortable than summer');
 console.log('Passed: 20 sourced cities, complete monthly data, plausible daily averages, heat interpolation, missing-data fallback and seasonal contrast.');
+
+const poor=samples.map(p=>({...p,scores:Array(12).fill(12)}));
+const good=samples.map(p=>({...p,scores:Array(12).fill(92)}));
+for(const x of [-20,0,20]){assert(Math.abs(travelScore(poor,x,0,0)-12)<1e-8,'uniform poor countries stay poor');assert(Math.abs(travelScore(good,x,0,0)-92)<1e-8,'uniform good countries stay good');}

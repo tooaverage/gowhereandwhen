@@ -2,8 +2,8 @@ import posthog from 'posthog-js/dist/module.no-external';
 
 // Explicit allowlist prevents SDK-added URLs, campaign values, person properties,
 // or future autocaptured data from bypassing the site's privacy rules.
-const events = new Set(['$pageview','open_guide','select_month','search_destination','booking_click','select_island','map_control']);
-const properties = new Set(['token','distinct_id','$device_id','$session_id','$window_id','$lib','$lib_version','$browser','$browser_version','$os','$os_version','$device_type','$screen_height','$screen_width','$viewport_height','$viewport_width','$timezone','$timezone_offset','$current_url','$pathname','$referrer','$referring_domain','$title','destination','month','provider','placement','booking_type','island','control','enabled']);
+const events = new Set(['$pageview','open_guide','select_month','search_destination','booking_click','select_island','map_control','select_city']);
+const properties = new Set(['token','distinct_id','$device_id','$session_id','$window_id','$lib','$lib_version','$browser','$browser_version','$os','$os_version','$device_type','$screen_height','$screen_width','$viewport_height','$viewport_width','$timezone','$timezone_offset','$current_url','$pathname','$referrer','$referring_domain','$title','destination','month','provider','placement','booking_type','island','control','enabled','city']);
 export function sanitizeEvent(event, allowed) {
   if (!allowed() || !event || !events.has(event.event)) return null;
   const clean = {};

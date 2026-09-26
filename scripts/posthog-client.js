@@ -22,7 +22,7 @@ export function sanitizeEvent(event, allowed) {
 export function startClient(token, host, allowed) {
   posthog.init(token, {
     api_host:host,
-    persistence:'localStorage',
+    persistence:'memory', disable_persistence:true,
     person_profiles:'never',
     autocapture:false, capture_pageview:false, capture_pageleave:false,
     capture_dead_clicks:false, rageclick:false, capture_heatmaps:false,
@@ -32,7 +32,7 @@ export function startClient(token, host, allowed) {
     disable_external_dependency_loading:true,
     advanced_disable_flags:true, opt_in_site_apps:false,
     save_campaign_params:false, save_referrer:false,
-    opt_out_capturing_by_default:true, opt_out_persistence_by_default:true,
+    opt_out_capturing_by_default:false, opt_out_persistence_by_default:true,
     request_batching:false, ip:false, debug:false,
     before_send:event => sanitizeEvent(event, allowed),
   });

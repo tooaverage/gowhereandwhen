@@ -1,10 +1,10 @@
-// The consent controller is independent of the SDK and sends nothing before opt-in.
+// Analytics runs by default with memory-only IDs; explicit refusals and GPC stop it.
 const id = document.querySelector('meta[name="gww-analytics"]')?.content;
 const host = document.querySelector('meta[name="gww-analytics-host"]')?.content;
 if (/^phc_[a-zA-Z0-9]+$/.test(id || '') && ['https://us.i.posthog.com','https://eu.i.posthog.com'].includes(host) && ['gowhereandwhen.com', 'www.gowhereandwhen.com'].includes(location.hostname)) {
   const key = 'gww-analytics-choice-v2-posthog';
-  let choice = null, started = false;
-  try { const saved = JSON.parse(localStorage.getItem(key)); if (saved && ['yes','no'].includes(saved.value) && Date.now() < saved.expires) choice = saved.value; } catch {}
+  let choice = "yes", started = false;
+  try { const saved = JSON.parse(localStorage.getItem(key)); if (saved && ['yes','no'].includes(saved.value) && (saved.value === 'no' || Date.now() < saved.expires)) choice = saved.value; } catch {}
   if (navigator.globalPrivacyControl) choice = 'no';
   const cleanURL = value => { if (!value) return ''; try { const u = new URL(value, location.href); return u.origin + u.pathname.replace(/\/index\.html$/, '/'); } catch { return ''; } };
   const allowed = () => choice === 'yes' && !navigator.globalPrivacyControl;
@@ -18,7 +18,7 @@ if (/^phc_[a-zA-Z0-9]+$/.test(id || '') && ['https://us.i.posthog.com','https://
     started = true;
     const run = ++generation;
     try {
-      // Separate chunk: no SDK download, storage, or requests before consent.
+      // Separate chunk, loaded only when analytics is permitted.
       loading ||= import('./posthog-client.js');
       const {startClient} = await loading;
       if (run !== generation || !allowed()) return;
@@ -33,12 +33,12 @@ if (/^phc_[a-zA-Z0-9]+$/.test(id || '') && ['https://us.i.posthog.com','https://
   }
   const panel = document.createElement('section');
   panel.className = 'analytics-choice'; panel.setAttribute('aria-label', 'Optional analytics');
-  panel.innerHTML = '<p><strong>Help improve these travel guides?</strong> Allow PostHog analytics to measure visits and use of the site. It saves a random visitor ID in your browser. Session recording is off.</p><p><a href="/methodology/#privacy">Privacy details</a></p><div><button type="button" data-choice="no">No thanks</button><button type="button" data-choice="yes">Allow analytics</button></div>';
+  panel.innerHTML = '<p><strong>Analytics preferences</strong> We use PostHog to measure visits and map use. Analytics IDs stay in page memory. Session recording is off.</p><p><a href="/methodology/#privacy">Privacy details</a></p><div><button type="button" data-choice="no">Disable analytics</button><button type="button" data-choice="yes">Allow analytics</button></div>';
   document.body.append(panel);
   const preferences = document.createElement('button'); preferences.type = 'button'; preferences.className = 'analytics-preferences'; preferences.textContent = 'Analytics preferences';
   (document.querySelector('footer') || document.body).append(preferences);
   preferences.onclick = () => { panel.hidden = false; panel.querySelector('button').focus(); };
-  panel.hidden = choice !== null;
+  panel.hidden = true;
   panel.addEventListener('click', e => {
     const selected = e.target.closest('[data-choice]')?.dataset.choice; if (!selected) return;
     choice = selected === 'yes' && !navigator.globalPrivacyControl ? 'yes' : 'no';

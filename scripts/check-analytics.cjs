@@ -5,7 +5,7 @@ const adapter=transformSync(fs.readFileSync(path.join(__dirname,'posthog-client.
 function run({host='gowhereandwhen.com',id='phc_TESTONLY',saved=null,gpc=false,delay=false}={}) {
  const nodes=[],events={},windowEvents={},stored=new Map(),captures=[],configs=[];
  let loads=0,enabled=false,resolve;
- const mock={init(id,config){configs.push(config);},opt_in_capturing(){enabled=true;},opt_out_capturing(){enabled=false;},capture(event,properties){if(enabled){const value=configs[0].before_send({event,properties});if(value)captures.push(value);}}};
+ const mock={init(id,config){configs.push(config);enabled=true;},opt_in_capturing(){enabled=true;},opt_out_capturing(){enabled=false;},capture(event,properties){if(enabled){const value=configs[0].before_send({event,properties});if(value)captures.push(value);}}};
  const module={exports:{}};vm.runInNewContext(adapter,{module,exports:module.exports,mock,URL,Set,Object});
  function node(tag){return {tag,dataset:{},hidden:false,listeners:{},setAttribute(){},append(){},focus(){},querySelector(){return {focus(){}};},addEventListener(n,f){this.listeners[n]=f;}};}
  const body={append(n){nodes.push(n);}};
@@ -19,12 +19,13 @@ function run({host='gowhereandwhen.com',id='phc_TESTONLY',saved=null,gpc=false,d
 }
 const flush=()=>new Promise(r=>setImmediate(r));
 (async()=>{
- for(const scenario of [{},{saved:'no'},{saved:'yes',gpc:true}]){const t=run(scenario);await flush();assert.equal(t.loads(),0,'SDK never loads without consent or with GPC');assert.equal(t.captures.length,0);}
+ for(const scenario of [{saved:'no'},{gpc:true},{saved:'yes',gpc:true}]){const t=run(scenario);await flush();assert.equal(t.loads(),0,'SDK never loads after refusal or with GPC');assert.equal(t.captures.length,0);}
  assert.equal(run({host:'127.0.0.1',saved:'yes'}).nodes.length,0,'Local previews excluded');
  assert.equal(run({id:'phc_bad<script>'}).nodes.length,0,'Invalid token disabled');
- const t=run();t.events['gww:month']({detail:{month:3,country:'austria'}});assert.equal(t.captures.length,0);
+ const t=run({saved:'no'});t.events['gww:month']({detail:{month:3,country:'austria'}});assert.equal(t.captures.length,0);
  t.choose('yes');await flush();assert.equal(t.loads(),1);assert.equal(t.captures.filter(e=>e.event==='$pageview').length,1);
- const config=t.configs[0];for(const key of ['autocapture','capture_pageview','capture_pageleave','capture_performance','capture_exceptions','save_campaign_params','save_referrer'])assert.equal(config[key],false,key);
+ const fresh=run();await flush();assert.equal(fresh.captures.length,1,'Fresh visitors measured without popup');assert.equal(fresh.nodes[0].hidden,true,'No automatic popup');
+ const config=t.configs[0];assert.equal(config.persistence,'memory');assert.equal(config.disable_persistence,true);for(const key of ['autocapture','capture_pageview','capture_pageleave','capture_performance','capture_exceptions','save_campaign_params','save_referrer'])assert.equal(config[key],false,key);
  assert.equal(config.disable_session_recording,true);assert.equal(config.advanced_disable_flags,true);assert.equal(config.person_profiles,'never');
  const page=t.captures[0].properties;assert.equal(page.$current_url,'https://gowhereandwhen.com/country/austria/');assert.equal(page.$referrer,'https://example.com/travel');
  t.events['gww:month']({detail:{month:3,country:'austria'}});assert.equal(t.captures.at(-1).properties.month,4);
@@ -37,11 +38,11 @@ const flush=()=>new Promise(r=>setImmediate(r));
  assert.equal(config.before_send({event:'$pageview',properties:{}}),null,'Withdrawal blocks pending events');
  t.choose('yes');await flush();assert.equal(t.loads(),1,'Reuse SDK after renewed consent');assert.equal(t.captures.length,count+1);
  t.storage('no');const after=t.captures.length;t.events['gww:search']({detail:{country:'austria'}});assert.equal(t.captures.length,after,'Cross-tab withdrawal honored');
- const late=run({delay:true});late.choose('yes');late.choose('no');late.resolve();await flush();assert.equal(late.configs.length,0,'Withdrawal while SDK loads prevents initialization');
- const race=run({delay:true});race.choose('yes');race.choose('no');race.choose('yes');race.resolve();await flush();assert.equal(race.captures.length,1,'Consent races do not duplicate pageviews');
+ const late=run({delay:true,saved:'no'});late.choose('yes');late.choose('no');late.resolve();await flush();assert.equal(late.configs.length,0,'Withdrawal while SDK loads prevents initialization');
+ const race=run({delay:true,saved:'no'});race.choose('yes');race.choose('no');race.choose('yes');race.resolve();await flush();assert.equal(race.captures.length,1,'Consent races do not duplicate pageviews');
  const active=run({saved:'yes'});await flush();active.navigator.globalPrivacyControl=true;assert.equal(active.configs[0].before_send({event:'$pageview'}),null);
  const clean=t.module.exports.sanitizeEvent({event:'$pageview',properties:{$current_url:'https://gowhereandwhen.com/?private=yes#secret',$referrer:'https://example.com/?email=secret',email:'secret',utm_campaign:'secret',$set:{email:'secret'},$initial_current_url:'private',distinct_id:'random'}},()=>true);
  assert.equal(clean.properties.email,undefined);assert.equal(clean.properties.$set,undefined);assert.equal(clean.properties.$initial_current_url,undefined);assert.equal(clean.properties.utm_campaign,undefined);assert.equal(clean.properties.$current_url,'https://gowhereandwhen.com/');assert.equal(clean.properties.$geoip_disable,true);
  assert.equal(t.module.exports.sanitizeEvent({event:'$autocapture'},()=>true),null);
- console.log('Passed PostHog consent, SDK isolation, event sanitization, local exclusion, withdrawal and race-condition checks.');
+ console.log('Passed PostHog default measurement, memory-only configuration, opt-out, SDK isolation, event sanitization, local exclusion, withdrawal and race-condition checks.');
 })().catch(error=>{console.error(error);process.exitCode=1;});

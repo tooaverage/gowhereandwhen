@@ -1,5 +1,6 @@
 // France-only sample: one map, route stops beside it, optional full city comparison.
 module.exports=record=>{
+ record=require('./france-route-destinations.cjs')(record);
  const engine=require('../engine.js');
  const timing=require('./france-travel-timing.cjs');
  let cities=require('./france-season-guide.cjs')(record);
@@ -31,7 +32,7 @@ module.exports=record=>{
  const map=route.match(/<svg class="cmap"[\s\S]*?<\/svg>/)[0];
  const cityCards=record.cities.map(c=>`<div class="heat-city-card" data-extra-card="${c.name}"><div class="extra-place-title"><strong>${c.name}</strong><span data-city-temperature="${c.name}"></span></div><small class="seasonal-reason" data-seasonal-reason="${c.name}"></small><small data-route-city="${c.name}" hidden></small></div>`).join('');
  route=route.replace(map,require('./france-heat-sample.cjs')(map,record,engine)+`<div class="heat-legend"><span>Less suited</span><span class="heat-ramp" aria-hidden="true"></span><span>Great time to go</span></div><p class="heat-note">Travel rating: weather + activities + events.</p><div class="extra-places"><h3>Extra spots <small>Off your route</small></h3><div class="heat-city-cards">${cityCards}</div></div>`);
- const method=`<details class="guide-sources timing-method"><summary>What the rating includes</summary><p>Weather, seasonal activities and events. Each place shows a reason to go and a trade-off.</p><p>These are editorial recommendations. Event dates vary. Crowds, prices and closures are not rated yet.</p><p>Map colours blend six city samples. They do not describe every mountain or coast. Grey means limited data.</p><p>Sources checked 26 September 2026: ${Object.entries(timing.sources).map(([name,url])=>`<a href="${url}">${name}</a>`).join(' · ')}.</p></details>`;
+ const method=`<details class="guide-sources timing-method"><summary>What the rating includes</summary><p>Weather, seasonal activities and events. Each place shows a reason to go and a trade-off.</p><p>These are editorial recommendations. Event dates vary. Crowds, prices and closures are not rated yet.</p><p>Map colours blend eight city samples. They do not describe every mountain or coast. Grey means limited data.</p><p>Sources checked 26 September 2026: ${Object.entries(timing.sources).map(([name,url])=>`<a href="${url}">${name}</a>`).join(' · ')}.</p></details>`;
  const notes=[];
  route=route.replace(/<details class="guide-sources">[\s\S]*?<\/details>/g,n=>{notes.push(n);return '';});
  route=route.replace('<summary>Sources &amp; weather notes</summary>','<summary>Weather sources</summary>');
@@ -53,6 +54,7 @@ module.exports=record=>{
   const routeNames=stops.map(li=>li.dataset.name);
   document.querySelectorAll('#cities .city').forEach((el,i)=>{const name=Object.keys(climate)[i],extra=!routeNames.includes(name);el.classList.toggle('extra-city',extra);el.querySelector('.lab').textContent=name+(extra?' +':'');});
   document.querySelectorAll('[data-extra-card]').forEach(el=>el.hidden=routeNames.includes(el.dataset.extraCard));
+  document.querySelector('.extra-places').hidden=routeNames.length===Object.keys(climate).length;
   document.querySelectorAll('[data-route-city]').forEach(el=>el.textContent=routeNames.includes(el.dataset.routeCity)?'On your route':'Extra spot · off route');
   document.querySelectorAll('#mpick button').forEach(b=>{
    const m=+b.dataset.m,score=Math.round(cities.reduce((n,c)=>n+c.scores[m],0)/cities.length);

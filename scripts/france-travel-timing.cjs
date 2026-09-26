@@ -6,6 +6,9 @@ const sources={
  wine:'https://www.bordeaux-tourism.co.uk/holidays/autumn',
  coast:'https://brest.fr/dossier-metropole/un-ete-plein-de-redecouvertes',
  carnival:'https://www.france.fr/en/event/Nice-carnival/',
+ normandy:'https://en.normandie-tourisme.fr/unmissable-sites/bayeux/',
+ loire:'https://www.touraineloirevalley.co.uk/discover/loire-valley-chateaux/',
+ provence:'https://avignon-tourisme.com/en/faqs/',
  christmas:'https://www.visitstrasbourg.fr/en/discover/the-capital-of-christmas/strasbourg-christmas-market-faq/'
 };
 const rules={
@@ -16,6 +19,7 @@ const rules={
  Brest:[{months:[5,6,7],reason:'Coastal walks and summer outings',source:'coast'}],
  Strasbourg:[{months:[3,4],reason:'Spring canals and city walks',source:'spring'},{months:[8,9],reason:'Autumn canals and cycling',source:'autumn'},{months:[11],reason:'Christmas markets',source:'christmas',event:true}]
 };
+const draws={Paris:'Museums and neighbourhood walks',Bayeux:'Normandy and D-Day history',Tours:'Loire Valley castles',Bordeaux:'Wine and riverfront walks',Avignon:'Provence, palace and nearby towns',Nice:'Old town and Riviera day trips',Lyon:'Food markets and old-town walks',Strasbourg:'Alsace, canals and Colmar'};
 const levels=[{label:'Poor',key:'avoid',value:15},{label:'Poor',key:'fair',value:35},{label:'Fair',key:'good',value:55},{label:'Good',key:'great',value:70},{label:'Great',key:'ideal',value:90}];
 function assess(city,m,weather,record={}){
  const highlight=(rules[city]||[]).find(r=>r.months.includes(m));
@@ -24,7 +28,7 @@ function assess(city,m,weather,record={}){
  if(highlight&&(highlight.event||weather>=44))level=4;
  if(storm||heat)level=0;
  const weatherText=heat?'Extreme heat limits outdoor plans':storm?'Seasonal storm risk':record.hi?.[m]<12?'Cold days; pack warm layers':record.hi?.[m]>28?'Hot days; plan breaks':record.pr?.[m]>90?'Keep a rainy-day plan':'Weather suits outdoor stops';
- return {...levels[level],reason:highlight?.reason||'Flexible sightseeing trip',weather:weatherText,source:highlight?sources[highlight.source]:null,event:!!highlight?.event,tradeoff:highlight?.event?'Only during event dates; check before booking':highlight?.source==='wine'?'Book visits; harvest work can affect access':weatherText};
+ return {...levels[level],reason:highlight?.reason||draws[city]||'Sightseeing',weather:weatherText,source:highlight?sources[highlight.source]:null,event:!!highlight?.event,tradeoff:highlight?.event?'Only during event dates; check before booking':highlight?.source==='wine'?'Book visits; harvest work can affect access':weatherText};
 }
 function rating(city,m,weather,record){return assess(city,m,weather,record).value;}
 module.exports={sources,rules,levels,assess,rating};

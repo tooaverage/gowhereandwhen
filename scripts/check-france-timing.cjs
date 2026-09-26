@@ -14,3 +14,23 @@ for(const c of cities)for(let m=0;m<12;m++){
  if(a.event)assert.ok(a.source.startsWith('https://'));
 }
 console.log('Passed France timing: seasonal reasons, no event leakage, heat override, complete month advice.');
+
+const routePlan=require('./france-route-plan.cjs');
+for(const [days,stays] of Object.entries(routePlan.plans)){
+ assert.equal(stays.reduce((sum,s)=>sum+s[1],0),Number(days)-1,'Nights match trip length');
+ assert.equal(new Set(stays.map(s=>s[0])).size,stays.length,'No repeated overnight bases');
+ for(const [i,stay] of stays.entries()){
+  assert(stay[1]>=2&&stay[1]<=5,'Deliberate 2–5 night stays');
+  assert(routePlan.stops.some(s=>s.name===stay[0]));
+  if(i)assert(routePlan.legs[stays[i-1][0]+'|'+stay[0]],'Every travel leg has a planning note');
+ }
+}
+assert(routePlan.plans[30].some(s=>s[0]==='Bayeux'),'Normandy belongs in the longer route');
+assert(routePlan.plans[30].some(s=>s[0]==='Tours'),'Loire Valley belongs in the longer route');
+for(const city of require('../climate/france-route.json')){
+ for(const key of ['hi','lo','pr'])assert.equal(city[key].length,12);
+ for(let m=0;m<12;m++){assert(city.hi[m]>=city.lo[m]);assert(city.pr[m]>=0);}
+ assert.equal(city.source.period,'2001-2020');
+ assert(city.source.url.startsWith('https://power.larc.nasa.gov/'));
+}
+console.log('Passed France routes: explicit stays, complete legs, traveller-selected bases and sourced climate.');

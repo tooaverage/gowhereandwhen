@@ -49,3 +49,13 @@ Build, site checks and France timing regressions passed. France regressions now 
 Next research: source real high/shoulder/low tourism seasons. The old weather-derived season ranks are not visitor data. Skiing and other seasonal draws should be assessed for the activity; crowds and price are trade-offs rather than automatic reasons to downgrade a worthwhile trip. Do not infer lastminute.com's methodology from its season legend.
 
 Production follow-up: mobile Lighthouse found white-on-green month text and mismatched accessible button names. Changed green-month text to dark ink and aligned accessible names with the visible month abbreviation and rating. Initial France scores: performance 67, accessibility 96, best practices 100, SEO 100.
+
+## 2026-09-26: France traveller-first itinerary correction
+
+Replaced proportional night scaling with explicit 3/7/14/30-day plans. A month now has eight bases and 29 nights: Paris 5, Bayeux (Normandy) 3, Tours (Loire Valley) 3, Bordeaux 4, Avignon (Provence) 4, Nice 4, Lyon 3, Strasbourg (Alsace) 3. These are suggested editorial allocations, not measured average stays. Fourteen days adds Alsace with 4/3/3/3 nights across Paris, Strasbourg, Lyon and Nice.
+
+Destination selection was cross-checked against three user-supplied traveller discussions and Nomadic Matt's France guide, then official Normandy, Touraine and Avignon tourism information and SNCF routes. No article wording copied. This is not a statistically representative popularity ranking. Comparable visitor counts are a next input, not yet implemented. Brest remains in underlying climate data but is no longer presented as a recommended extra stop on the France travel map.
+
+Added traceable NASA POWER 2001–2020 daily-derived climate for Bayeux, Tours and Avignon after selecting these travel bases. Only the France guide uses the new destination set. Source links flag longer train legs, station changes, and local transport needs; return travel remains a separate booking choice. The map line shows stop order, not a railway track.
+
+Previous release 243b415 verified in mobile Lighthouse: performance 66, accessibility 100, best practices 100, SEO 100. France-only route checks cover night totals, unique bases, deliberate 2–5-night stays, all legs and climate completeness.

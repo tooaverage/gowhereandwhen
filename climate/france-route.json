@@ -1,0 +1,167 @@
+[
+  {
+    "name": "Bayeux",
+    "iso": 250,
+    "lat": 49.2765,
+    "lng": -0.7031,
+    "hi": [
+      8.5,
+      8.2,
+      9.4,
+      11.5,
+      13.9,
+      16.8,
+      19.0,
+      19.6,
+      18.3,
+      15.9,
+      12.4,
+      9.6
+    ],
+    "lo": [
+      6.0,
+      5.5,
+      6.5,
+      8.4,
+      10.9,
+      13.6,
+      15.7,
+      16.6,
+      15.4,
+      13.1,
+      9.9,
+      7.1
+    ],
+    "pr": [
+      84.3,
+      69.2,
+      64.0,
+      44.0,
+      52.1,
+      46.2,
+      49.5,
+      57.6,
+      54.5,
+      87.2,
+      98.5,
+      100.8
+    ],
+    "source": {
+      "provider": "NASA POWER / MERRA-2",
+      "period": "2001-2020",
+      "url": "https://power.larc.nasa.gov/api/temporal/daily/point?parameters=T2M_MAX,T2M_MIN,PRECTOTCORR&community=AG&longitude=-0.7031&latitude=49.2765&start=20010101&end=20201231&format=JSON",
+      "method": "Monthly mean of daily highs and lows; mean monthly precipitation total across 20 complete years. Gridded reanalysis, not a city weather station.",
+      "retrieved": "2026-09-26"
+    }
+  },
+  {
+    "name": "Tours",
+    "iso": 250,
+    "lat": 47.3941,
+    "lng": 0.6848,
+    "hi": [
+      7.0,
+      8.4,
+      12.1,
+      15.7,
+      19.0,
+      23.5,
+      26.2,
+      26.4,
+      23.1,
+      17.9,
+      11.6,
+      7.5
+    ],
+    "lo": [
+      1.1,
+      0.9,
+      2.8,
+      5.3,
+      8.6,
+      12.2,
+      14.1,
+      14.0,
+      11.0,
+      8.3,
+      4.6,
+      1.6
+    ],
+    "pr": [
+      64.3,
+      50.7,
+      58.5,
+      48.0,
+      67.1,
+      59.2,
+      51.1,
+      48.9,
+      40.4,
+      69.5,
+      68.4,
+      71.9
+    ],
+    "source": {
+      "provider": "NASA POWER / MERRA-2",
+      "period": "2001-2020",
+      "url": "https://power.larc.nasa.gov/api/temporal/daily/point?parameters=T2M_MAX,T2M_MIN,PRECTOTCORR&community=AG&longitude=0.6848&latitude=47.3941&start=20010101&end=20201231&format=JSON",
+      "method": "Monthly mean of daily highs and lows; mean monthly precipitation total across 20 complete years. Gridded reanalysis, not a city weather station.",
+      "retrieved": "2026-09-26"
+    }
+  },
+  {
+    "name": "Avignon",
+    "iso": 250,
+    "lat": 43.9493,
+    "lng": 4.8055,
+    "hi": [
+      9.1,
+      10.3,
+      14.3,
+      18.2,
+      22.5,
+      28.2,
+      31.6,
+      31.0,
+      25.7,
+      20.5,
+      13.9,
+      9.9
+    ],
+    "lo": [
+      0.7,
+      0.6,
+      3.4,
+      6.7,
+      10.4,
+      15.1,
+      17.6,
+      17.3,
+      13.5,
+      9.9,
+      5.0,
+      1.6
+    ],
+    "pr": [
+      48.9,
+      39.4,
+      44.2,
+      56.0,
+      56.0,
+      36.8,
+      25.1,
+      31.1,
+      62.2,
+      85.2,
+      98.3,
+      52.4
+    ],
+    "source": {
+      "provider": "NASA POWER / MERRA-2",
+      "period": "2001-2020",
+      "url": "https://power.larc.nasa.gov/api/temporal/daily/point?parameters=T2M_MAX,T2M_MIN,PRECTOTCORR&community=AG&longitude=4.8055&latitude=43.9493&start=20010101&end=20201231&format=JSON",
+      "method": "Monthly mean of daily highs and lows; mean monthly precipitation total across 20 complete years. Gridded reanalysis, not a city weather station.",
+      "retrieved": "2026-09-26"
+    }
+  }
+]

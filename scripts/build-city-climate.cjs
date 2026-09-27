@@ -1,6 +1,6 @@
 const fs=require('node:fs'),path=require('node:path'),E=require('../engine.js');
 const root=path.resolve(__dirname,'..'),file=path.join(root,'storybook-lab/data.json');
-const data=JSON.parse(fs.readFileSync(file)),featured=require('../climate/top-cities.json'),regional=require('../climate/france.json'),cities=[...featured,...regional];
+const data=JSON.parse(fs.readFileSync(file)),featured=require('../climate/top-cities.json'),regional=require('../climate/france.json'),spain=require('../climate/spain.json'),cities=[...featured,...regional,...spain];
 for(const [index,city] of cities.entries()){
  const record=data.find(r=>r.iso===city.iso);if(!record)throw Error('Unknown country '+city.iso);
  const c={...city,...(index<featured.length?{featuredOrder:index+1}:{}),area:record.name,off:[0,-10]};

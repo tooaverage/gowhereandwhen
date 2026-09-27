@@ -259,7 +259,7 @@ const CONTENT = [
       { q: 'Is Spain too hot in summer?', a: 'July and August are very hot inland, especially in Madrid and Seville. The coast is more bearable, but spring and autumn are easier across the country.' },
       { q: 'When is the cheapest time to visit Spain?', a: 'November, January and February, outside the holidays, when crowds thin and prices fall, with mild weather on the coast.' },
     ],
-    markers: [{ mon: 'Apr', kind: 'fest' }, { mon: 'Sep', kind: 'sun' }],
+    markers: [],
   },
 
   { slug: 'greece', iso: 300, name: 'Greece',

@@ -38,8 +38,8 @@
       "slug": "spain",
       "region": "Europe",
       "hasGuide": true,
-      "cityCount": 1,
-      "sourcedCityCount": 1,
+      "cityCount": 6,
+      "sourcedCityCount": 6,
       "regionalPrototype": false,
       "editorialStatus": "needs-review"
     },

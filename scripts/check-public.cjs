@@ -18,4 +18,13 @@ const sourceData=JSON.parse(read(path.resolve(__dirname,'../storybook/data.json'
 assert.deepEqual(publicData.map(({lead,...record})=>record),sourceData.map(({lead,...record})=>record),'Weather data, scores, cities and map destinations preserved');
 const philippines=read(path.join(root,'country/philippines/index.html'));assert(philippines.includes('id="island-life"'));assert(philippines.includes('island-life.js'));assert(philippines.includes('data-booking-type="accommodation"'));
 assert(read(path.join(root,'country/austria/index.html')).includes('late December to early March'));
+const usa=read(path.join(root,'country/usa/index.html'));
+const usaSection=usa.match(/<section class="guide-section" id="regions">([\s\S]*?)<\/section>/)?.[1];
+assert(usaSection,'USA regional table missing');
+assert(usa.includes('Choose your region first.')&&!usa.includes('May and September are the best all-round months'),'USA regional lead');
+assert(usaSection.includes('1991–2020')&&usaSection.includes('These city stations leave out Alaska'),'USA period and coverage limit');
+assert.equal((usaSection.match(/<tr>/g)||[]).length,13,'USA table has header and twelve months');
+const usaCities=sourceData.find(r=>r.iso===840).cities.filter(c=>['New York City','Chicago','Miami','Denver','Seattle','San Francisco','Los Angeles','Honolulu'].includes(c.name));
+assert.equal(usaCities.length,8);
+for(const city of usaCities){assert.equal(city.source.period,'1991–2020');assert(city.source.url.startsWith('https://www.ncei.noaa.gov/'));assert(usaSection.includes(city.source.url));for(const key of ['hi','lo','pr'])assert.equal(city[key].length,12);}
 console.log('Passed: 89 canonical pages, unique metadata, crawlable internal links/assets/fragments, schema JSON, archive noindex, 404 and retained island/booking surfaces.');

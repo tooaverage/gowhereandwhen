@@ -44,3 +44,7 @@ console.log(`Public website built: Storybook homepage and ${count} country guide
 
 require('./scripts/enhance-public.cjs')(root,out);
 require('./scripts/monetize-public.cjs')(root,out);
+
+// Inflight feedback widget on every published page.
+const inflight='<script src="https://inflight.co/widget.js" data-org="me788eec" async></script>';
+(function addInflight(dir){for(const d of fs.readdirSync(dir,{withFileTypes:true})){const p=path.join(dir,d.name);if(d.isDirectory())addInflight(p);else if(d.name.endsWith('.html')){const s=fs.readFileSync(p,'utf8');if(!s.includes('inflight.co/widget.js')&&s.includes('</head>'))fs.writeFileSync(p,s.replace('</head>',inflight+'</head>'));}}})(out);

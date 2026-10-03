@@ -22,6 +22,14 @@ When To Go (gowhereandwhen.com): an interactive world map plus per-country guide
 
 `gen-images.js` generates one vintage-style illustration per country with Nano Banana Pro (Gemini 3 Pro Image), saved to `images/<slug>.jpg`. `gen.js` drops the image into the top of each country cover when the file exists, and skips the band when it does not. Run it with a `GEMINI_API_KEY`, then rerun `gen.js`.
 
+## Inflight (previews and feedback)
+
+The Inflight MCP server (`https://mcp.inflight.co/mcp`) shares previews and collects review comments. The widget tag (`data-org="me788eec"`) is in `index.html` and is added to every published page by `build-public.cjs`.
+
+- Preview link or sharing deployed work: call `share_preview` with the repo from the git remote, the full HEAD sha, the branch, a `starting_route`, an `overview` and a `title`. Follow its returned next steps. Never share a production deployment.
+- Standalone HTML prototype: call `share_html`.
+- Review comments or next steps: call `get_feedback`, then `complete_next_step` as each item is done.
+
 ## Deploy
 
 Push to `main`. The Pages workflow (`.github/workflows/deploy-pages.yml`) uploads the repo root and deploys. The `CNAME` file sets the custom domain.

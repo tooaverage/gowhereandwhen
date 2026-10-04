@@ -2,6 +2,10 @@
 
 The live site uses Storybook, built from storybook-lab through build-public.cjs. Older directions below are historical, not permission to mix styles. Reuse Lilita One headings, Nunito Sans text, shared game.css and seo.css tokens, established components and semantic weather colours. Country content uses guide-section/wrap, weather-table/table-scroll and existing navigation. Verify 320px, 390px and desktop; tables may scroll inside their container but the whole page must not overflow. No per-country theme, fonts or invented card system.
 
+### Guide footer touch targets, 4 October 2026
+
+Italy's post-release mobile Lighthouse audit found the two shared guide-footer navigation links too small to tap reliably. Give those links at least 48px of height in the shared layout. Check rendered mobile spacing and the Lighthouse accessibility finding before closing a release; the Italy finding is a shared template issue, not an Italy-specific weather-data issue.
+
 # When to go design exploration
 
 ## Active direction

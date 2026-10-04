@@ -1,5 +1,13 @@
 # Content releases
 
+## 2026-10-03: Turkey regional comparison (release candidate)
+
+- Existing URL: https://gowhereandwhen.com/country/turkey/ . Intent: choose a Turkish region and month; a second URL would overlap the country overview. Before: Istanbul weather score and broad regional prose. After: a four-city, twelve-month high/rain comparison for Antalya, İzmir, Nevşehir and Trabzon, with the Istanbul score limit beside it. No route or child URL is claimed.
+- Source: Turkish State Meteorological Service official city seasonal normals (1991–2020), with each city URL stored in `climate/turkey-mgm.json`. The table uses published average daily highs and monthly rain; complete lows are stored for validation. The source pages link to the 1991–2020 normals, but the city-page text does not state a common station period explicitly, so the public caption omits a year claim. [Antalya](https://www.mgm.gov.tr/veridegerlendirme/Il-ve-Ilceler-Istatistik.aspx?k=H&m=ANTALYA), [İzmir](https://www.mgm.gov.tr/veridegerlendirme/Il-ve-Ilceler-Istatistik.aspx?k=H&m=IZMIR), [Nevşehir](https://www.mgm.gov.tr/veridegerlendirme/Il-ve-Ilceler-Istatistik.aspx?k=H&m=NEVSEHIR), [Trabzon](https://www.mgm.gov.tr/veridegerlendirme/Il-ve-Ilceler-Istatistik.aspx?k=H&m=TRABZON).
+- [GoTürkiye balloon guidance](https://goturkiye.com/blog/cappadocia-hot-air-balloons-things-to-know-before-you-fly) says flights may be cancelled for weather. Removed the unsupported “calmest, clearest” and fixed cheap-month claims. Removed Turkey's month pictographs; `docs/COPY-RULES.md` already requires labelled icons and no emoji. Other pages remain for checked batches.
+- Source/build/check and 320px, 390px, desktop local layout passed. Last pre-release Lighthouse artifact (run 36896771408): home 37, France 66, Japan 68, Spain 66, USA 66 performance; all 100 accessibility, best practices and SEO. Heavy homepage map remains a gap. Publication and live verification pending.
+- Scope gaps: four cities are samples, not national or mountain coverage. Istanbul scores still use older inputs; no sourced itinerary or route was added. The API pilot remains disabled and no paid API/cloud generation was used. Local account-allowance token use and dollars were not exposed.
+
 ## 2026-09-26: workflow foundation
 
 - Existing public coverage: 202 map records, 74 guides, 69 city records (36 carry a source object), plus Australia's ten-point regional prototype. Nine countries have multiple city records. These counts are an inventory, not a review certificate.

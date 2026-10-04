@@ -27,4 +27,16 @@ assert.equal((usaSection.match(/<tr>/g)||[]).length,13,'USA table has header and
 const usaCities=sourceData.find(r=>r.iso===840).cities.filter(c=>['New York City','Chicago','Miami','Denver','Seattle','San Francisco','Los Angeles','Honolulu'].includes(c.name));
 assert.equal(usaCities.length,8);
 for(const city of usaCities){assert.equal(city.source.period,'1991–2020');assert(city.source.url.startsWith('https://www.ncei.noaa.gov/'));assert(usaSection.includes(city.source.url));for(const key of ['hi','lo','pr'])assert.equal(city[key].length,12);}
+const turkey=read(path.join(root,'country/turkey/index.html'));
+const turkeySection=turkey.match(/<section class="guide-section" id="regions">([\s\S]*?)<\/section>/)?.[1];
+assert(turkeySection,'Turkey regional table missing');
+assert.equal((turkeySection.match(/<tr>/g)||[]).length,13,'Turkey table has header and twelve months');
+for(const city of require('../climate/turkey-mgm.json')){
+ assert(turkeySection.includes(city.name)&&turkeySection.includes(city.source.replaceAll('&','&amp;')),city.name+' source visible');
+ assert.equal(city.period,'1991-2020 seasonal normals');
+ assert.equal(city.provider,'Turkish State Meteorological Service (MGM)');
+ for(const key of ['hi','lo','pr'])assert.equal(city[key].length,12,city.name+' '+key);
+}
+assert(turkey.includes('Balloon flights can still be cancelled by weather.')&&!turkey.includes('calmest, clearest mornings'),'Turkey balloon claim');
+assert(!/[✿☀🌷]/u.test(turkey),'Turkey pictograph markers');
 console.log('Passed: 89 canonical pages, unique metadata, crawlable internal links/assets/fragments, schema JSON, archive noindex, 404 and retained island/booking surfaces.');

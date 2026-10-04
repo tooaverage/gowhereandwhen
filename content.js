@@ -649,11 +649,11 @@ const CONTENT = [
   { slug: 'turkey', iso: 792, name: 'Turkey',
     hub: { city: 'Istanbul', lat: 41.0082, lng: 28.9784, zoom: 11, iata: 'IST' },
     title: 'Best Time to Visit Turkey: Istanbul Weather by Month',
-    desc: 'The best time to visit Turkey is spring, April to May, and autumn, September to October, with warm, comfortable weather and fewer crowds.',
-    heroLead: 'Go in <strong>spring, April to May</strong>, or <strong>autumn, September to October</strong>, for warm, comfortable days and lighter crowds. <strong>Summer</strong> is hot and busy on the coast, and <strong>winter</strong> is cool, with skiing inland.',
+    desc: 'Compare Turkey weather by region and month. Spring and autumn suit Istanbul and Cappadocia; summer is hot on the coast.',
+    heroLead: '<strong>April to May</strong> and <strong>September to October</strong> offer milder days for Istanbul and Cappadocia. Coastal summers are hotter. Compare four regions below.',
     intro: [
-      'Turkey bridges Europe and Asia and its climate varies just as much. The month ratings track Istanbul, where spring and autumn bring the most pleasant weather, summer is hot and humid and winter is cool and wet, with the odd snowfall.',
-      'The Mediterranean and Aegean coasts run hotter and stay warm later into autumn, while the high interior, including Cappadocia, has cold winters and warm summers. The shoulder seasons suit almost everywhere at once.',
+      'The month ratings use Istanbul weather. Other regions differ, so compare the city table before choosing dates.',
+      'Antalya and Izmir have hot summers. Nevsehir, near Cappadocia, has colder winters. Trabzon has wetter autumn months.',
     ],
     regions: [
       { icon: 'landmark', h: 'Istanbul and the northwest', p: 'Best in spring and autumn for the mosques, bazaars and Bosphorus. Summers are hot, winters cool and grey.' },
@@ -662,20 +662,20 @@ const CONTENT = [
     ],
     bestFor: [
       { h: 'Istanbul and culture', p: 'April to May and September to October for comfortable sightseeing and the Bosphorus at its best.' },
-      { h: 'Cappadocia and balloons', p: 'Spring and autumn for the calmest, clearest mornings for hot-air ballooning over the valleys.' },
+      { h: 'Cappadocia and balloons', p: 'Spring and autumn offer milder days. Balloon flights can still be cancelled by weather.' },
       { h: 'Beaches and ruins', p: 'June to September on the Turquoise Coast, or the warm shoulder months to dodge the peak heat.' },
-      { h: 'Fewer crowds', p: 'November and the early spring bring cooler weather, quiet sites and better value.' },
+      { h: 'Cooler city trips', p: 'November and early spring bring cooler weather. Compare current prices for your dates.' },
     ],
     whatsOn: [
       { icon: 'flower-2', h: 'Tulip season, April', p: 'Istanbul\'s parks fill with millions of tulips, the flower\'s historic home.' },
       { icon: 'sun', h: 'Coast season, June to Sep', p: 'The Aegean and Mediterranean shores are warm, sunny and made for swimming.' },
     ],
     faq: [
-      { q: 'What is the best time to visit Turkey?', a: 'Spring, April to May, and autumn, September to October, with warm, comfortable weather and smaller crowds than the hot summer peak.' },
-      { q: 'When is the best time for Cappadocia?', a: 'Spring and autumn, for mild walking weather and the calm, clear mornings that suit hot-air balloon flights.' },
-      { q: 'Is the Turkish coast good in summer?', a: 'Yes for beaches and warm seas, though July and August are hot and busy. The shoulder months are more comfortable.' },
+      { q: 'What is the best time to visit Turkey?', a: 'April to May and September to October offer milder days for many city trips. Check the region you plan to visit.' },
+      { q: 'When is the best time for Cappadocia?', a: 'Spring and autumn suit walking. Balloon flights run year round but can be cancelled by weather.' },
+      { q: 'Is the Turkish coast good in summer?', a: 'Summer suits beach trips, but Antalya and Izmir average daytime highs above 30°C in July and August.' },
     ],
-    markers: [{ mon: 'Apr', kind: 'bloom' }, { mon: 'Sep', kind: 'sun' }],
+    markers: [],
   },
 
   { slug: 'croatia', iso: 191, name: 'Croatia',

@@ -39,4 +39,15 @@ for(const city of require('../climate/turkey-mgm.json')){
 }
 assert(turkey.includes('Balloon flights can still be cancelled by weather.')&&!turkey.includes('calmest, clearest mornings'),'Turkey balloon claim');
 assert(!/[✿☀🌷]/u.test(turkey),'Turkey pictograph markers');
+const italy=read(path.join(root,'country/italy/index.html'));
+const italySection=italy.match(/<section class="guide-section" id="regions">([\s\S]*?)<\/section>/)?.[1];
+assert(italySection,'Italy regional table missing');
+assert.equal((italySection.match(/<tr>/g)||[]).length,13,'Italy table has header and twelve months');
+assert(italy.includes('The score above uses Rome.')&&italy.includes('These city estimates cannot describe the Alps'),'Italy score and coverage limits');
+assert(!italy.includes('The quietest, cheapest stretch of the year.')&&!/[✿☀🌷]/u.test(italy),'Italy copy and pictographs');
+for(const city of require('../climate/italy.json')){
+ assert(italySection.includes(city.name)&&italySection.includes(city.source.url.replaceAll('&','&amp;')),city.name+' source visible');
+ assert.equal(city.source.period,'2001-2020');
+ for(const key of ['hi','lo','pr'])assert.equal(city[key].length,12,city.name+' '+key);
+}
 console.log('Passed: 89 canonical pages, unique metadata, crawlable internal links/assets/fragments, schema JSON, archive noindex, 404 and retained island/booking surfaces.');

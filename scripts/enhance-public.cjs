@@ -104,6 +104,28 @@ module.exports=function enhancePublic(root,out){
    html=html.replace('The quietest, cheapest stretch of the year.','Compare weather by region and prices for your dates.');
    html=html.replace(/"dateModified":"[^" ]+"/g,'"dateModified":"2026-10-03"');
   }
+  if(r.slug==='italy'){
+   html=html.replace('<section class="guide-section" id="months">',require('./italy-regions.cjs')()+'<section class="guide-section" id="months">');
+   html=html.replace('<a href="#months">By month</a>','<a href="#regions">Cities</a><a href="#months">Months</a>');
+   html=html.replace('class="stay-shortcut" href="#stay">Where to stay ↗','class="stay-shortcut" href="#stay">Stay ↗');
+   html=html.replace('Go in <strong>spring, April to June</strong>, or <strong>September to October</strong>, for warm, dry days and thinner crowds. <strong>July and August</strong> are hot and packed, and <strong>winter</strong> is cool and quiet, ideal for art cities without the queues.','<strong>Choose your city first.</strong> Spring and autumn can suit city walks. Summer is hot in Rome and the south.');
+   html=html.replace('Italy is at its best in the shoulder seasons. The ratings key off Rome, where spring and early autumn bring warm, dry, comfortable weather and the great sights without the August crush. Locals take their own holidays in August, so cities can feel both crowded with tourists and shut for the season.','The ratings above use Rome weather. They cannot rate the whole country. Compare cities below before choosing a month.');
+   html=html.replace('The country stretches from Alpine peaks to the hot Mediterranean south, so conditions vary. The north is cooler and greener, Tuscany glows in late spring and at harvest, and Sicily and the south stay warm well into autumn.','Italy spans mountains, cities and islands. City weather does not tell you mountain snow or sea warmth.');
+   html=html.replace('<div class="k">Best month</div>','<div class="k">Top Rome score</div>');
+   html=html.replace('<div class="k">Warmest, Aug</div>','<div class="k">Rome Aug high</div>');
+   html=html.replace('<div class="k">Wettest, Nov</div>','<div class="k">Rome Nov rain</div>');
+   html=html.replace('<div class="k">Coldest, Jan</div>','<div class="k">Rome Jan low</div>');
+   html=html.replace('The quietest, cheapest stretch of the year.','Compare prices for your dates. Weather cannot show the cheapest month.');
+   html=html.replace('Spring wildflowers and a golden September harvest. Summer is hot in Florence and Rome, but the hill country stays pleasant.','Florence and Rome heat up in summer. Check the city table for your month.');
+   html=html.replace('April to June and September to October for Rome, Florence and Venice, with warm days and shorter queues.','Compare spring and autumn for Rome, Florence and Venice. Check local events for busy dates.');
+   html=html.replace('June and September for the Amalfi Coast, Sardinia and Sicily, with warm seas and fewer crowds than August.','Compare June and September for coastal trips. Air temperature does not show sea warmth.');
+   html=html.replace('September and October bring the grape and olive harvests, truffle season and a calendar of food festivals.','Check local harvest and food event dates for autumn trips.');
+   html=html.replace('December to March in the Dolomites and the northern Alps.','Check each resort’s lift and snow reports before you book a winter trip.');
+   html=html.replace('Wildflowers across Tuscany and Umbria, and warm, clear days in the art cities.','Try city walks in spring. Weather still varies by place and day.');
+   html=html.replace('The vendemmia and olive harvest fill the countryside with festivals and new wine.','Look for local harvest events in autumn. Check dates before you go.');
+   html=html.replace('Spring, April to June, and September to October, when the weather is warm and dry and the crowds are lighter than in high summer.','Compare spring and autumn for city walks. The best month depends on where you go.');
+   html=html.replace(/"dateModified":"[^" ]+"/g,'"dateModified":"2026-10-04"');
+  }
   if(r.slug==='usa'){
    html=html.replace('<section class="guide-section" id="months">',require('./usa-regions.cjs')(r)+'<section class="guide-section" id="months">');
    html=html.replace('<a href="#months">By month</a>','<a href="#regions">Weather</a><a href="#months">By month</a>');
@@ -129,7 +151,7 @@ module.exports=function enhancePublic(root,out){
  save('/methodology/',shell('How Our Travel Weather Ratings Work','Understand GoWhereAndWhen weather scores, source limitations, regional differences and the editorial approach behind the country guides.','/methodology/',fs.readFileSync(path.join(root,'scripts/methodology.html'),'utf8')));
  const urls=['/','/country/',...guides.map(r=>'/country/'+r.slug+'/'),...months.map(m=>'/when/'+m.toLowerCase()+'/'),'/methodology/'];
  require('./add-analytics.cjs')(root,out,urls);
- fs.writeFileSync(path.join(out,'sitemap.xml'),`<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.map(url=>`  <url><loc>${origin+url}</loc><lastmod>${url==='/country/turkey/'?'2026-10-03':url==='/country/usa/'?'2026-10-01':url==='/country/spain/'?'2026-09-27':url==='/country/france/'?'2026-09-26':reviewed}</lastmod></url>`).join('\n')}\n</urlset>\n`);
+ fs.writeFileSync(path.join(out,'sitemap.xml'),`<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.map(url=>`  <url><loc>${origin+url}</loc><lastmod>${url==='/country/italy/'?'2026-10-04':url==='/country/turkey/'?'2026-10-03':url==='/country/usa/'?'2026-10-01':url==='/country/spain/'?'2026-09-27':url==='/country/france/'?'2026-09-26':reviewed}</lastmod></url>`).join('\n')}\n</urlset>\n`);
  fs.writeFileSync(path.join(out,'robots.txt'),`User-agent: *\nAllow: /\n\nSitemap: ${origin}/sitemap.xml\n`);
  fs.writeFileSync(path.join(out,'404.html'),shell('Page Not Found','Find a destination guide or return to the world map.','/404.html','<h1>That page could not be found</h1><p>'+link('/','Open the world map')+' or '+link('/country/','browse country guides')+'.</p>').replace('index,follow,max-image-preview:large','noindex,follow').replace(/<link rel="canonical"[^>]*>/,''));
  fs.writeFileSync(path.join(out,'llms.txt'),`# GoWhereAndWhen\n\nSeasonal travel planning with an interactive map and ${guides.length} country guides. Weather values are representative-city estimates, not forecasts, snow reports, crowd or price measurements.\n\n- [Country guides](${origin}/country/)\n- [Methodology and limitations](${origin}/methodology/)\n${guides.map(r=>`- [${r.name}](${origin}/country/${r.slug}/)`).join('\n')}\n`);

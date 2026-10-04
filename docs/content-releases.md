@@ -1,5 +1,12 @@
 # Content releases
 
+## 2026-10-04: Italy city comparison (release candidate)
+
+- Existing URL: https://gowhereandwhen.com/country/italy/ . Intent: compare Italian cities by month before choosing a trip; a new child URL would overlap the country overview. Before: Rome-only score and broad national advice. After: six-city, twelve-month daytime-high and rain table, short region differences, and a clear Rome score limit. This is not a travel itinerary or a new rating model.
+- Climate: `climate/italy.json` holds complete daily-derived 2001–2020 NASA POWER / MERRA-2 highs, lows and monthly rain for Rome, Milan, Venice, Florence, Naples and Palermo, with coordinates, method and direct request URLs. Rome reuses the established series. This is gridded reanalysis, not station measurements. [Italy tourism seasons](https://www.italia.it/en/italy/seasons), [five city destinations](https://www.italia.it/en/italy/grandi-destinazioni-italiane) and [Palermo tourism](https://www.italia.it/en/sicily/palermo) support the sample choice and trip context, not a popularity rank.
+- Removed an unsupported fixed cheapest-month claim, unsourced queue and warm-sea promises, and Italy month pictographs. `docs/COPY-RULES.md` already covers these corrections; other pages remain for checked batches. Six city points do not cover Alpine conditions, every coast or sea temperature. The original Rome score uses separate weather inputs. Route depth remains a separate milestone.
+- Storybook generation, `npm run build`, `npm run check` and diff checks passed. At 320px, 390px and desktop, the page had no horizontal overflow; the table scrolls within its container on mobile. Its caption, source disclosure and navigation remained readable. The latest pre-release mobile Lighthouse run 37177307381 passed; Turkey scored 66 performance and 100 accessibility/best practices/SEO, while the home page scored 36 performance with a slow map. This is a lab report, not field data. Deployment, live URL and Italy Lighthouse follow publication. No paid API/cloud generation or pilot activation. Local Sol token and dollar usage are not exposed.
+
 ## 2026-10-03: Turkey regional comparison (published)
 
 - Existing URL: https://gowhereandwhen.com/country/turkey/ . Intent: choose a Turkish region and month; a second URL would overlap the country overview. Before: Istanbul weather score and broad regional prose. After: a four-city, twelve-month high/rain comparison for Antalya, İzmir, Nevşehir and Trabzon, with the Istanbul score limit beside it. No route or child URL is claimed.

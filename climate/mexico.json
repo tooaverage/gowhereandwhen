@@ -1,0 +1,302 @@
+[
+  {
+    "name": "Mexico City",
+    "iso": 484,
+    "lat": 19.4326,
+    "lng": -99.1332,
+    "hi": [
+      19.1,
+      21.5,
+      23.7,
+      25.9,
+      25.8,
+      23.3,
+      21.3,
+      21.1,
+      20.2,
+      20.0,
+      19.5,
+      19.3
+    ],
+    "lo": [
+      4.1,
+      5.1,
+      6.4,
+      8.6,
+      10.1,
+      10.5,
+      10.0,
+      9.9,
+      9.6,
+      7.8,
+      5.7,
+      4.7
+    ],
+    "pr": [
+      8.9,
+      11.6,
+      15.2,
+      22.0,
+      55.2,
+      135.4,
+      153.9,
+      153.5,
+      148.1,
+      64.1,
+      19.3,
+      5.6
+    ],
+    "source": {
+      "provider": "NASA POWER / MERRA-2",
+      "period": "2001-2020",
+      "url": "https://power.larc.nasa.gov/api/temporal/daily/point?parameters=T2M_MAX,T2M_MIN,PRECTOTCORR&community=AG&longitude=-99.1332&latitude=19.4326&start=20010101&end=20201231&format=JSON",
+      "method": "Monthly mean of daily highs and lows; mean monthly precipitation total across 20 complete years. Gridded reanalysis, not a city weather station.",
+      "retrieved": "2026-10-05"
+    },
+    "units": {
+      "hi": "degrees C, mean daily high",
+      "lo": "degrees C, mean daily low",
+      "pr": "mm, mean monthly total"
+    }
+  },
+  {
+    "name": "Cancun",
+    "iso": 484,
+    "lat": 21.1619,
+    "lng": -86.8515,
+    "hi": [
+      26.4,
+      27.3,
+      28.2,
+      29.6,
+      30.4,
+      29.7,
+      30.1,
+      30.5,
+      30.0,
+      28.8,
+      27.4,
+      26.9
+    ],
+    "lo": [
+      22.0,
+      22.5,
+      23.0,
+      24.2,
+      25.5,
+      26.2,
+      26.4,
+      26.7,
+      26.5,
+      25.6,
+      23.8,
+      23.0
+    ],
+    "pr": [
+      62.6,
+      50.8,
+      37.7,
+      40.9,
+      92.3,
+      180.5,
+      89.1,
+      114.3,
+      165.6,
+      223.9,
+      124.2,
+      67.7
+    ],
+    "source": {
+      "provider": "NASA POWER / MERRA-2",
+      "period": "2001-2020",
+      "url": "https://power.larc.nasa.gov/api/temporal/daily/point?parameters=T2M_MAX,T2M_MIN,PRECTOTCORR&community=AG&longitude=-86.8515&latitude=21.1619&start=20010101&end=20201231&format=JSON",
+      "method": "Monthly mean of daily highs and lows; mean monthly precipitation total across 20 complete years. Gridded reanalysis, not a city weather station.",
+      "retrieved": "2026-10-05"
+    },
+    "units": {
+      "hi": "degrees C, mean daily high",
+      "lo": "degrees C, mean daily low",
+      "pr": "mm, mean monthly total"
+    }
+  },
+  {
+    "name": "Oaxaca",
+    "iso": 484,
+    "lat": 17.0732,
+    "lng": -96.7266,
+    "hi": [
+      22.7,
+      25.6,
+      27.8,
+      29.5,
+      27.8,
+      24.0,
+      22.7,
+      22.8,
+      22.0,
+      21.6,
+      21.2,
+      22.2
+    ],
+    "lo": [
+      7.5,
+      8.6,
+      10.2,
+      12.5,
+      13.7,
+      13.6,
+      12.9,
+      12.9,
+      13.0,
+      11.5,
+      9.0,
+      8.1
+    ],
+    "pr": [
+      7.4,
+      6.3,
+      12.7,
+      32.0,
+      72.7,
+      198.1,
+      151.3,
+      169.3,
+      203.3,
+      100.0,
+      18.2,
+      7.8
+    ],
+    "source": {
+      "provider": "NASA POWER / MERRA-2",
+      "period": "2001-2020",
+      "url": "https://power.larc.nasa.gov/api/temporal/daily/point?parameters=T2M_MAX,T2M_MIN,PRECTOTCORR&community=AG&longitude=-96.7266&latitude=17.0732&start=20010101&end=20201231&format=JSON",
+      "method": "Monthly mean of daily highs and lows; mean monthly precipitation total across 20 complete years. Gridded reanalysis, not a city weather station.",
+      "retrieved": "2026-10-05"
+    },
+    "units": {
+      "hi": "degrees C, mean daily high",
+      "lo": "degrees C, mean daily low",
+      "pr": "mm, mean monthly total"
+    }
+  },
+  {
+    "name": "Puerto Vallarta",
+    "iso": 484,
+    "lat": 20.6534,
+    "lng": -105.2253,
+    "hi": [
+      26.3,
+      27.7,
+      29.8,
+      31.8,
+      33.0,
+      30.9,
+      28.0,
+      27.6,
+      27.2,
+      27.7,
+      27.2,
+      26.1
+    ],
+    "lo": [
+      14.8,
+      15.1,
+      15.9,
+      17.5,
+      19.5,
+      21.0,
+      21.0,
+      21.1,
+      20.9,
+      19.8,
+      17.1,
+      15.2
+    ],
+    "pr": [
+      16.0,
+      24.5,
+      12.3,
+      0.7,
+      10.1,
+      155.3,
+      317.5,
+      342.5,
+      333.9,
+      130.6,
+      26.6,
+      17.4
+    ],
+    "source": {
+      "provider": "NASA POWER / MERRA-2",
+      "period": "2001-2020",
+      "url": "https://power.larc.nasa.gov/api/temporal/daily/point?parameters=T2M_MAX,T2M_MIN,PRECTOTCORR&community=AG&longitude=-105.2253&latitude=20.6534&start=20010101&end=20201231&format=JSON",
+      "method": "Monthly mean of daily highs and lows; mean monthly precipitation total across 20 complete years. Gridded reanalysis, not a city weather station.",
+      "retrieved": "2026-10-05"
+    },
+    "units": {
+      "hi": "degrees C, mean daily high",
+      "lo": "degrees C, mean daily low",
+      "pr": "mm, mean monthly total"
+    }
+  },
+  {
+    "name": "Cabo San Lucas",
+    "iso": 484,
+    "lat": 22.8905,
+    "lng": -109.9167,
+    "hi": [
+      24.4,
+      24.4,
+      25.3,
+      26.0,
+      27.2,
+      28.5,
+      30.4,
+      30.9,
+      30.3,
+      30.1,
+      28.0,
+      25.1
+    ],
+    "lo": [
+      18.6,
+      18.0,
+      18.3,
+      19.0,
+      19.8,
+      21.7,
+      25.2,
+      26.5,
+      26.4,
+      25.1,
+      22.7,
+      19.7
+    ],
+    "pr": [
+      9.3,
+      10.9,
+      2.7,
+      2.1,
+      0.6,
+      2.9,
+      18.8,
+      59.6,
+      99.3,
+      25.8,
+      18.1,
+      10.7
+    ],
+    "source": {
+      "provider": "NASA POWER / MERRA-2",
+      "period": "2001-2020",
+      "url": "https://power.larc.nasa.gov/api/temporal/daily/point?parameters=T2M_MAX,T2M_MIN,PRECTOTCORR&community=AG&longitude=-109.9167&latitude=22.8905&start=20010101&end=20201231&format=JSON",
+      "method": "Monthly mean of daily highs and lows; mean monthly precipitation total across 20 complete years. Gridded reanalysis, not a city weather station.",
+      "retrieved": "2026-10-05"
+    },
+    "units": {
+      "hi": "degrees C, mean daily high",
+      "lo": "degrees C, mean daily low",
+      "pr": "mm, mean monthly total"
+    }
+  }
+]

@@ -50,4 +50,18 @@ for(const city of require('../climate/italy.json')){
  assert.equal(city.source.period,'2001-2020');
  for(const key of ['hi','lo','pr'])assert.equal(city[key].length,12,city.name+' '+key);
 }
+const mexico=read(path.join(root,'country/mexico/index.html'));
+const mexicoSection=mexico.match(/<section class="guide-section" id="regions">([\s\S]*?)<\/section>/)?.[1];
+assert(mexicoSection,'Mexico regional table missing');
+assert.equal((mexicoSection.match(/<tr>/g)||[]).length,13,'Mexico table has header and twelve months');
+assert(mexico.includes('The score above uses Mexico City.')&&mexico.includes('Storm dates show a season, not a local forecast.'),'Mexico score and storm limits');
+assert(!mexico.includes('The quietest, cheapest stretch of the year.')&&!/[✿☀🌷]/u.test(mexico),'Mexico copy and pictographs');
+for(const city of require('../climate/mexico.json')){
+ assert(mexicoSection.includes(city.name)&&mexicoSection.includes(city.source.url.replaceAll('&','&amp;')),city.name+' source visible');
+ assert.equal(city.source.period,'2001-2020');
+ assert(city.lat>14&&city.lat<33&&city.lng> -118&&city.lng< -86,city.name+' inside Mexico bounds');
+ assert(city.units?.hi?.includes('degrees C')&&city.units?.pr?.includes('mm'),city.name+' units recorded');
+ for(const key of ['hi','lo','pr'])assert.equal(city[key].length,12,city.name+' '+key);
+ for(let m=0;m<12;m++)assert(city.hi[m]>=city.lo[m]&&city.hi[m]<50&&city.lo[m]>-20&&city.pr[m]>=0&&city.pr[m]<1000,city.name+' plausible month '+m);
+}
 console.log('Passed: 89 canonical pages, unique metadata, crawlable internal links/assets/fragments, schema JSON, archive noindex, 404 and retained island/booking surfaces.');

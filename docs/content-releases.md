@@ -1,5 +1,13 @@
 # Content releases
 
+## 2026-10-05: Mexico city comparison (release candidate)
+
+- Existing URL: https://gowhereandwhen.com/country/mexico/ . No child page: the regional month question belongs in the country overview. Before: a Mexico City score and a countrywide dry-season claim, with unsupported price advice. After: a five-city, twelve-month high/rain comparison, region-first copy, both hurricane-basin dates and an explicit Mexico City score limit. No new route or recommendation model.
+- `climate/mexico.json` stores complete 2001–2020 daily-derived NASA POWER / MERRA-2 highs, lows and monthly rain for Mexico City, Cancun, Oaxaca, Puerto Vallarta and Cabo San Lucas, plus coordinates, direct request URLs, units and method. This gridded estimate does not measure every beach or mountain. The existing Mexico City score uses different input data. [Visit Mexico climate guidance](https://visitmexico.com/en/pagina/clima), [Visit Mexico Day of the Dead guidance](https://visitmexico.com/en/recomendacion/40/day-of-the-dead-a-journey-to-the-heart-of-mexico) and [NOAA hurricane climatology](https://www.nhc.noaa.gov/climo/) support the regional copy, event and storm dates.
+- Removed the Mexico month pictographs and fixed broad cheapest-month and countrywide-season claims. The maintained copy rules already require labelled icons and no emoji; remaining pages await checked batches. No complete national coverage or travel itinerary is claimed.
+- Storybook regeneration, public build/check and diff checks passed. Local 320px, 390px and 1280px guide views had no page overflow; the table scrolls within its container on mobile. The homepage had no page overflow at those widths. Latest pre-release Lighthouse report (Italy follow-up 37216916296) scored home 36, France 66, Japan 68, Spain 65, USA 67, Turkey 66 and Italy 67 performance. Italy's accessibility/best practices/SEO scored 100. Mexico audit and live deployment remain pending.
+- Monday Search Console evidence, hypothesis and marketing pack are recorded separately. No paid API/cloud generation, API pilot activation or spend. Local account-allowance token use and dollar cost were not exposed. Guide inventory remains 74/202; next arrival-priority country is the UK after publication.
+
 ## 2026-10-04: Italy city comparison (published)
 
 - Existing URL: https://gowhereandwhen.com/country/italy/ . Intent: compare Italian cities by month before choosing a trip; a new child URL would overlap the country overview. Before: Rome-only score and broad national advice. After: six-city, twelve-month daytime-high and rain table, short region differences, and a clear Rome score limit. This is not a travel itinerary or a new rating model.

@@ -15,3 +15,7 @@ Sources:
 - https://developers.google.com/search/docs/fundamentals/creating-helpful-content
 - https://developers.google.com/search/docs/crawling-indexing/canonicalization
 - https://developers.google.com/search/docs/essentials/spam-policies
+
+## 2026-10-05: Mexico guide hypothesis
+
+Search Console access is verified. The site has little search traffic so far; private figures and page rows are in `../private-marketing/2026-10-05-mexico-pack.md`. Hypothesis: a sourced five-city month comparison on the existing Mexico guide may help readers choose between the highlands, Caribbean, Pacific coast and Baja. Change date: 5 October 2026. Review no earlier than 2 November, using completed 28-day periods and page/query evidence. Mark the result inconclusive if impressions remain sparse; do not infer causation from a small change. Google's current [helpful-content guidance](https://developers.google.com/search/docs/fundamentals/creating-helpful-content) favours answers made for readers; its [Search Console comparison guidance](https://developers.google.com/search/docs/monitor-debug/debugging-search-traffic-drops) calls for comparable periods and seasonality checks. No separate Mexico URL was added.

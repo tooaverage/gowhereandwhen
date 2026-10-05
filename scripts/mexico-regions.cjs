@@ -1,0 +1,12 @@
+const cities = require('../climate/mexico.json');
+const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const esc = value => String(value).replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
+
+module.exports = function mexicoRegions(){
+ for(const city of cities){
+  if(!Number.isFinite(city.lat)||!Number.isFinite(city.lng)||!city.source?.url||!['hi','lo','pr'].every(key=>city[key]?.length===12&&city[key].every(Number.isFinite)))throw Error('Mexico climate missing: '+city.name);
+  for(let m=0;m<12;m++)if(city.hi[m]<city.lo[m]||city.pr[m]<0)throw Error('Mexico climate invalid: '+city.name+' '+m);
+ }
+ const rows=months.map((month,m)=>`<tr><th scope="row">${month}</th>${cities.map(city=>`<td>${Math.round(city.hi[m])}°C<br><small>${Math.round(city.pr[m])} mm rain</small></td>`).join('')}</tr>`).join('');
+ return `<section class="guide-section" id="regions"><div class="wrap"><h2>Mexico weather, city by city</h2><p>The score above uses Mexico City. Compare four other places before you choose a month.</p><p class="disc">Swipe the table sideways on a small screen.</p><p id="mexico-weather-caption"><strong>Average daytime high and monthly rain, 2001–2020</strong></p><div class="table-scroll"><table class="weather-table" aria-labelledby="mexico-weather-caption"><thead><tr><th scope="col">Month</th>${cities.map(city=>`<th scope="col">${esc(city.name)}</th>`).join('')}</tr></thead><tbody>${rows}</tbody></table></div><p>July is wet in Mexico City and Puerto Vallarta. Cancun is wettest in October. Cabo San Lucas stays much drier.</p><p>These city estimates cannot describe mountains, every coast or sea conditions. Storm dates show a season, not a local forecast.</p><details class="guide-sources"><summary>Sources and weather notes</summary><p>NASA POWER / MERRA-2 estimates use daily data from 2001–2020. Highs are average daily highs; rain is the average monthly total. This is gridded climate data, not station readings or a forecast. The Mexico City score above uses a separate weather input.</p><p>${cities.map(city=>`<a href="${esc(city.source.url)}">${esc(city.name)} data</a>`).join(' · ')} · <a href="https://visitmexico.com/en/pagina/clima">Visit Mexico climate guide</a> · <a href="https://www.nhc.noaa.gov/climo/">NOAA hurricane seasons</a> · <a href="https://visitmexico.com/en/recomendacion/40/day-of-the-dead-a-journey-to-the-heart-of-mexico">Day of the Dead regional guide</a> · Checked October 2026</p></details></div></section>`;
+};

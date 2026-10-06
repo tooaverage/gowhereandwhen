@@ -1,11 +1,12 @@
 # Content releases
 
-## 2026-10-06: UK four-nation weather comparison (release candidate)
+## 2026-10-06: UK four-nation weather comparison (published)
 
 - Existing URL: https://gowhereandwhen.com/country/uk/ . No child page: choosing a month across UK regions belongs in the country overview. Before: London weather score and a broad April–June/September recommendation. After: four Met Office station comparisons for London (Heathrow), Edinburgh, Cardiff and Belfast, with twelve monthly average highs and rain totals. The London score remains separate and is not a UK-wide rating.
 - Source: UK Met Office 1991–2020 station normals, with four direct source links and coordinates in `climate/uk.json`. VisitBritain supports the general summer outdoor context. These stations do not cover Highlands, coasts or every town; no route or new recommendation model is claimed.
 - Removed unsupported cheapest-month advice and the UK's decorative month pictographs. The no-emoji rule was already in `docs/COPY-RULES.md`; other pages remain for checked batches. The four-city table gives local contrasts without changing existing climate scores.
-- Storybook generation, build, repository checks and diff checks passed. Rendered table reviewed at 320, 390 and 1280px: mobile table scrolls inside its container; no page overflow. Latest pre-release Lighthouse run 37352108992: home 37 performance/17.2s LCP, France 68, Japan 59, Mexico 69; accessibility, best practices and SEO 100 for all. Home map remains a known performance gap. Deployment, live verification and new UK Lighthouse: pending.
+- Storybook generation, build, repository checks and diff checks passed. Rendered table reviewed at 320, 390 and 1280px: mobile table scrolls inside its container; no page overflow. Published commit `49ead74` through Pages run 37506701288. Live page and sitemap returned 200; live 390px view showed four stations, twelve rows and no page overflow or UK pictograph.
+- Post-release Lighthouse run 37506850552 passed in 14m38s, close to its 15-minute timeout. UK: performance 67, accessibility 100, best practices 100, SEO 100, LCP 1.4s. Home 63, France 38, Japan 43 and USA 38 performance in this single run. France/USA had 17.0s LCP, while the previous run showed the home page at 17.2s. This variability needs separate repeat evidence; do not attribute it to the UK table or claim the performance floor is met.
 - No paid API/cloud generation or C$25 pilot activation. Local account-allowance token and dollar usage unavailable. Existing guide inventory remains 74/202; next arrivals-priority guide after this release: Germany's established guide, while its new recommendation preview stays unpublished pending owner review.
 
 ## 2026-10-05: Mexico city comparison (published)

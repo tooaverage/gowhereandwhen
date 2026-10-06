@@ -47,7 +47,7 @@ module.exports=function enhancePublic(root,out){
  fs.writeFileSync(path.join(out,'index.html'),home);
  for(const r of guides){
   const file=path.join(out,'country',r.slug,'index.html');let html=common(fs.readFileSync(file,'utf8'));
-  const title=r.slug==='france'?'Best Time to Visit France: Paris, Riviera & Regional Weather':r.slug==='austria'?'Best Time to Visit Austria: Cities, Alps & Skiing':r.slug==='mexico'?'Best Time to Visit Mexico: Weather by City and Month':`Best Time to Visit ${r.name}: Weather by Month`;
+  const title=r.slug==='france'?'Best Time to Visit France: Paris, Riviera & Regional Weather':r.slug==='austria'?'Best Time to Visit Austria: Cities, Alps & Skiing':r.slug==='mexico'?'Best Time to Visit Mexico: Weather by City and Month':r.slug==='uk'?'Best Time to Visit the UK: Weather by City and Month':`Best Time to Visit ${r.name}: Weather by Month`;
   html=html.replace(/<title>.*?<\/title>/,`<title>${esc(title)} | GoWhereAndWhen</title>`);
   html=html.replace('Find your best time to visit','Best time to visit');
   html=html.replace(/(<div class="guide-intro">[\s\S]*?<\/div>)/,`$1<p class="rating-context">Weather scores use ${esc(r.city)} as a reference. They are not forecasts or measures of snow, prices or crowds. ${link('/methodology/','How to use these ratings')}</p>`);
@@ -126,6 +126,12 @@ module.exports=function enhancePublic(root,out){
    html=html.replace('Spring, April to June, and September to October, when the weather is warm and dry and the crowds are lighter than in high summer.','Compare spring and autumn for city walks. The best month depends on where you go.');
    html=html.replace(/"dateModified":"[^" ]+"/g,'"dateModified":"2026-10-04"');
   }
+  if(r.slug==='uk'){
+   html=html.replace('<section class="guide-section" id="months">',require('./uk-regions.cjs')()+'<section class="guide-section" id="months">');
+   html=html.replace('<a href="#months">By month</a>','<a href="#regions">Cities</a><a href="#months">Months</a>');
+   html=html.replace('The quietest, cheapest stretch of the year.','Compare prices for your dates. Weather cannot show the cheapest month.');
+   html=html.replace(/"dateModified":"[^" ]+"/g,'"dateModified":"2026-10-06"');
+  }
   if(r.slug==='mexico'){
    html=html.replace('<section class="guide-section" id="months">',require('./mexico-regions.cjs')()+'<section class="guide-section" id="months">');
    html=html.replace('<a href="#months">By month</a>','<a href="#regions">Cities</a><a href="#months">Months</a>');
@@ -159,7 +165,7 @@ module.exports=function enhancePublic(root,out){
  save('/methodology/',shell('How Our Travel Weather Ratings Work','Understand GoWhereAndWhen weather scores, source limitations, regional differences and the editorial approach behind the country guides.','/methodology/',fs.readFileSync(path.join(root,'scripts/methodology.html'),'utf8')));
  const urls=['/','/country/',...guides.map(r=>'/country/'+r.slug+'/'),...months.map(m=>'/when/'+m.toLowerCase()+'/'),'/methodology/'];
  require('./add-analytics.cjs')(root,out,urls);
- fs.writeFileSync(path.join(out,'sitemap.xml'),`<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.map(url=>`  <url><loc>${origin+url}</loc><lastmod>${url==='/country/mexico/'?'2026-10-05':url==='/country/italy/'?'2026-10-04':url==='/country/turkey/'?'2026-10-03':url==='/country/usa/'?'2026-10-01':url==='/country/spain/'?'2026-09-27':url==='/country/france/'?'2026-09-26':reviewed}</lastmod></url>`).join('\n')}\n</urlset>\n`);
+ fs.writeFileSync(path.join(out,'sitemap.xml'),`<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.map(url=>`  <url><loc>${origin+url}</loc><lastmod>${url==='/country/uk/'?'2026-10-06':url==='/country/mexico/'?'2026-10-05':url==='/country/italy/'?'2026-10-04':url==='/country/turkey/'?'2026-10-03':url==='/country/usa/'?'2026-10-01':url==='/country/spain/'?'2026-09-27':url==='/country/france/'?'2026-09-26':reviewed}</lastmod></url>`).join('\n')}\n</urlset>\n`);
  fs.writeFileSync(path.join(out,'robots.txt'),`User-agent: *\nAllow: /\n\nSitemap: ${origin}/sitemap.xml\n`);
  fs.writeFileSync(path.join(out,'404.html'),shell('Page Not Found','Find a destination guide or return to the world map.','/404.html','<h1>That page could not be found</h1><p>'+link('/','Open the world map')+' or '+link('/country/','browse country guides')+'.</p>').replace('index,follow,max-image-preview:large','noindex,follow').replace(/<link rel="canonical"[^>]*>/,''));
  fs.writeFileSync(path.join(out,'llms.txt'),`# GoWhereAndWhen\n\nSeasonal travel planning with an interactive map and ${guides.length} country guides. Weather values are representative-city estimates, not forecasts, snow reports, crowd or price measurements.\n\n- [Country guides](${origin}/country/)\n- [Methodology and limitations](${origin}/methodology/)\n${guides.map(r=>`- [${r.name}](${origin}/country/${r.slug}/)`).join('\n')}\n`);

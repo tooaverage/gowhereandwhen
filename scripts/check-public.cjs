@@ -51,6 +51,18 @@ for(const city of require('../climate/italy.json')){
  for(const key of ['hi','lo','pr'])assert.equal(city[key].length,12,city.name+' '+key);
 }
 const mexico=read(path.join(root,'country/mexico/index.html'));
+const uk=read(path.join(root,'country/uk/index.html'));
+const ukSection=uk.match(/<section class="guide-section" id="regions">([\s\S]*?)<\/section>/)?.[1];
+assert(ukSection,'UK regional table missing');
+assert.equal((ukSection.match(/<tr>/g)||[]).length,13,'UK table has header and twelve months');
+assert(uk.includes('The score above uses London.')&&ukSection.includes('cannot describe the Highlands'),'UK score and coverage limits');
+for(const city of require('../climate/uk.json')){
+ assert(ukSection.includes(city.name)&&ukSection.includes(city.source.url.replaceAll('&','&amp;')),city.name+' source visible');
+ assert.equal(city.source.period,'1991–2020');
+ assert(city.lat>50&&city.lat<56.5&&city.lng> -6.5&&city.lng<0,city.name+' plausible UK coordinates');
+ for(const key of ['hi','lo','pr'])assert.equal(city[key].length,12,city.name+' '+key);
+ for(let m=0;m<12;m++)assert(city.hi[m]>=city.lo[m]&&city.hi[m]<40&&city.lo[m]>-20&&city.pr[m]>=0&&city.pr[m]<500,city.name+' plausible month '+m);
+}
 const mexicoSection=mexico.match(/<section class="guide-section" id="regions">([\s\S]*?)<\/section>/)?.[1];
 assert(mexicoSection,'Mexico regional table missing');
 assert.equal((mexicoSection.match(/<tr>/g)||[]).length,13,'Mexico table has header and twelve months');

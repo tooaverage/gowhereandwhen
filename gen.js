@@ -234,15 +234,16 @@ function page(c) {
   </div></section>
 
   <section class="section--tight"><div class="wrap"><div class="stubs">
-    ${stub('Best months', 'ideal', D.high, 'The steadiest weather, peaking around ' + MON[D.best] + '.')}
-    ${stub('Shoulder', 'good', D.shoulder, 'Either side of peak, with thinner crowds and better rates.')}
-    ${stub('Low season', 'fair', D.low, lowReason)}
+    ${c.slug === 'japan' ? stub('Tokyo: higher scores', 'ideal', D.high, 'Weather comfort only. Check your region and activity.') : stub('Best months', 'ideal', D.high, 'The steadiest weather, peaking around ' + MON[D.best] + '.')}
+    ${c.slug === 'japan' ? stub('Tokyo: other months', 'good', D.shoulder, 'Check local weather, holidays and rates.') : stub('Shoulder', 'good', D.shoulder, 'Either side of peak, with thinner crowds and better rates.')}
+    ${c.slug === 'japan' ? stub('Tokyo: lower scores', 'fair', D.low, 'A low Tokyo score can still suit trips elsewhere.') : stub('Low season', 'fair', D.low, lowReason)}
   </div></div></section>
 
   <section class="section band"><div class="wrap prose">
     <p class="eyebrow eyebrow--coral"><i data-lucide="cloud-sun" class="ic"></i> In short</p>
     <h2 style="margin-top:14px">The year at a glance</h2>
     ${c.intro.map(p => '<p>' + p + '</p>').join('\n    ')}
+    ${c.sources ? '<details class="guide-sources"><summary>Sources for Japan’s seasons</summary><ul>' + c.sources.map(s => '<li><a href="' + esc(s.url) + '">' + esc(s.label) + '</a></li>').join('') + '</ul></details>' : ''}
     <div class="grid grid--4" style="margin-top:24px">
       <div class="card stat"><div class="n">${MON[D.best]}</div><div class="k">Best month</div></div>
       <div class="card stat"><div class="n">${rec.hi[D.warm]}&deg;C</div><div class="k">Warmest, ${MON[D.warm]}</div></div>

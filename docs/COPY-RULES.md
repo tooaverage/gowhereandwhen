@@ -35,6 +35,7 @@ For AI search, offer useful maps, local comparisons and sourced facts. Measure r
 | Sources and methods | Accessible disclosure with links, dates and key limits |
 
 Reuse Japan's shared city-map and itinerary components and the site design system. Use Lucide SVG icons consistently. No emojis anywhere in site copy or UI. Do not use Unicode weather symbols as icon substitutes. Decorative icons beside a text label are hidden from screen readers. Icon-only controls need an accessible name. Colour is never the only signal.
+Check the rendered page after month selection: runtime code can replace a source SVG with a Unicode pictograph.
 
 ## Length targets
 
@@ -123,6 +124,7 @@ Treat corrections as evidence. Do not defend stylistic habits. Flag a conflict w
 - **2026-09-26, SEO priority:** “if we need them for SEO then add the words”. Add useful answers and distinct local detail, never filler to meet a word count. Keep explanations concise and jargon-free. Proposed interpretation: word limits are targets with documented accuracy/usefulness exceptions.
 
 - **2026-09-26, all site copy and UI:** “no emojis!!” Use labelled Lucide SVG icons. Decorative icons beside labels are hidden from screen readers. Check changed pages for emoji and Unicode pictographs before publishing.
+- **2026-10-07, Japan checked page:** The month script replaced source icons with pictographs. Remove them in the checked Japan batch and inspect the rendered controls. Other guides remain for later checked batches.
 
 - **2026-09-26, source notes and footer:** Avoid scientific phrasing such as “gridded climate averages”, “reference dataset” and “climate normals”. Use plain words such as “past weather averages”. Keep the source name, years and material differences in a short source disclosure. Do not repeat the full method in the footer.
 - **2026-09-26, shared UI:** Month panels need closed rounded borders and score badges that stay in place when opened. Footer groups need clear spacing. Icons should feel round and playful through SVG strokes and soft backgrounds, never emojis.

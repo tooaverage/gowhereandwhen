@@ -1,5 +1,12 @@
 # Content releases
 
+## 2026-10-07: Japan regional timing correction (checked candidate, unpublished)
+
+- Existing URL: https://gowhereandwhen.com/country/japan/ . No child URL: regional timing questions belong in the country overview. Before: Tokyo weather advice applied to all Japan, a blanket August–October avoid claim, unsupported cheapest-month advice and runtime pictographs. After: short region-first guidance, Tokyo-labelled weather windows and top score, sourced regional rain/typhoon notes, an accessible source disclosure and no Japan month pictographs. The established itinerary retains all four lengths; its unsupported rail-pass statement was removed and its map is labelled Travel itinerary.
+- Sources: [JNTO regional weather](https://www.japan.travel/en/plan/weather/), [JNTO seasons and climate](https://www.japan.travel/national-parks/plan-your-visit/seasons-and-climate/), [JNTO June rains](https://www.japan.travel/en/guide/june/) and [JMA typhoon climatology](https://www.jma.go.jp/jma/kishou/know/typhoon/1-4.html). Existing city weather estimates and fixed comfort scores are unchanged. Eight of ten city records still lack attached source metadata; this update does not claim full national climate validation or new route coverage.
+- Generator, Storybook, build and repository checks passed. Local 320px, 390px and 1280px review found no page overflow; the city table scrolls internally at 320px. The source disclosure opens with four links. All 3/7/14/30-day route selectors showed the expected 2/6/13/29 nights and stop counts. The no-emoji copy rule is recorded in `docs/COPY-RULES.md`; other guides remain for checked batches.
+- Publication and live checks are pending. No new URL is live from this candidate. Last available Lighthouse report is run 37506850552: Japan performance 43, accessibility/best practices/SEO 100, one simulated-mobile run; this is not an audit of the candidate. No paid API/cloud generation, no C$25 pilot activation or spend. Local account-allowance token and dollar usage unavailable. Guide inventory remains 74/202.
+
 ## 2026-10-06: UK four-nation weather comparison (published)
 
 - Existing URL: https://gowhereandwhen.com/country/uk/ . No child page: choosing a month across UK regions belongs in the country overview. Before: London weather score and a broad April–June/September recommendation. After: four Met Office station comparisons for London (Heathrow), Edinburgh, Cardiff and Belfast, with twelve monthly average highs and rain totals. The London score remains separate and is not a UK-wide rating.

@@ -164,7 +164,7 @@ const PLACES = {
       title: 'The Golden Route, Tokyo to Hiroshima',
       length: '14 days, by shinkansen',
       onward: 'Shinkansen onward',
-      lead: 'Tokyo, a night in Hakone under Fuji, then the shinkansen west to Kyoto, Nara, Osaka and Hiroshima with Miyajima. Three days each in Tokyo and Kyoto beat adding more cities. A 14-day rail pass or point-to-point tickets both work.',
+      lead: 'Start in Tokyo, then visit Hakone, Kyoto, Nara, Osaka and Hiroshima. Check each train leg and compare ticket options for your dates.',
       stops: [
         { name: 'Tokyo', lat: 35.68, lng: 139.69, tier: 3, nights: 4, p: 'Shibuya, Shinjuku, Asakusa and Akihabara. Day trip to Kamakura or Nikko if you have a spare day.' },
         { name: 'Hakone', lat: 35.23, lng: 139.10, tier: 14, nights: 1, via: 'Train, 1.5 hours', off: [16, 34], p: 'Hot springs, the ropeway and Mount Fuji across Lake Ashi on a clear day.' },

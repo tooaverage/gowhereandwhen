@@ -174,7 +174,7 @@ function routeSection(c) {
   if (!geo) return '';
   const R = P.route;
   const pr = projector(geo, 600);
-  let svg = svgOpen(pr, c.name + ' backpacker route map') + landPath(geo, pr) + '<polyline class="leg" id="rt-line" points=""/>';
+  let svg = svgOpen(pr, c.name + (c.slug === 'japan' ? ' travel itinerary map' : ' backpacker route map')) + landPath(geo, pr) + '<polyline class="leg" id="rt-line" points=""/>';
   R.stops.forEach((s, i) => {
     const on = inClip(s.lng, s.lat, P.clip);
     const [x, y] = on ? pr.fn(s.lng, s.lat) : [0, 0];
@@ -200,7 +200,7 @@ function routeSection(c) {
 
   return `
   <section class="section band" id="route"><div class="wrap">
-    <p class="eyebrow eyebrow--coral"><i data-lucide="route" class="ic"></i> Backpacker route</p>
+    <p class="eyebrow eyebrow--coral"><i data-lucide="route" class="ic"></i> ${c.slug === 'japan' ? 'Travel itinerary' : 'Backpacker route'}</p>
     <h2 style="margin-top:14px">${esc(R.title)}</h2>
     <p class="lead" style="margin:12px 0 20px">${esc(R.lead)}</p>
     <div class="row" style="gap:14px; margin-bottom:18px"><span class="eyebrow eyebrow--sun">How long have you got?</span><div class="mpick" id="rpick" role="tablist" aria-label="Trip length">${chips}</div></div>

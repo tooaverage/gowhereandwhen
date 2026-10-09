@@ -1,0 +1,422 @@
+[
+  {
+    "name": "Beijing",
+    "iso": 156,
+    "lat": 39.9042,
+    "lng": 116.4074,
+    "units": {
+      "hi": "degrees C, mean daily high",
+      "lo": "degrees C, mean daily low",
+      "pr": "mm per calendar month"
+    },
+    "hi": [
+      1.5,
+      5.2,
+      13.4,
+      21.7,
+      28.7,
+      31.9,
+      32.5,
+      30.8,
+      26.6,
+      19.4,
+      9.9,
+      2.3
+    ],
+    "lo": [
+      -10.2,
+      -7.0,
+      -1.7,
+      5.2,
+      12.5,
+      17.9,
+      21.0,
+      19.6,
+      13.7,
+      5.7,
+      -2.1,
+      -8.5
+    ],
+    "pr": [
+      2.0,
+      5.7,
+      9.1,
+      23.8,
+      38.5,
+      84.1,
+      151.4,
+      108.5,
+      63.9,
+      29.9,
+      14.2,
+      2.0
+    ],
+    "source": {
+      "provider": "NASA POWER / MERRA-2",
+      "period": "2001-2020",
+      "url": "https://power.larc.nasa.gov/api/temporal/daily/point?parameters=T2M_MAX,T2M_MIN,PRECTOTCORR&community=AG&longitude=116.4074&latitude=39.9042&start=20010101&end=20201231&format=JSON",
+      "method": "Monthly mean of daily highs and lows; mean monthly precipitation total across 20 complete years. Gridded reanalysis, not a city weather station.",
+      "retrieved": "2026-10-09"
+    }
+  },
+  {
+    "name": "Shanghai",
+    "iso": 156,
+    "lat": 31.2304,
+    "lng": 121.4737,
+    "units": {
+      "hi": "degrees C, mean daily high",
+      "lo": "degrees C, mean daily low",
+      "pr": "mm per calendar month"
+    },
+    "hi": [
+      8.4,
+      10.4,
+      14.7,
+      20.3,
+      25.4,
+      28.4,
+      32.0,
+      31.9,
+      28.2,
+      23.4,
+      17.7,
+      10.8
+    ],
+    "lo": [
+      1.1,
+      2.4,
+      5.6,
+      10.8,
+      16.5,
+      21.1,
+      25.5,
+      25.7,
+      21.6,
+      15.9,
+      10.0,
+      3.1
+    ],
+    "pr": [
+      67.1,
+      78.1,
+      87.8,
+      95.1,
+      104.6,
+      195.2,
+      147.6,
+      172.6,
+      136.4,
+      76.9,
+      71.1,
+      53.1
+    ],
+    "source": {
+      "provider": "NASA POWER / MERRA-2",
+      "period": "2001-2020",
+      "url": "https://power.larc.nasa.gov/api/temporal/daily/point?parameters=T2M_MAX,T2M_MIN,PRECTOTCORR&community=AG&longitude=121.4737&latitude=31.2304&start=20010101&end=20201231&format=JSON",
+      "method": "Monthly mean of daily highs and lows; mean monthly precipitation total across 20 complete years. Gridded reanalysis, not a city weather station.",
+      "retrieved": "2026-10-09"
+    }
+  },
+  {
+    "name": "Xi'an",
+    "iso": 156,
+    "lat": 34.3416,
+    "lng": 108.9398,
+    "units": {
+      "hi": "degrees C, mean daily high",
+      "lo": "degrees C, mean daily low",
+      "pr": "mm per calendar month"
+    },
+    "hi": [
+      5.7,
+      10.2,
+      17.1,
+      23.7,
+      28.4,
+      32.6,
+      33.5,
+      32.0,
+      26.2,
+      20.6,
+      13.8,
+      7.0
+    ],
+    "lo": [
+      -3.9,
+      -1.2,
+      3.3,
+      9.2,
+      14.3,
+      19.3,
+      21.8,
+      20.8,
+      15.6,
+      9.5,
+      2.4,
+      -2.9
+    ],
+    "pr": [
+      8.6,
+      13.1,
+      22.6,
+      40.0,
+      69.2,
+      83.7,
+      124.1,
+      114.0,
+      124.8,
+      59.5,
+      26.8,
+      5.9
+    ],
+    "source": {
+      "provider": "NASA POWER / MERRA-2",
+      "period": "2001-2020",
+      "url": "https://power.larc.nasa.gov/api/temporal/daily/point?parameters=T2M_MAX,T2M_MIN,PRECTOTCORR&community=AG&longitude=108.9398&latitude=34.3416&start=20010101&end=20201231&format=JSON",
+      "method": "Monthly mean of daily highs and lows; mean monthly precipitation total across 20 complete years. Gridded reanalysis, not a city weather station.",
+      "retrieved": "2026-10-09"
+    }
+  },
+  {
+    "name": "Chengdu",
+    "iso": 156,
+    "lat": 30.5728,
+    "lng": 104.0668,
+    "units": {
+      "hi": "degrees C, mean daily high",
+      "lo": "degrees C, mean daily low",
+      "pr": "mm per calendar month"
+    },
+    "hi": [
+      11.4,
+      14.8,
+      20.3,
+      25.8,
+      29.6,
+      32.2,
+      32.6,
+      31.1,
+      27.4,
+      22.8,
+      17.8,
+      12.3
+    ],
+    "lo": [
+      0.7,
+      3.1,
+      8.1,
+      13.2,
+      17.4,
+      20.9,
+      23.1,
+      22.3,
+      18.5,
+      13.6,
+      7.9,
+      2.2
+    ],
+    "pr": [
+      12.2,
+      13.9,
+      32.8,
+      60.0,
+      96.1,
+      128.8,
+      224.0,
+      201.2,
+      127.4,
+      59.1,
+      23.1,
+      11.5
+    ],
+    "source": {
+      "provider": "NASA POWER / MERRA-2",
+      "period": "2001-2020",
+      "url": "https://power.larc.nasa.gov/api/temporal/daily/point?parameters=T2M_MAX,T2M_MIN,PRECTOTCORR&community=AG&longitude=104.0668&latitude=30.5728&start=20010101&end=20201231&format=JSON",
+      "method": "Monthly mean of daily highs and lows; mean monthly precipitation total across 20 complete years. Gridded reanalysis, not a city weather station.",
+      "retrieved": "2026-10-09"
+    }
+  },
+  {
+    "name": "Kunming",
+    "iso": 156,
+    "lat": 25.0389,
+    "lng": 102.7183,
+    "units": {
+      "hi": "degrees C, mean daily high",
+      "lo": "degrees C, mean daily low",
+      "pr": "mm per calendar month"
+    },
+    "hi": [
+      15.5,
+      18.2,
+      21.3,
+      24.2,
+      26.1,
+      26.8,
+      26.2,
+      26.1,
+      24.9,
+      22.0,
+      18.8,
+      15.5
+    ],
+    "lo": [
+      2.0,
+      3.6,
+      6.7,
+      10.1,
+      13.2,
+      15.9,
+      16.1,
+      15.6,
+      14.0,
+      11.1,
+      6.5,
+      3.0
+    ],
+    "pr": [
+      20.4,
+      7.9,
+      15.1,
+      28.3,
+      76.9,
+      144.4,
+      176.7,
+      154.9,
+      102.9,
+      67.8,
+      21.0,
+      12.3
+    ],
+    "source": {
+      "provider": "NASA POWER / MERRA-2",
+      "period": "2001-2020",
+      "url": "https://power.larc.nasa.gov/api/temporal/daily/point?parameters=T2M_MAX,T2M_MIN,PRECTOTCORR&community=AG&longitude=102.7183&latitude=25.0389&start=20010101&end=20201231&format=JSON",
+      "method": "Monthly mean of daily highs and lows; mean monthly precipitation total across 20 complete years. Gridded reanalysis, not a city weather station.",
+      "retrieved": "2026-10-09"
+    }
+  },
+  {
+    "name": "Guangzhou",
+    "iso": 156,
+    "lat": 23.1291,
+    "lng": 113.2644,
+    "units": {
+      "hi": "degrees C, mean daily high",
+      "lo": "degrees C, mean daily low",
+      "pr": "mm per calendar month"
+    },
+    "hi": [
+      20.5,
+      23.2,
+      26.1,
+      29.1,
+      30.7,
+      31.0,
+      31.7,
+      31.7,
+      30.8,
+      29.0,
+      26.3,
+      21.5
+    ],
+    "lo": [
+      8.8,
+      11.7,
+      15.1,
+      19.3,
+      22.9,
+      25.1,
+      25.4,
+      25.3,
+      23.6,
+      19.3,
+      14.8,
+      9.4
+    ],
+    "pr": [
+      49.0,
+      41.0,
+      96.4,
+      151.7,
+      298.0,
+      331.7,
+      212.7,
+      243.6,
+      178.3,
+      55.6,
+      41.5,
+      30.4
+    ],
+    "source": {
+      "provider": "NASA POWER / MERRA-2",
+      "period": "2001-2020",
+      "url": "https://power.larc.nasa.gov/api/temporal/daily/point?parameters=T2M_MAX,T2M_MIN,PRECTOTCORR&community=AG&longitude=113.2644&latitude=23.1291&start=20010101&end=20201231&format=JSON",
+      "method": "Monthly mean of daily highs and lows; mean monthly precipitation total across 20 complete years. Gridded reanalysis, not a city weather station.",
+      "retrieved": "2026-10-09"
+    }
+  },
+  {
+    "name": "Harbin",
+    "iso": 156,
+    "lat": 45.8038,
+    "lng": 126.535,
+    "units": {
+      "hi": "degrees C, mean daily high",
+      "lo": "degrees C, mean daily low",
+      "pr": "mm per calendar month"
+    },
+    "hi": [
+      -13.1,
+      -7.7,
+      2.3,
+      13.4,
+      21.7,
+      27.2,
+      29.1,
+      27.2,
+      21.9,
+      11.9,
+      -1.0,
+      -11.6
+    ],
+    "lo": [
+      -23.2,
+      -19.9,
+      -9.6,
+      -0.2,
+      7.8,
+      14.5,
+      18.1,
+      16.3,
+      9.0,
+      -0.2,
+      -10.1,
+      -20.6
+    ],
+    "pr": [
+      4.9,
+      5.4,
+      11.1,
+      22.0,
+      54.2,
+      103.9,
+      134.7,
+      104.6,
+      54.2,
+      21.0,
+      13.2,
+      8.0
+    ],
+    "source": {
+      "provider": "NASA POWER / MERRA-2",
+      "period": "2001-2020",
+      "url": "https://power.larc.nasa.gov/api/temporal/daily/point?parameters=T2M_MAX,T2M_MIN,PRECTOTCORR&community=AG&longitude=126.535&latitude=45.8038&start=20010101&end=20201231&format=JSON",
+      "method": "Monthly mean of daily highs and lows; mean monthly precipitation total across 20 complete years. Gridded reanalysis, not a city weather station.",
+      "retrieved": "2026-10-09"
+    }
+  }
+]

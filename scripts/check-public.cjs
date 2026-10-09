@@ -51,6 +51,20 @@ for(const city of require('../climate/italy.json')){
  for(const key of ['hi','lo','pr'])assert.equal(city[key].length,12,city.name+' '+key);
 }
 const mexico=read(path.join(root,'country/mexico/index.html'));
+const china=read(path.join(root,'country/china/index.html'));
+const chinaSection=china.match(/<section class="guide-section" id="regions">([\s\S]*?)<\/section>/)?.[1];
+assert(chinaSection,'China regional table missing');
+assert.equal((chinaSection.match(/<tr>/g)||[]).length,13,'China table has header and twelve months');
+assert(china.includes('The score above uses Beijing.')&&chinaSection.includes('Tibet, Xinjiang, Hainan'),'China score and coverage limits');
+assert(!china.includes('mild, dry weather across most of the country')&&!/[✿☀🌷]/u.test(china),'China broad claim and pictographs');
+for(const city of require('../climate/china.json')){
+ assert(chinaSection.includes(city.name.replaceAll("'",'&#39;'))&&chinaSection.includes(city.source.url.replaceAll('&','&amp;')),city.name+' source visible');
+ assert.equal(city.source.period,'2001-2020');
+ assert(city.lat>18&&city.lat<54&&city.lng>73&&city.lng<135,city.name+' plausible China coordinates');
+ assert(city.units?.hi?.includes('degrees C')&&city.units?.pr?.includes('mm'),city.name+' units recorded');
+ for(const key of ['hi','lo','pr'])assert.equal(city[key].length,12,city.name+' '+key);
+ for(let m=0;m<12;m++)assert(city.hi[m]>=city.lo[m]&&city.hi[m]<50&&city.lo[m]>-40&&city.pr[m]>=0&&city.pr[m]<1000,city.name+' plausible month '+m);
+}
 const uk=read(path.join(root,'country/uk/index.html'));
 const ukSection=uk.match(/<section class="guide-section" id="regions">([\s\S]*?)<\/section>/)?.[1];
 assert(ukSection,'UK regional table missing');

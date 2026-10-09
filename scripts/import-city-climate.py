@@ -14,7 +14,7 @@ def load(row):
    except Exception:
     if attempt==2: raise
     time.sleep(2)
- raw=json.loads(path.read_text());p=raw['properties']['parameter'];out=dict(name=name,iso=iso,lat=lat,lng=lng)
+ raw=json.loads(path.read_text());p=raw['properties']['parameter'];out=dict(name=name,iso=iso,lat=lat,lng=lng,units={'hi':'degrees C, mean daily high','lo':'degrees C, mean daily low','pr':'mm per calendar month'})
  for field,param in [('hi','T2M_MAX'),('lo','T2M_MIN'),('pr','PRECTOTCORR')]:
   values=[]
   for m in range(1,13):

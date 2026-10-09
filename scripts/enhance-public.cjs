@@ -47,7 +47,7 @@ module.exports=function enhancePublic(root,out){
  fs.writeFileSync(path.join(out,'index.html'),home);
  for(const r of guides){
   const file=path.join(out,'country',r.slug,'index.html');let html=common(fs.readFileSync(file,'utf8'));
-  const title=r.slug==='france'?'Best Time to Visit France: Paris, Riviera & Regional Weather':r.slug==='austria'?'Best Time to Visit Austria: Cities, Alps & Skiing':r.slug==='mexico'?'Best Time to Visit Mexico: Weather by City and Month':r.slug==='uk'?'Best Time to Visit the UK: Weather by City and Month':`Best Time to Visit ${r.name}: Weather by Month`;
+  const title=r.slug==='france'?'Best Time to Visit France: Paris, Riviera & Regional Weather':r.slug==='austria'?'Best Time to Visit Austria: Cities, Alps & Skiing':r.slug==='mexico'?'Best Time to Visit Mexico: Weather by City and Month':r.slug==='uk'?'Best Time to Visit the UK: Weather by City and Month':r.slug==='china'?'Best Time to Visit China: Weather by City and Month':`Best Time to Visit ${r.name}: Weather by Month`;
   html=html.replace(/<title>.*?<\/title>/,`<title>${esc(title)} | GoWhereAndWhen</title>`);
   html=html.replace('Find your best time to visit','Best time to visit');
   html=html.replace(/(<div class="guide-intro">[\s\S]*?<\/div>)/,`$1<p class="rating-context">Weather scores use ${esc(r.city)} as a reference. They are not forecasts or measures of snow, prices or crowds. ${link('/methodology/','How to use these ratings')}</p>`);
@@ -58,6 +58,21 @@ module.exports=function enhancePublic(root,out){
   // A visible breadcrumb matches the existing BreadcrumbList data.
   html=html.replace('<div class="guide-opening">',`<nav class="seo-breadcrumb" aria-label="Breadcrumb">${link('/','Home')} / ${link('/country/','Country guides')} / <span aria-current="page">${esc(r.name)}</span></nav><div class="guide-opening">`);
   html=html.replace('</main>',`<section class="guide-section"><div class="wrap"><h2>Plan another month or destination</h2>${monthLinks()}<p>${link('/country/','Browse all '+guides.length+' country guides')} · ${link('/methodology/','Sources, editorial approach and weather methodology')}</p></div></section></main>`);
+  if(r.slug==='china'){
+   html=html.replace('<span class="brand-symbol" aria-hidden="true">✦</span>','<img class="brand-mark" src="/storybook/assets/logo.svg" alt="" width="34" height="34">');
+   html=html.replace('class="game-guide"','class="game-guide china-guide"');
+   html=html.replace('<a data-canonical-link href="/country/">All guides</a></nav>','</nav>');
+   html=html.replace('<section class="guide-section" id="months">',require('./china-regions.cjs')()+'<section class="guide-section" id="months">');
+   html=html.replace('<a href="#months">By month</a>','<a href="#regions">Cities</a><a href="#months">Months</a>');
+   html=html.replace('<a href="#seasons">Seasons</a>','<a href="#seasons">Scores</a>').replace('<a href="#watch-out">Watch out</a>','').replace('<a href="#stay" class="stay-shortcut">Where to stay ↗</a>','<a href="#stay" class="stay-shortcut">Stay</a>');
+   html=html.replace(/<section class="season-summary">[\s\S]*?<\/section>/,'<section class="season-summary"><div class="wrap"><div class="stubs"><div class="stub"><div class="stub__band k-ideal">Top Beijing scores</div><span class="stub__v">Apr–May · Sep–Oct</span><p>Compare heat and rain before you choose.</p></div><div class="stub"><div class="stub__band k-good">Other months</div><span class="stub__v">Mar · Jun–Aug</span><p>Summer gets hotter and wetter in Beijing.</p></div><div class="stub"><div class="stub__band k-fair">Cold in Beijing</div><span class="stub__v">Nov–Feb</span><p>Harbin can still suit an ice trip.</p></div></div></div></section>');
+   html=html.replace('Your year in China','Beijing weather by month').replace('<div class="k">Best month</div>','<div class="k">Beijing top score</div>');
+   html=html.replace('<div class="k">Warmest, Jul</div>','<div class="k">Beijing Jul high</div>').replace('<div class="k">Wettest, Aug</div>','<div class="k">Beijing Aug rain</div>').replace('<div class="k">Coldest, Jan</div>','<div class="k">Beijing Jan low</div>');
+   html=html.replace('<h3>Rainy season</h3>','<h3>Beijing rain</h3>').replace('<h3>Hard cold</h3>','<h3>Beijing cold</h3>');
+   html=html.replace('Pick a month, see where the weather is good. A planning guide built from climate normals, not a forecast.','Choose a city and month. Past weather is a guide, not a forecast.');
+   html=html.replace('The quietest, cheapest stretch of the year.','Compare prices for your dates. Weather cannot show the cheapest month.');
+   html=html.replace(/"dateModified":"[^" ]+"/g,'"dateModified":"2026-10-09"');
+  }
   if(r.slug==='japan'){
    html=html.replace('<span class="brand-symbol" aria-hidden="true">✦</span>','<img class="brand-mark" src="/storybook/assets/logo.svg" alt="" width="34" height="34">');
    html=html.replace('Your year in Japan','Tokyo weather by month').replace('<div class="k">Best month</div>','<div class="k">Tokyo top score</div>');
@@ -170,7 +185,7 @@ module.exports=function enhancePublic(root,out){
  save('/methodology/',shell('How Our Travel Weather Ratings Work','Understand GoWhereAndWhen weather scores, source limitations, regional differences and the editorial approach behind the country guides.','/methodology/',fs.readFileSync(path.join(root,'scripts/methodology.html'),'utf8')));
  const urls=['/','/country/',...guides.map(r=>'/country/'+r.slug+'/'),...months.map(m=>'/when/'+m.toLowerCase()+'/'),'/methodology/'];
  require('./add-analytics.cjs')(root,out,urls);
- fs.writeFileSync(path.join(out,'sitemap.xml'),`<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.map(url=>`  <url><loc>${origin+url}</loc><lastmod>${url==='/country/japan/'?'2026-10-07':url==='/country/uk/'?'2026-10-06':url==='/country/mexico/'?'2026-10-05':url==='/country/italy/'?'2026-10-04':url==='/country/turkey/'?'2026-10-03':url==='/country/usa/'?'2026-10-01':url==='/country/spain/'?'2026-09-27':url==='/country/france/'?'2026-09-26':reviewed}</lastmod></url>`).join('\n')}\n</urlset>\n`);
+ fs.writeFileSync(path.join(out,'sitemap.xml'),`<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.map(url=>`  <url><loc>${origin+url}</loc><lastmod>${url==='/country/china/'?'2026-10-09':url==='/country/japan/'?'2026-10-07':url==='/country/uk/'?'2026-10-06':url==='/country/mexico/'?'2026-10-05':url==='/country/italy/'?'2026-10-04':url==='/country/turkey/'?'2026-10-03':url==='/country/usa/'?'2026-10-01':url==='/country/spain/'?'2026-09-27':url==='/country/france/'?'2026-09-26':reviewed}</lastmod></url>`).join('\n')}\n</urlset>\n`);
  fs.writeFileSync(path.join(out,'robots.txt'),`User-agent: *\nAllow: /\n\nSitemap: ${origin}/sitemap.xml\n`);
  fs.writeFileSync(path.join(out,'404.html'),shell('Page Not Found','Find a destination guide or return to the world map.','/404.html','<h1>That page could not be found</h1><p>'+link('/','Open the world map')+' or '+link('/country/','browse country guides')+'.</p>').replace('index,follow,max-image-preview:large','noindex,follow').replace(/<link rel="canonical"[^>]*>/,''));
  fs.writeFileSync(path.join(out,'llms.txt'),`# GoWhereAndWhen\n\nSeasonal travel planning with an interactive map and ${guides.length} country guides. Weather values are representative-city estimates, not forecasts, snow reports, crowd or price measurements.\n\n- [Country guides](${origin}/country/)\n- [Methodology and limitations](${origin}/methodology/)\n${guides.map(r=>`- [${r.name}](${origin}/country/${r.slug}/)`).join('\n')}\n`);

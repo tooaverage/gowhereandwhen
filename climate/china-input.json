@@ -1,0 +1,9 @@
+[
+  {"name":"Beijing","iso":156,"lat":39.9042,"lng":116.4074},
+  {"name":"Shanghai","iso":156,"lat":31.2304,"lng":121.4737},
+  {"name":"Xi'an","iso":156,"lat":34.3416,"lng":108.9398},
+  {"name":"Chengdu","iso":156,"lat":30.5728,"lng":104.0668},
+  {"name":"Kunming","iso":156,"lat":25.0389,"lng":102.7183},
+  {"name":"Guangzhou","iso":156,"lat":23.1291,"lng":113.2644},
+  {"name":"Harbin","iso":156,"lat":45.8038,"lng":126.5350}
+]

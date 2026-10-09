@@ -77,7 +77,7 @@ These rules apply to visitor-facing editorial copy, not source titles, URLs, cod
 
 **Caveats:** retain the meaning that estimates are not forecasts; comfort scores do not measure ski snow, prices or crowds; source coverage varies. Put the applicable limitation near the claim. Keep fuller details in the methodology page or source disclosure. Never hide a limitation needed to understand the recommendation.
 
-**Local scope:** a Tokyo score is not a Japan-wide verdict. Do not mark a country “Avoid” solely because one city has poor weather.
+**Local scope:** a reference-city score is not a country-wide verdict. Name the city beside the score and compare regions before making a national timing claim. Do not mark a country “Avoid” solely because one city has poor weather.
 
 ## Examples are style references
 
@@ -125,6 +125,7 @@ Treat corrections as evidence. Do not defend stylistic habits. Flag a conflict w
 
 - **2026-09-26, all site copy and UI:** “no emojis!!” Use labelled Lucide SVG icons. Decorative icons beside labels are hidden from screen readers. Check changed pages for emoji and Unicode pictographs before publishing.
 - **2026-10-07, Japan checked page:** The month script replaced source icons with pictographs. Remove them in the checked Japan batch and inspect the rendered controls. Other guides remain for later checked batches.
+- **2026-10-09, China checked page:** The Beijing score was presented beside broad China-wide dry/mild season claims, while the only sourced city records were Hong Kong and Macao. Add sourced mainland city comparisons, keep the Beijing limit visible, and inspect the rendered month controls. Other guides remain for checked batches.
 
 - **2026-09-26, source notes and footer:** Avoid scientific phrasing such as “gridded climate averages”, “reference dataset” and “climate normals”. Use plain words such as “past weather averages”. Keep the source name, years and material differences in a short source disclosure. Do not repeat the full method in the footer.
 - **2026-09-26, shared UI:** Month panels need closed rounded borders and score badges that stay in place when opened. Footer groups need clear spacing. Icons should feel round and playful through SVG strokes and soft backgrounds, never emojis.

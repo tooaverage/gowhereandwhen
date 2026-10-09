@@ -13,7 +13,7 @@ jobs:
   audit:
     if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 25
     steps:
       - uses: actions/setup-node@v4
         with:
@@ -21,7 +21,7 @@ jobs:
       - name: Audit production pages on simulated mobile
         run: |
           mkdir -p reports
-          for page in home france japan spain usa turkey italy mexico uk china; do
+          for page in china home france japan spain usa turkey italy mexico uk; do
             url="https://gowhereandwhen.com/"
             if [ "$page" != home ]; then url="https://gowhereandwhen.com/country/$page/"; fi
             npx --yes lighthouse@12.8.2 "$url" --chrome-flags="--headless --no-sandbox" --only-categories=performance,accessibility,best-practices,seo --output=json --output=html --output-path="reports/$page" --quiet

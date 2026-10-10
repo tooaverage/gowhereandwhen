@@ -1,6 +1,6 @@
 # Content releases
 
-## 2026-10-10: Germany seasonal and rail accuracy (release candidate)
+## 2026-10-10: Germany seasonal and rail accuracy (published)
 
 - Existing URL: https://gowhereandwhen.com/country/germany/ . Before: Berlin's score beside broad national May–September advice, fixed crowd and price claims, generic festival and ski windows, and a loop implying the Deutschland-Ticket covers intercity trains. After: Berlin is named as the score reference, the next Munich Oktoberfest dates, September 18 to October 3, 2027, are exact, market dates vary by city, Zugspitze ski dates are conditional, and the ticket's local-train limit is stated. The route label reads Travel itinerary. No new URL, climate series or recommendation rating was added.
 - Sources: [official Oktoberfest](https://www.oktoberfest.de/en), [Germany Travel markets](https://www.germany.travel/de/kampagne/weihnachtsmaerkte/weihnachtsmaerkte.html), [Zugspitze operating dates](https://zugspitze.de/en/Service-information/Opening-hours-timetables) and [Deutsche Bahn ticket validity](https://int.bahn.de/en/faq/deutschlandticket-which-trains). The page groups them in an accessible disclosure. Old eight-city climate inputs and comfort scores remain; their station provenance is not yet fully verified. The existing route still scales night allocations, so this is an accuracy correction, not complete route coverage or seasonal itinerary publication.
@@ -9,6 +9,8 @@
 ### Germany publication verification, 10 October 2026
 
 - Content commit `6c34e50` deployed through Pages run 38076326998. Live https://gowhereandwhen.com/country/germany/ and its sitemap entry returned successfully. The live page contains the exact Oktoberfest dates, Deutsche Bahn ticket limit, four-link source disclosure and Travel itinerary map label. At 390px, its navigation fit and the page had no horizontal overflow. The automatic ten-page Lighthouse audit omitted Germany, so it was cancelled and the workflow now substitutes Germany for the already-audited China page. Germany audit results are pending.
+- Before closing the batch, the official organizer published next year's dates. Commit `f9d1400` replaced the completed 2026 Oktoberfest with September 18 to October 3, 2027, and deployed in Pages run 38076800153. Fresh live responses and a cache-busted 320px browser view show the 2027 dates, no old festival dates and no page overflow. The first Germany audit was superseded by the final deployment; run 38076835524 is auditing the final page.
+- A final copy check found weather-derived “Shoulder” and “Low season” headings. The Berlin summary now names weather windows, without implying measured tourism demand. Build/check and rendered 320px, 390px and desktop checks passed with no page overflow. The ten-page audit ran much longer than the previous report, so the workflow now checks Germany plus the standing homepage, France and Japan pages. Publication of this final summary correction and its focused audit are pending.
 
 ## 2026-10-09: China regional weather comparison (release candidate)
 

@@ -20,7 +20,7 @@ const philippines=read(path.join(root,'country/philippines/index.html'));assert(
 assert(read(path.join(root,'country/austria/index.html')).includes('late December to early March'));
 const germany=read(path.join(root,'country/germany/index.html'));
 assert(germany.includes('usually not ICE, IC or EC trains')&&germany.includes('https://int.bahn.de/en/faq/deutschlandticket-which-trains')&&!germany.includes('Deutschland-Ticket or rail pass covers most of it'),'Germany ticket scope and source');
-assert(germany.includes('September 19 to October 4, 2026')&&germany.includes('Germany sources and limits'),'Germany dated event and source disclosure');
+assert(germany.includes('September 18 to October 3, 2027')&&germany.includes('Germany sources and limits'),'Germany dated event and source disclosure');
 const usa=read(path.join(root,'country/usa/index.html'));
 const usaSection=usa.match(/<section class="guide-section" id="regions">([\s\S]*?)<\/section>/)?.[1];
 assert(usaSection,'USA regional table missing');

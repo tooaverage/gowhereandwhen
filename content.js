@@ -143,11 +143,11 @@ const CONTENT = [
   { slug: 'germany', iso: 276, name: 'Germany',
     hub: { city: 'Berlin', lat: 52.52, lng: 13.405, zoom: 11, iata: 'BER' },
     title: 'Best Time to Visit Germany: Weather, Oktoberfest and Markets',
-    desc: 'Compare Berlin weather with German city, Alpine and event seasons. Oktoberfest runs September 19 to October 4 in 2026; Christmas market dates vary by city.',
-    heroLead: '<strong>Choose the trip first.</strong> May to September suits city walks and outdoor trips. Munich’s Oktoberfest runs <strong>September 19 to October 4, 2026</strong>. Christmas market dates vary by city.',
+    desc: 'Compare Berlin weather with German city, Alpine and event seasons. Oktoberfest runs September 18 to October 3 in 2027; Christmas market dates vary by city.',
+    heroLead: '<strong>Choose the trip first.</strong> May to September suits city walks and outdoor trips. Munich’s Oktoberfest runs <strong>September 18 to October 3, 2027</strong>. Christmas market dates vary by city.',
     intro: [
       'The weather score uses Berlin. Compare the city map before choosing another region. May to September gives longer days for city walks, but heat and rain vary by place.',
-      'Oktoberfest is in Munich from September 19 to October 4 in 2026. Christmas markets have different opening and closing dates. Check your city before booking.',
+      'Oktoberfest is in Munich from September 18 to October 3 in 2027. Christmas markets have different opening and closing dates. Check your city before booking.',
     ],
     regions: [
       { icon: 'building-2', h: 'Berlin and the north', p: 'Cool and flat, best from late spring to early autumn. The north coast is breezy and made for summer.' },
@@ -156,17 +156,17 @@ const CONTENT = [
     ],
     bestFor: [
       { h: 'City walks', p: 'Compare May, June and September. Check each city’s rain and daytime highs.' },
-      { h: 'Oktoberfest', p: 'Munich, September 19 to October 4 in 2026. Check rooms and event details before travel.' },
+      { h: 'Oktoberfest', p: 'Munich, September 18 to October 3 in 2027. Check rooms and event details before travel.' },
       { h: 'Christmas markets', p: 'Many open in Advent. Dates and closing days differ by market.' },
       { h: 'Alpine trips', p: 'Check trail or ski lift openings for your dates. Town temperatures do not show mountain conditions.' },
     ],
     whatsOn: [
-      { icon: 'party-popper', h: 'Oktoberfest, September 19 to October 4', p: 'The 2026 event is in Munich. It is a reason to visit, not a weather score.' },
+      { icon: 'party-popper', h: 'Oktoberfest, September 18 to October 3', p: 'The 2027 event is in Munich. It is a reason to visit, not a weather score.' },
       { icon: 'sparkles', h: 'Christmas markets, Advent', p: 'Check the dates for the market you want. Some close before Christmas.' },
     ],
     faq: [
       { q: 'What is the best time to visit Germany?', a: 'For city walks, compare May to September. For Oktoberfest, go to Munich during its 2026 dates. Check Alpine conditions for hiking or skiing.' },
-      { q: 'When is Oktoberfest?', a: 'Munich Oktoberfest runs September 19 to October 4 in 2026. Dates change each year.' },
+      { q: 'When is Oktoberfest?', a: 'Munich Oktoberfest runs September 18 to October 3 in 2027. Dates change each year.' },
       { q: 'When do the Christmas markets open?', a: 'Dates differ by city and market. Many open during Advent; check official listings before booking.' },
     ],
     markers: [{ mon: 'Sep', kind: 'fest' }, { mon: 'Dec', kind: 'snow' }],

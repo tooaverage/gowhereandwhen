@@ -49,7 +49,7 @@ const PLACES = {
       title: 'The classic Germany loop',
       length: '12 to 14 days, by train',
       onward: 'Train onward',
-      lead: 'Berlin south through Dresden and Nuremberg to Munich, then west to Cologne and up to Hamburg. Every stop is on the rail network, and a Deutschland-Ticket or rail pass covers most of it.',
+      lead: 'This rail loop links Berlin, Saxony, Bavaria, the Rhine and Hamburg. Check each leg and fare before booking. The Deutschland-Ticket covers local transport, but usually not ICE, IC or EC trains.',
       stops: [
         { name: 'Berlin', lat: 52.52, lng: 13.405, tier: 3, nights: 3, p: 'Museums, the Wall, the nightlife. Most loops start here.' },
         { name: 'Leipzig', lat: 51.34, lng: 12.37, tier: 30, nights: 1, via: 'Train, 1.5 hours', p: 'Bach, the peaceful revolution and a cheap, lively bar scene.' },
@@ -64,6 +64,7 @@ const PLACES = {
         { name: 'Hamburg', lat: 53.55, lng: 9.99, tier: 14, nights: 2, via: 'Train, 4 hours', p: 'The harbour, Speicherstadt and the Reeperbahn. Two hours back to Berlin to fly out.' },
       ],
       sources: [
+        { t: 'Deutsche Bahn, Deutschland-Ticket validity', u: 'https://int.bahn.de/en/faq/deutschlandticket-which-trains' },
         { t: 'Hostelz, Germany 3-week backpacker itinerary', u: 'https://www.hostelz.com/solo-travel-itineraries/germany/germany-3-weeks-complete-backpacker-itinerary' },
         { t: 'kimkim, 2 weeks in Germany', u: 'https://www.kimkim.com/c/2-weeks-in-germany-unique-itineraries' },
         { t: 'Bucketlistly, 2 to 3 weeks Germany itinerary', u: 'https://www.bucketlistly.blog/posts/two-weeks-germany-itinerary' },

@@ -156,3 +156,5 @@ Reviewed 26 September 2026. Recheck when evidence or guidance changes; do not pr
 
 - **2026-09-26, region discoverability:** “why wasn't Normandy added”. When a route represents a region through a base town, show both names in the itinerary and the recognisable region on the map where practical. Bayeux alone does not make Normandy discoverable. Apply the same principle to Tours/Loire Valley and Avignon/Provence.
 - **2026-09-26, rating calibration:** General autumn suggestions do not by themselves justify Great. Explanations must distinguish mild/warm sightseeing days from cool or hot trade-offs and exceptional events. These are editorial criteria, not a measured universal preference. Validate the next sample in a country the owner knows before wider rollout.
+
+- **2026-10-10, published Germany guide:** The old loop implied a Deutschland-Ticket covers intercity trains. State its local-transport scope and that ICE, IC and EC usually need a separate ticket, using Deutsche Bahn as the source. Check the rendered route lead and source link. This corrects the established guide; the newer Germany recommendation preview remains unpublished.

@@ -18,6 +18,9 @@ const sourceData=JSON.parse(read(path.resolve(__dirname,'../storybook/data.json'
 assert.deepEqual(publicData.map(({lead,...record})=>record),sourceData.map(({lead,...record})=>record),'Weather data, scores, cities and map destinations preserved');
 const philippines=read(path.join(root,'country/philippines/index.html'));assert(philippines.includes('id="island-life"'));assert(philippines.includes('island-life.js'));assert(philippines.includes('data-booking-type="accommodation"'));
 assert(read(path.join(root,'country/austria/index.html')).includes('late December to early March'));
+const germany=read(path.join(root,'country/germany/index.html'));
+assert(germany.includes('usually not ICE, IC or EC trains')&&germany.includes('https://int.bahn.de/en/faq/deutschlandticket-which-trains')&&!germany.includes('Deutschland-Ticket or rail pass covers most of it'),'Germany ticket scope and source');
+assert(germany.includes('September 19 to October 4, 2026')&&germany.includes('Germany sources and limits'),'Germany dated event and source disclosure');
 const usa=read(path.join(root,'country/usa/index.html'));
 const usaSection=usa.match(/<section class="guide-section" id="regions">([\s\S]*?)<\/section>/)?.[1];
 assert(usaSection,'USA regional table missing');

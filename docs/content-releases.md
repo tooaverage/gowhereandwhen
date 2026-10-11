@@ -162,3 +162,10 @@ Installed the personal correction-ratchet skill and added project AGENTS.md link
 
 - Published commit `0da7254` through successful Pages run 36896705807. Live https://gowhereandwhen.com/country/usa/ and sitemap returned 200; live mobile inspection confirmed the new lead, twelve table rows, eight NOAA station links and no page overflow at 390px.
 - Post-deploy Lighthouse run 36896771408 succeeded. USA: performance 66, accessibility 100, best practices 100, SEO 100; LCP 1.8s. Home/France/Japan/Spain performance: 37/66/68/66. Home LCP 16.9s, a recurring map-loading gap with lab variability; it did not regress because of the USA template. This audit measures simulated mobile, not field traffic or search rank.
+
+## 2026-10-11: home and France month-control accessibility repair
+
+- URLs: https://gowhereandwhen.com/ and https://gowhereandwhen.com/country/france/ . No new guide or route. Before: the visible abbreviated month buttons had separate accessible names that failed the latest production Lighthouse label/name match audit (11 home and 12 France controls). After: the visible text supplies the accessible name; the group labels and pressed state remain. This is a control fix, not a weather or recommendation change.
+- Evidence: Lighthouse run 38078028876, `label-content-name-mismatch` failed on the exact controls despite overall accessibility category scores of 100. Homepage performance was 69 with 1.4s LCP in that run; the earlier slow heavy-map runs remain unresolved and variable.
+- Storybook generation, `npm run build`, `npm run check` and `git diff --check` passed. Rendered home and France inspected at 320px, 390px and desktop, including France month switching; no page overflow. Post-release Lighthouse and live deployment verification pending.
+- Inventory remains 74/202. The top-ten arrivals priority queue has been covered at the existing URL level; extension needs comparable dated arrivals evidence. Germany recommendation preview remains unpublished. No billable API/cloud generation, pilot activation or spend; local account-allowance usage and dollar cost unavailable. Sunday local, so Monday SEO block not due.

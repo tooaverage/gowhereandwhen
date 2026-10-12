@@ -1,5 +1,11 @@
 # SEO learning log
 
+## 2026-10-12: Brazil regional-answer hypothesis (pending)
+
+- Search Console domain-property access is available. The last completed 28-day period has sparse clicks, so do not infer a ranking trend from one page or use it as an arrivals queue. Raw metrics and the Monday marketing pack are in `../private-marketing/` outside this public site.
+- Question: will a clearer region-first answer help searchers decide whether the Brazil guide fits their trip? The existing Brazil page mixed Rio, Manaus and Pantanal seasons. On October 12, the country page and its description were revised to separate those places, with official sources and no new URL. Baseline captured privately; review the next completed 28-day window no earlier than November 10. Check page impressions, clicks and relevant queries, and mark the result supported, rejected or inconclusive. Sparse traffic and seasonality limit attribution.
+- [Google's snippet guidance](https://developers.google.com/search/docs/appearance/snippet) says page text is the main snippet source and a useful meta description may be used; it does not promise a chosen snippet. [Google's helpful-content guidance](https://developers.google.com/search/docs/fundamentals/creating-helpful-content) supports a decision-focused answer rather than more words. The Search Console indexing report should be read by reason, not treated as 132 broken pages: most excluded URLs are alternates with canonical tags.
+
 ## 2026-09-26: starting rules, not measured growth results
 
 - Useful AI-assisted content is permitted; scaled content without user value risks Google spam enforcement. Daily publishing itself is not a ranking signal.

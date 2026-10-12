@@ -55,6 +55,10 @@ for(const city of require('../climate/italy.json')){
  for(const key of ['hi','lo','pr'])assert.equal(city[key].length,12,city.name+' '+key);
 }
 const mexico=read(path.join(root,'country/mexico/index.html'));
+const brazil=read(path.join(root,'country/brazil/index.html'));
+assert(brazil.includes('The score above uses Rio weather.')&&brazil.includes('Manaus and the Amazon')&&brazil.includes('May to September is drier'),'Brazil regional limits');
+assert(brazil.includes('Brazil sources and limits')&&brazil.includes('https://www.gov.br/turismo/'),'Brazil source disclosure');
+assert(!brazil.includes('The Amazon and the Pantanal')&&!brazil.includes('The quietest, cheapest stretch of the year.')&&!/[✿☀🌷]/u.test(brazil),'Brazil broad claims and pictographs');
 const china=read(path.join(root,'country/china/index.html'));
 const chinaSection=china.match(/<section class="guide-section" id="regions">([\s\S]*?)<\/section>/)?.[1];
 assert(chinaSection,'China regional table missing');

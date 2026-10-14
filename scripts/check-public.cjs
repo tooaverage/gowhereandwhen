@@ -57,6 +57,13 @@ for(const city of require('../climate/italy.json')){
 }
 const mexico=read(path.join(root,'country/mexico/index.html'));
 const saudi=read(path.join(root,'country/saudi-arabia/index.html'));
+const portugal=read(path.join(root,'country/portugal/index.html'));
+const portugalSection=portugal.match(/<section class="guide-section" id="regions">([\s\S]*?)<\/section>/)?.[1];
+assert(portugalSection,'Portugal regional comparison missing');
+assert.equal((portugalSection.match(/<tr>/g)||[]).length,13,'Portugal table has header and twelve months');
+assert(portugal.includes('The score above uses Lisbon weather.')&&portugalSection.includes('do not show Madeira, the Azores, mountains or sea conditions'),'Portugal score and coverage limits');
+assert(!portugal.includes('cheaper rates and fewer crowds')&&!/[✦✿☀🌷]/u.test(portugal),'Portugal unsupported price claim and pictographs');
+for(const city of require('../climate/portugal.json'))assert(portugalSection.includes(city.name)&&portugalSection.includes(city.source.url.replaceAll('&','&amp;')),city.name+' IPMA source visible');
 const saudiSection=saudi.match(/<section class="guide-section" id="regions">([\s\S]*?)<\/section>/)?.[1];
 assert(saudiSection,'Saudi city comparison missing');
 assert.equal((saudiSection.match(/<tr>/g)||[]).length,13,'Saudi table has header and twelve months');

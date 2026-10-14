@@ -23,9 +23,17 @@
         "arrivals2024": 29727444,
         "source": "UN Tourism Statistics Database (2025), processed by Our World in Data, retrieved 14 October 2026",
         "url": "https://ourworldindata.org/grapher/international-tourist-trips"
+      },
+      {
+        "iso": 620,
+        "name": "Portugal",
+        "arrivals2024Approx": 29000000,
+        "source": "UN Tourism Statistics Database (2025), processed by Our World in Data; cross-checked against Turismo de Portugal/INE 2024 non-resident tourist count, retrieved 14 October 2026",
+        "url": "https://ourworldindata.org/grapher/international-tourist-trips",
+        "crossCheck": "https://travelbi.turismodeportugal.pt/en/tourism-in-portugal/portugal-is-on-track-to-reach-30-million-international-tourists-by-2025/"
       }
     ],
-    "nextCandidateNote": "Comparable 2024 overnight tourist-arrival evidence supports Saudi Arabia as the next candidate. The OWID series omits some top-ten countries, so this is not a verified global rank or a complete order beyond the original top ten."
+    "nextCandidateNote": "Comparable 2024 overnight tourist-arrival evidence supports Saudi Arabia then Portugal as candidates. The OWID series omits some top-ten countries, so this is not a verified global rank or a complete order beyond the original top ten."
   },
   "note": "Inventory only. Completion requires the source and editorial checks in CONTENT-FACTORY.md; multiple cities do not imply full national coverage.",
   "destinations": [
@@ -159,6 +167,19 @@
       "hasGuide": true,
       "cityCount": 1,
       "sourcedCityCount": 1,
+      "regionalPrototype": false,
+      "editorialStatus": "needs-review"
+    },
+    {
+      "iso": 620,
+      "name": "Portugal",
+      "arrivalsRank": null,
+      "queueEvidence": "UN Tourism 2024 overnight arrivals; global rank unverified",
+      "slug": "portugal",
+      "region": "Europe",
+      "hasGuide": true,
+      "cityCount": 0,
+      "sourcedCityCount": 0,
       "regionalPrototype": false,
       "editorialStatus": "needs-review"
     },
@@ -719,18 +740,6 @@
       "name": "Poland",
       "arrivalsRank": null,
       "slug": "poland",
-      "region": "Europe",
-      "hasGuide": true,
-      "cityCount": 0,
-      "sourcedCityCount": 0,
-      "regionalPrototype": false,
-      "editorialStatus": "needs-review"
-    },
-    {
-      "iso": 620,
-      "name": "Portugal",
-      "arrivalsRank": null,
-      "slug": "portugal",
       "region": "Europe",
       "hasGuide": true,
       "cityCount": 0,

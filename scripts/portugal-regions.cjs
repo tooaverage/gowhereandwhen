@@ -1,0 +1,13 @@
+const cities=require('../climate/portugal.json');
+const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+module.exports=function portugalRegions(){
+ if(cities.map(c=>c.name).join(',')!=='Lisbon,Porto,Faro,Évora')throw Error('Portugal station sample changed');
+ for(const city of cities){
+  if(city.iso!==620||!Number.isFinite(city.lat)||!Number.isFinite(city.lng)||!city.station||!city.source?.url||city.source.period!=='1991-2020'||!['hi','lo','pr'].every(k=>city[k]?.length===12&&city[k].every(Number.isFinite)))throw Error('Portugal station data missing: '+city.name);
+  for(let m=0;m<12;m++)if(city.hi[m]<city.lo[m]||city.hi[m]>50||city.lo[m]<-20||city.pr[m]<0||city.pr[m]>1000)throw Error('Portugal station value invalid: '+city.name+' '+m);
+ }
+ const rows=months.map((month,m)=>`<tr><th scope="row">${month}</th>${cities.map(city=>`<td>${Math.round(city.hi[m])}°C<br><small>${Math.round(city.pr[m])} mm rain</small></td>`).join('')}</tr>`).join('');
+ return `<section class="guide-section" id="regions"><div class="wrap"><h2>Portugal weather by place</h2><p>The score above uses Lisbon weather. Compare the north, Algarve and inland Alentejo before choosing a month.</p><p class="disc">Swipe the table sideways on a small screen.</p><p id="portugal-weather-caption"><strong>Average daytime high and monthly rain, 1991–2020</strong></p><div class="table-scroll"><table class="weather-table" aria-labelledby="portugal-weather-caption"><thead><tr><th scope="col">Month</th>${cities.map(city=>`<th scope="col">${esc(city.name)}<small>${esc(city.region)}</small></th>`).join('')}</tr></thead><tbody>${rows}</tbody></table></div><p>In August, Évora averages 34°C by day; Porto averages 25°C. Porto gets more autumn rain than Faro.</p><p>These mainland stations do not show Madeira, the Azores, mountains or sea conditions.</p><details class="guide-sources"><summary>Sources and weather limits</summary><p>IPMA station averages cover 1991–2020. Highs are average daily highs; rain is the monthly total. These are past averages, not forecasts. The Lisbon score above uses older curated inputs.</p><p>${cities.map(city=>`<a href="${esc(city.source.url)}">${esc(city.name)} station data</a>`).join(' · ')} · <a href="https://www.visitportugal.com/en/weather">Visit Portugal climate guide</a> · <a href="https://www.visitlisboa.com/en/events/st-anthonys-night-12-13th-june">Visit Lisboa festival dates</a> · Checked October 2026</p></details></div></section>`;
+};

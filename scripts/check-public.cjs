@@ -2,7 +2,8 @@ const fs=require('node:fs'),path=require('node:path'),assert=require('node:asser
 const root=path.resolve(__dirname,'../public-dist'),origin='https://gowhereandwhen.com';
 const read=file=>fs.readFileSync(file,'utf8'),attrs=tag=>Object.fromEntries([...tag.matchAll(/([\w-]+)="([^"]*)"/g)].map(m=>[m[1],m[2]]));
 const urls=[...read(path.join(root,'sitemap.xml')).matchAll(/<loc>(.*?)<\/loc>/g)].map(m=>m[1]);
-assert.equal(urls.length,89);assert.equal(new Set(urls).size,89);
+const expectedUrls=require('../content.js').CONTENT.length+15;
+assert.equal(urls.length,expectedUrls);assert.equal(new Set(urls).size,expectedUrls);
 const titles=new Set(),linked=new Set();
 for(const url of urls){const file=path.join(root,new URL(url).pathname,'index.html'),html=read(file);const tags=[...html.matchAll(/<(?:meta|link|a|script|img|iframe)\b[^>]*>/g)].map(m=>({type:m[0].match(/^<(\w+)/)[1],...attrs(m[0])}));
  const canonical=tags.filter(t=>t.rel==='canonical').map(t=>t.href);assert.deepEqual(canonical,[url],url+' canonical');assert(!tags.some(t=>t.name==='robots'&&t.content.includes('noindex')),url+' indexing');
@@ -55,6 +56,13 @@ for(const city of require('../climate/italy.json')){
  for(const key of ['hi','lo','pr'])assert.equal(city[key].length,12,city.name+' '+key);
 }
 const mexico=read(path.join(root,'country/mexico/index.html'));
+const saudi=read(path.join(root,'country/saudi-arabia/index.html'));
+const saudiSection=saudi.match(/<section class="guide-section" id="regions">([\s\S]*?)<\/section>/)?.[1];
+assert(saudiSection,'Saudi city comparison missing');
+assert.equal((saudiSection.match(/<tr>/g)||[]).length,13,'Saudi table has header and twelve months');
+assert(saudi.includes('The score above uses Riyadh weather.')&&saudiSection.includes('Aseer highlands are outside this table'),'Saudi score and coverage limits');
+assert(!saudi.includes('The quietest, cheapest stretch of the year.')&&!/[✿☀🌷]/u.test(saudi),'Saudi copy and pictographs');
+for(const city of require('../climate/saudi-arabia.json')) assert(saudiSection.includes(city.name)&&saudiSection.includes(city.source.url.replaceAll('&','&amp;')),city.name+' source visible');
 const brazil=read(path.join(root,'country/brazil/index.html'));
 assert(brazil.includes('The score above uses Rio weather.')&&brazil.includes('Manaus and the Amazon')&&brazil.includes('May to September is drier'),'Brazil regional limits');
 assert(brazil.includes('Brazil sources and limits')&&brazil.includes('https://www.gov.br/turismo/'),'Brazil source disclosure');
@@ -98,4 +106,4 @@ for(const city of require('../climate/mexico.json')){
  for(const key of ['hi','lo','pr'])assert.equal(city[key].length,12,city.name+' '+key);
  for(let m=0;m<12;m++)assert(city.hi[m]>=city.lo[m]&&city.hi[m]<50&&city.lo[m]>-20&&city.pr[m]>=0&&city.pr[m]<1000,city.name+' plausible month '+m);
 }
-console.log('Passed: 89 canonical pages, unique metadata, crawlable internal links/assets/fragments, schema JSON, archive noindex, 404 and retained island/booking surfaces.');
+console.log(`Passed: ${expectedUrls} canonical pages, unique metadata, crawlable internal links/assets/fragments, schema JSON, archive noindex, 404 and retained island/booking surfaces.`);

@@ -2381,6 +2381,35 @@ const CONTENT = [
     markers: [{ mon: "Feb", kind: "sun" }, { mon: "Jul", kind: "fest" }],
   },
 
+  { slug: 'saudi-arabia', iso: 682, name: 'Saudi Arabia',
+    hub: { city: 'Riyadh', lat: 24.7136, lng: 46.6753, zoom: 11, iata: 'RUH' },
+    title: 'Best Time to Visit Saudi Arabia: Weather by Region',
+    desc: 'Compare Riyadh, Jeddah and AlUla by month. Find cooler seasons for desert trips and learn why Aseer needs a separate check.',
+    heroLead: '<strong>Choose your region first.</strong> Winter suits desert walks in Riyadh and AlUla. The Red Sea coast stays warmer. Aseer has a different summer climate.',
+    intro: [
+      'The score above uses Riyadh weather. It cannot rate the coast or the mountains. Compare three places below before choosing a month.',
+      'Visit Saudi suggests winter for AlUla and many outdoor trips. Summer heat is severe inland; Aseer highlands offer a cooler option.',
+    ],
+    regions: [
+      { icon: 'building-2', h: 'Riyadh', p: 'Winter is easier for outdoor city trips. Summer afternoons are very hot.' },
+      { icon: 'waves', h: 'Jeddah and the Red Sea', p: 'The coast stays warm in winter. Summer brings heat and humidity.' },
+      { icon: 'mountain', h: 'Aseer highlands', p: 'Visit Saudi highlights Aseer for summer. Check town and mountain weather separately.' },
+    ],
+    bestFor: [
+      { h: 'AlUla', p: 'Plan desert walks in the cooler months. Check current site hours and event dates.' },
+      { h: 'City walks', p: 'Compare Riyadh and Jeddah in winter. Their daytime heat differs.' },
+      { h: 'Aseer outdoors', p: 'Summer is a regional option. Mountain weather differs from the lowlands.' },
+      { h: 'Travel dates', p: 'Check current weather and site hours before booking. Climate averages cannot predict a trip.' },
+    ],
+    whatsOn: [],
+    faq: [
+      { q: 'What is the best time to visit Saudi Arabia?', a: 'For Riyadh and AlUla outdoor trips, start with winter. Aseer is a separate summer option.' },
+      { q: 'Is Saudi Arabia too hot in summer?', a: 'Riyadh, Jeddah and AlUla have very hot summer days. Aseer highlands differ, so check local conditions.' },
+      { q: 'When should I visit AlUla?', a: 'Visit Saudi recommends its cooler winter season for outdoor exploration.' },
+    ],
+    markers: [],
+  },
+
 ];
 
 if (typeof module !== 'undefined' && module.exports) module.exports = { CONTENT };

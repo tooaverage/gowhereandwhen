@@ -49,3 +49,7 @@ Use 4px for label-to-heading, 8px for closely related content, 24px between cont
 ### Map-label ratchet, 26 September 2026
 
 City names sit to the right of their marker by default. Do not retain a place-specific left-side override after changing neighbouring destinations. An exception needs a documented clipping or collision reason. After adding places or changing map layout, check actual rendered label boxes against other labels, markers and the SVG bounds on desktop and narrow screens, including extra-place suffixes and every trip length. Keep geographic coordinates fixed; use a labelled leader line if a marker ever needs a visual offset. The read-only browser check is `scripts/check-map-label-layout.js`.
+
+### Narrow header, 14 October 2026
+
+At 320px, the brand and guide link collided in the shared header. Hide the duplicate header link below 421px; the world map, guide navigation and footer still provide the same paths. Check the rendered header at 320px and 390px on the homepage and a changed guide. A new guide with a long name may also need more hero height so its actions do not overlap map controls. Inspect after the map loads.

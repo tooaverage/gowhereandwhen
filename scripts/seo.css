@@ -35,3 +35,8 @@
 
 /* Guide footer links need a full mobile touch target. */
 .game-guide .foot .cols>div:nth-child(2) a{display:inline-flex;align-items:center;min-height:48px}
+
+@media(max-width:420px){
+ .game-nav nav{display:none}
+ .saudi-guide .game-hero{height:720px}
+}

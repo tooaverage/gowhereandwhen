@@ -15,7 +15,17 @@
       276,
       392,
       156
-    ]
+    ],
+    "nextCandidates": [
+      {
+        "iso": 682,
+        "name": "Saudi Arabia",
+        "arrivals2024": 29727444,
+        "source": "UN Tourism Statistics Database (2025), processed by Our World in Data, retrieved 14 October 2026",
+        "url": "https://ourworldindata.org/grapher/international-tourist-trips"
+      }
+    ],
+    "nextCandidateNote": "Comparable 2024 overnight tourist-arrival evidence supports Saudi Arabia as the next candidate. The OWID series omits some top-ten countries, so this is not a verified global rank or a complete order beyond the original top ten."
   },
   "note": "Inventory only. Completion requires the source and editorial checks in CONTENT-FACTORY.md; multiple cities do not imply full national coverage.",
   "destinations": [
@@ -136,6 +146,19 @@
       "hasGuide": true,
       "cityCount": 2,
       "sourcedCityCount": 2,
+      "regionalPrototype": false,
+      "editorialStatus": "needs-review"
+    },
+    {
+      "iso": 682,
+      "name": "Saudi Arabia",
+      "arrivalsRank": null,
+      "queueEvidence": "UN Tourism 2024 overnight arrivals; global rank unverified",
+      "slug": "saudi-arabia",
+      "region": "Africa & Middle East",
+      "hasGuide": true,
+      "cityCount": 1,
+      "sourcedCityCount": 1,
       "regionalPrototype": false,
       "editorialStatus": "needs-review"
     },
@@ -2128,18 +2151,6 @@
       "hasGuide": false,
       "cityCount": 0,
       "sourcedCityCount": 0,
-      "regionalPrototype": false,
-      "editorialStatus": "needs-review"
-    },
-    {
-      "iso": 682,
-      "name": "Saudi Arabia",
-      "arrivalsRank": null,
-      "slug": null,
-      "region": "Africa & Middle East",
-      "hasGuide": false,
-      "cityCount": 1,
-      "sourcedCityCount": 1,
       "regionalPrototype": false,
       "editorialStatus": "needs-review"
     },

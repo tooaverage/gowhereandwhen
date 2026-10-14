@@ -35,10 +35,10 @@ for(const item of fs.readdirSync(root,{withFileTypes:true})) {
   }
   count++;
 }
-assert.equal(count,74);
+assert.equal(count,require('../content.js').CONTENT.length);
 const ph = fs.readFileSync(path.join(root,'philippines/index.html'),'utf8');
 assert.equal((ph.match(/class="island-booking"/g)||[]).length,8);
 assert.ok(ph.includes('Find a stay on your island'));
 assert.ok(ph.includes('Bohol day trips'));
 assert.ok(!ph.includes('Top tours in Manila'));
-console.log('Passed booking attribution, fallback, dates, 74-guide and 8-island checks.');
+console.log(`Passed booking attribution, fallback, dates, ${count}-guide and 8-island checks.`);

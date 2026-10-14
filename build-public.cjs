@@ -21,7 +21,7 @@ home=publicHTML(home).replace(/<title>[^<]*<\/title>/,'<title>gowhereandwhen.com
  .replaceAll('./assets/logo.svg','./storybook/assets/logo.svg').replaceAll('./game.css?v=storybook32','./storybook/game.css?v=storybook32')
  .replaceAll('./app.js?v=storybook32','./storybook/app.js?v=storybook32').replaceAll('../play/','./play/')
  .replace('storybook:true','storybook:true,public:true')
- .replace('</head>','<meta name="description" content="Explore a playful 3D world map and find the best time to visit 74 countries. Compare monthly weather ratings, cities and seasonal highlights."/><link rel="canonical" href="https://gowhereandwhen.com/"/></head>');
+ .replace('</head>','<meta name="description" content="Explore a playful 3D world map and find the best time to visit '+require('./content.js').CONTENT.length+' countries. Compare monthly weather ratings, cities and seasonal highlights."/><link rel="canonical" href="https://gowhereandwhen.com/"/></head>');
 fs.writeFileSync(path.join(out,'index.html'),home);
 let count=0;
 for(const entry of fs.readdirSync(path.join(root,'storybook/country'),{withFileTypes:true})){
@@ -39,7 +39,7 @@ const manifestPath=path.join(out,'site.webmanifest');
 if(fs.existsSync(manifestPath)){const manifest=JSON.parse(fs.readFileSync(manifestPath,'utf8'));manifest.name='gowhereandwhen.com';manifest.short_name='gowhereandwhen.com';fs.writeFileSync(manifestPath,JSON.stringify(manifest));}
 fs.copyFileSync(path.join(root,'storybook/assets/logo.svg'),path.join(out,'favicon.svg'));
 fs.writeFileSync(path.join(out,'.nojekyll'),'');
-if(count!==74)throw Error(`Expected 74 Storybook country guides; found ${count}`);
+if(count!==require('./content.js').CONTENT.length)throw Error(`Expected ${require('./content.js').CONTENT.length} Storybook country guides; found ${count}`);
 console.log(`Public website built: Storybook homepage and ${count} country guides. Older editions retained.`);
 
 require('./scripts/enhance-public.cjs')(root,out);

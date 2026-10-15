@@ -40,3 +40,5 @@
  .game-nav nav{display:none}
  .saudi-guide .game-hero{height:720px}
 }
+
+@media(max-width:699px){.greece-guide .hero-scene .map-mini-controls{bottom:190px}}

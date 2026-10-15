@@ -1,0 +1,13 @@
+const cities=require('../climate/greece.json');
+const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const esc=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+module.exports=function greeceRegions(){
+ if(cities.map(c=>c.name).join(',')!=='Athens,Thessaloniki,Corfu,Heraklion,Rhodes')throw Error('Greece city sample changed');
+ for(const city of cities){
+  if(city.iso!==300||!Number.isFinite(city.lat)||!Number.isFinite(city.lng)||city.source?.period!=='2001-2020'||!city.source?.url||!['hi','lo','pr'].every(k=>city[k]?.length===12&&city[k].every(Number.isFinite)))throw Error('Greece climate missing: '+city.name);
+  for(let m=0;m<12;m++)if(city.hi[m]<city.lo[m]||city.hi[m]>50||city.lo[m]<-20||city.pr[m]<0||city.pr[m]>1000)throw Error('Greece climate invalid: '+city.name+' '+m);
+ }
+ const rows=months.map((month,m)=>`<tr><th scope="row">${month}</th>${cities.map(city=>`<td>${Math.round(city.hi[m])}°C<br><small>${Math.round(city.pr[m])} mm rain</small></td>`).join('')}</tr>`).join('');
+ return `<section class="guide-section" id="regions"><div class="wrap"><h2>Greece weather by place</h2><p>The score above uses Athens. Compare northern Greece, Corfu, Crete and Rhodes before choosing a month.</p><p class="disc">Swipe the table sideways on a small screen.</p><p id="greece-weather-caption"><strong>Average daytime high and monthly rain, 2001–2020</strong></p><div class="table-scroll"><table class="weather-table" aria-labelledby="greece-weather-caption"><thead><tr><th scope="col">Month</th>${cities.map(city=>`<th scope="col">${esc(city.name)}</th>`).join('')}</tr></thead><tbody>${rows}</tbody></table></div><p>In October, Corfu gets more rain than Heraklion. July days are hotter in Athens and Thessaloniki than Heraklion.</p><p>These five points miss the Cyclades, mountain weather and sea conditions. Summer island winds can also affect a trip.</p><details class="guide-sources"><summary>Sources and weather limits</summary><p>NASA POWER / MERRA-2 estimates use daily data from 2001–2020. Highs are average daily highs; rain is the average monthly total. These are map-based averages, not forecasts or station records. The Athens score and older city map use separate inputs.</p><p>${cities.map(city=>`<a href="${esc(city.source.url)}">${esc(city.name)} data</a>`).join(' · ')} · <a href="https://www.visitgreece.gr/en/before-you-travel/climate">Visit Greece climate guide</a> · <a href="https://www.visitgreece.gr/en/mainland/ionian-islands">Ionian Islands</a> · Checked October 2026</p></details></div></section>`;
+};

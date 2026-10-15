@@ -271,7 +271,7 @@ const CONTENT = [
   { slug: 'greece', iso: 300, name: 'Greece',
     hub: { city: 'Athens', lat: 37.9838, lng: 23.7275, zoom: 11, iata: 'ATH' },
     title: 'Best Time to Visit Greece: Weather and the Islands by Month',
-    desc: 'The best time to visit Greece is May to June and September to October, with warm, dry weather, swimmable seas and fewer crowds than the July to August peak.',
+    desc: 'Compare monthly weather for Athens, Thessaloniki, Corfu, Heraklion and Rhodes. Choose a Greek destination before choosing a travel month.',
     heroLead: 'Go in <strong>May and June</strong> or <strong>September and October</strong> for warm, dry days, swimmable seas and lighter crowds. <strong>July and August</strong> are hot and packed, and <strong>winter</strong> is mild but many islands wind down.',
     intro: [
       'Greece runs on a long, dry Mediterranean summer. The month ratings track Athens, where late spring and early autumn bring warm, rainless days, blooming or golden landscapes, and a sea that stays swimmable from late May into October. The peak of July and August is hot and very busy.',
@@ -297,7 +297,7 @@ const CONTENT = [
       { q: 'Can you visit the Greek islands in winter?', a: 'You can, but many hotels and tavernas close and ferries run less often, especially on the smaller islands. Crete and the larger islands stay more active.' },
       { q: 'When is the sea warmest in Greece?', a: 'September, after a full summer of sun, which is why early autumn is so popular for swimming.' },
     ],
-    markers: [{ mon: 'Jun', kind: 'sun' }, { mon: 'Sep', kind: 'sun' }],
+    markers: [],
   },
 
   { slug: 'portugal', iso: 620, name: 'Portugal',

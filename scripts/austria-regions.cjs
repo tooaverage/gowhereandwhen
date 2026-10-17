@@ -1,0 +1,13 @@
+const cities=require('../climate/austria-geosphere.json');
+const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const esc=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+module.exports=function austriaRegions(){
+ if(cities.map(c=>c.name).join(',')!=='Vienna,Salzburg,Innsbruck,Graz,Bregenz,Klagenfurt')throw Error('Austria station sample changed');
+ for(const city of cities){
+  if(city.iso!==40||!city.station||!Number.isFinite(city.lat)||!Number.isFinite(city.lng)||city.source?.period!=='1991-2020'||!city.source?.url||!['hi','lo','pr'].every(k=>city[k]?.length===12&&city[k].every(Number.isFinite)))throw Error('Austria station data missing: '+city.name);
+  for(let m=0;m<12;m++)if(city.hi[m]<city.lo[m]||city.hi[m]>50||city.lo[m]<-30||city.pr[m]<0||city.pr[m]>1000)throw Error('Austria station value invalid: '+city.name+' '+m);
+ }
+ const rows=months.map((month,m)=>`<tr><th scope="row">${month}</th>${cities.map(city=>`<td>${Math.round(city.hi[m])}°C<br><small>${Math.round(city.pr[m])} mm rain</small></td>`).join('')}</tr>`).join('');
+ return `<section class="guide-section" id="regions"><div class="wrap"><h2>Austria weather by place</h2><p>The score above uses Vienna. Compare cities, Alpine valleys and lake areas before choosing a month.</p><p class="disc">Swipe the table sideways on a small screen.</p><p id="austria-weather-caption"><strong>Average daytime high and monthly rain, 1991–2020</strong></p><div class="table-scroll"><table class="weather-table" aria-labelledby="austria-weather-caption"><thead><tr><th scope="col">Month</th>${cities.map(city=>`<th scope="col">${esc(city.name)}<small>${esc(city.region)}</small></th>`).join('')}</tr></thead><tbody>${rows}</tbody></table></div><p>In August, Salzburg averages 193 mm of rain; Vienna averages 74 mm. Innsbruck's valley weather does not describe its high peaks.</p><p>These six stations miss many mountain valleys, ski slopes and lake conditions. Check local forecasts for your trip.</p><details class="guide-sources"><summary>Sources and weather limits</summary><p>GeoSphere Austria station averages cover 1991–2020. Highs are mean daily highs; rain is the mean monthly total. These are past averages, not forecasts. The Vienna score and older city map use separate inputs.</p><p><a href="${esc(cities[0].source.url)}">GeoSphere Austria station workbook</a> (temperature and rain sheets; stations named above) · <a href="https://klimaportal.geosphere.at/klimamittelwerte_1991_2020.html">How the station averages were made</a> · <a href="https://www.austria.info/en-gb/inspiration/destinations/">Austria Tourism destinations</a> · Checked October 2026</p></details></div></section>`;
+};

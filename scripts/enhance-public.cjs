@@ -8,7 +8,7 @@ const plain=value=>String(value||'').replace(/<[^>]*>/g,'').replace(/&amp;/g,'&'
 const link=(url,label)=>`<a data-canonical-link href="${url}">${esc(label)}</a>`;
 module.exports=function enhancePublic(root,out){
  const all=JSON.parse(fs.readFileSync(path.join(root,'storybook/data.json')));
- const austria=all.find(r=>r.iso===40);austria.lead='<strong>Spring or autumn for cities, June–September for lakes and mountain holidays, and winter for skiing.</strong> Vienna’s weather score does not describe Alpine snow conditions. Compare the activity-specific seasons in the guide.';
+ const austria=all.find(r=>r.iso===40);austria.lead='<strong>Choose spring or autumn for cities, summer for lakes and hikes, or winter for skiing.</strong> Compare six places in the guide. The score uses Vienna.';
  fs.writeFileSync(path.join(out,'storybook/data.json'),JSON.stringify(all));
  const guides=all.filter(r=>r.slug&&fs.existsSync(path.join(out,'country',r.slug,'index.html'))).sort((a,b)=>a.name.localeCompare(b.name));
  const css=fs.readFileSync(path.join(root,'storybook/fonts.css'),'utf8')+fs.readFileSync(path.join(root,'storybook/game.css'),'utf8')+fs.readFileSync(path.join(root,'scripts/seo.css'),'utf8');
@@ -102,11 +102,19 @@ module.exports=function enhancePublic(root,out){
    html=html.replace(/"dateModified":"[^" ]+"/g,'"dateModified":"2026-09-26"');
   }
   if(r.slug==='austria'){
-   html=html.replace(/(<div class="guide-intro"><p class="lead">)[\s\S]*?(<\/p>)/,'$1<strong>Choose spring or autumn for a city break, June–September for lakes and mountain holidays, or winter for skiing.</strong> Austria has no single best month for every trip: Vienna weather does not describe conditions on an Alpine ski slope.$2');
+   html=html.replace(/(<div class="guide-intro"><p class="lead">)[\s\S]*?(<\/p>)/,'$1<strong>Choose spring or autumn for cities, summer for lakes and hikes, or winter for skiing.</strong> Compare six places below. The score above uses Vienna.$2');
    html=html.replace('Austria month by month','Austria weather by month: Vienna');
-   html=html.replace('<section class="guide-section" id="months">',fs.readFileSync(path.join(root,'scripts/austria-season-guide.html'),'utf8')+'<section class="guide-section" id="months">');
+   html=html.replace('<section class="guide-section" id="months">',require('./austria-regions.cjs')()+fs.readFileSync(path.join(root,'scripts/austria-season-guide.html'),'utf8')+'<section class="guide-section" id="months">');
+   html=html.replace('<a href="#months">By month</a>','<a href="#regions">Places</a><a href="#months">Months</a>');
+   html=html.replace('Your year in Austria','Vienna weather by month').replace('<div class="k">Best month</div>','<div class="k">Top Vienna score</div>');
+   html=html.replace(/<section class="season-summary">[\s\S]*?<\/section>/,'<section class="season-summary"><div class="wrap"><div class="stubs"><div class="stub"><div class="stub__band k-ideal">Vienna weather</div><span class="stub__v">Apr–Jun · Sep</span><p>Higher scores for city walks.</p></div><div class="stub"><div class="stub__band k-good">Western Austria</div><span class="stub__v">Check rain</span><p>Salzburg and Bregenz are wetter in summer.</p></div><div class="stub"><div class="stub__band k-fair">Ski trip</div><span class="stub__v">Check the resort</span><p>Vienna weather does not rate ski snow.</p></div></div></div></section>');
+   for(const heading of ['The year at a glance','Where you go changes when you go','Best time to visit Austria for','What is on, and when'])html=html.replace(new RegExp('<section class="guide-section"><div class="wrap(?: prose)?">\\s*<h2>'+heading+'<\\/h2>[\\s\\S]*?<\\/section>'),'');
+   html=html.replace(/<section class="guide-section" id="watch-out">[\s\S]*?<\/section>/,'').replace('<a href="#watch-out">Watch out</a>','');
    html=html.replace('December to March across the Tyrol and western Alps, with the deepest, most reliable snow at the higher resorts.','Late December to early March is the core ski season, according to Austria Tourism. Individual resorts can open earlier or close later; check their snow reports and lift openings.');
    html=html.replace('The quiet shoulder seasons are mild and cheaper.','Spring and autumn are useful options for city breaks; compare prices for your dates.');
+   html=html.replace('The quietest, cheapest stretch of the year.','Compare prices for your dates. Weather cannot show the cheapest month.');
+   html=html.replace(/[✿☀🌷]/gu,'');
+   html=html.replace(/"dateModified":"[^" ]+"/g,'"dateModified":"2026-10-17"');
   }
   if(r.slug==='brazil'){
    html=html.replace('<div class="k">Best month</div>','<div class="k">Top Rio score</div>');
@@ -249,7 +257,7 @@ module.exports=function enhancePublic(root,out){
  save('/methodology/',shell('How Our Travel Weather Ratings Work','Understand GoWhereAndWhen weather scores, source limitations, regional differences and the editorial approach behind the country guides.','/methodology/',fs.readFileSync(path.join(root,'scripts/methodology.html'),'utf8')));
  const urls=['/','/country/',...guides.map(r=>'/country/'+r.slug+'/'),...months.map(m=>'/when/'+m.toLowerCase()+'/'),'/methodology/'];
  require('./add-analytics.cjs')(root,out,urls);
- fs.writeFileSync(path.join(out,'sitemap.xml'),`<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.map(url=>`  <url><loc>${origin+url}</loc><lastmod>${url==='/country/greece/'?'2026-10-15':url==='/country/portugal/'?'2026-10-14':url==='/country/saudi-arabia/'?'2026-10-14':url==='/country/brazil/'?'2026-10-12':url==='/country/germany/'?'2026-10-10':url==='/country/china/'?'2026-10-09':url==='/country/japan/'?'2026-10-07':url==='/country/uk/'?'2026-10-06':url==='/country/mexico/'?'2026-10-05':url==='/country/italy/'?'2026-10-04':url==='/country/turkey/'?'2026-10-03':url==='/country/usa/'?'2026-10-01':url==='/country/spain/'?'2026-09-27':url==='/country/france/'?'2026-09-26':reviewed}</lastmod></url>`).join('\n')}\n</urlset>\n`);
+ fs.writeFileSync(path.join(out,'sitemap.xml'),`<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.map(url=>`  <url><loc>${origin+url}</loc><lastmod>${url==='/country/austria/'?'2026-10-17':url==='/country/greece/'?'2026-10-15':url==='/country/portugal/'?'2026-10-14':url==='/country/saudi-arabia/'?'2026-10-14':url==='/country/brazil/'?'2026-10-12':url==='/country/germany/'?'2026-10-10':url==='/country/china/'?'2026-10-09':url==='/country/japan/'?'2026-10-07':url==='/country/uk/'?'2026-10-06':url==='/country/mexico/'?'2026-10-05':url==='/country/italy/'?'2026-10-04':url==='/country/turkey/'?'2026-10-03':url==='/country/usa/'?'2026-10-01':url==='/country/spain/'?'2026-09-27':url==='/country/france/'?'2026-09-26':reviewed}</lastmod></url>`).join('\n')}\n</urlset>\n`);
  fs.writeFileSync(path.join(out,'robots.txt'),`User-agent: *\nAllow: /\n\nSitemap: ${origin}/sitemap.xml\n`);
  fs.writeFileSync(path.join(out,'404.html'),shell('Page Not Found','Find a destination guide or return to the world map.','/404.html','<h1>That page could not be found</h1><p>'+link('/','Open the world map')+' or '+link('/country/','browse country guides')+'.</p>').replace('index,follow,max-image-preview:large','noindex,follow').replace(/<link rel="canonical"[^>]*>/,''));
  fs.writeFileSync(path.join(out,'llms.txt'),`# GoWhereAndWhen\n\nSeasonal travel planning with an interactive map and ${guides.length} country guides. Weather values are representative-city estimates, not forecasts, snow reports, crowd or price measurements.\n\n- [Country guides](${origin}/country/)\n- [Methodology and limitations](${origin}/methodology/)\n${guides.map(r=>`- [${r.name}](${origin}/country/${r.slug}/)`).join('\n')}\n`);

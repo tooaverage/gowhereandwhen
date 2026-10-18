@@ -17,6 +17,13 @@
   ],
   "nextCandidates": [
     {
+      "iso": 764,
+      "name": "Thailand",
+      "arrivals2024": 35545714,
+      "source": "Thailand Ministry of Tourism and Sports, 2024 foreign tourist arrivals, retrieved 18 October 2026",
+      "url": "https://international.mots.go.th/10997/"
+    },
+    {
       "iso": 682,
       "name": "Saudi Arabia",
       "arrivals2024": 29727444,
@@ -32,5 +39,5 @@
       "crossCheck": "https://travelbi.turismodeportugal.pt/en/tourism-in-portugal/portugal-is-on-track-to-reach-30-million-international-tourists-by-2025/"
     }
   ],
-  "nextCandidateNote": "Comparable 2024 overnight tourist-arrival evidence supports Saudi Arabia then Portugal as candidates. The OWID series omits some top-ten countries, so this is not a verified global rank or a complete order beyond the original top ten."
+  "nextCandidateNote": "Thailand's ministry reports 2024 foreign tourist arrivals, ahead of Saudi Arabia and Portugal by their 2024 overnight-arrival counts. Source definitions may differ. This is queue evidence, not a verified global rank or strictly comparable full order beyond the original top ten."
 }

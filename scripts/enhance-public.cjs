@@ -47,7 +47,7 @@ module.exports=function enhancePublic(root,out){
  fs.writeFileSync(path.join(out,'index.html'),home);
  for(const r of guides){
   const file=path.join(out,'country',r.slug,'index.html');let html=common(fs.readFileSync(file,'utf8'));
-  const title=r.slug==='france'?'Best Time to Visit France: Paris, Riviera & Regional Weather':r.slug==='portugal'?'Best Time to Visit Portugal: Weather by Region and Month':r.slug==='austria'?'Best Time to Visit Austria: Cities, Alps & Skiing':r.slug==='mexico'?'Best Time to Visit Mexico: Weather by City and Month':r.slug==='uk'?'Best Time to Visit the UK: Weather by City and Month':r.slug==='china'?'Best Time to Visit China: Weather by City and Month':r.slug==='germany'?'Best Time to Visit Germany: Cities, Oktoberfest & Alps':`Best Time to Visit ${r.name}: Weather by Month`;
+  const title=r.slug==='france'?'Best Time to Visit France: Paris, Riviera & Regional Weather':r.slug==='portugal'?'Best Time to Visit Portugal: Weather by Region and Month':r.slug==='austria'?'Best Time to Visit Austria: Cities, Alps & Skiing':r.slug==='thailand'?'Best Time to Visit Thailand: Weather by Coast and Month':r.slug==='mexico'?'Best Time to Visit Mexico: Weather by City and Month':r.slug==='uk'?'Best Time to Visit the UK: Weather by City and Month':r.slug==='china'?'Best Time to Visit China: Weather by City and Month':r.slug==='germany'?'Best Time to Visit Germany: Cities, Oktoberfest & Alps':`Best Time to Visit ${r.name}: Weather by Month`;
   html=html.replace(/<title>.*?<\/title>/,`<title>${esc(title)} | GoWhereAndWhen</title>`);
   html=html.replace('Find your best time to visit','Best time to visit');
   html=html.replace(/(<div class="guide-intro">[\s\S]*?<\/div>)/,`$1<p class="rating-context">Weather scores use ${esc(r.city)} as a reference. They are not forecasts or measures of snow, prices or crowds. ${link('/methodology/','How to use these ratings')}</p>`);
@@ -115,6 +115,25 @@ module.exports=function enhancePublic(root,out){
    html=html.replace('The quietest, cheapest stretch of the year.','Compare prices for your dates. Weather cannot show the cheapest month.');
    html=html.replace(/[✿☀🌷]/gu,'');
    html=html.replace(/"dateModified":"[^" ]+"/g,'"dateModified":"2026-10-17"');
+  }
+  if(r.slug==='thailand'){
+   html=html.replace('<span class="brand-symbol" aria-hidden="true">✦</span>','<img class="brand-mark" src="/storybook/assets/logo.svg" alt="" width="34" height="34">');
+   html=html.replace('The best time to visit Thailand is the cool, dry season from November to February, with warm, sunny days.','Compare Bangkok, Chiang Mai, Phuket and Ko Samui weather by month. Rain peaks at different times on Thailand’s two coasts.');
+   html=html.replace(/(<div class="guide-intro"><p class="lead">)[\s\S]*?(<\/p>)/,'$1<strong>November to January suits Bangkok and Chiang Mai.</strong> For islands, compare Phuket and Ko Samui: their wettest months differ.$2');
+   html=html.replace(/<section class="guide-section"><div class="wrap prose">\s*<h2>The year at a glance<\/h2>[\s\S]*?<\/section>/,'');
+   html=html.replace('<section class="guide-section" id="months">',require('./thailand-regions.cjs')()+'<section class="guide-section" id="months">');
+   html=html.replace('<a href="#months">By month</a>','<a href="#regions">Places</a><a href="#months">Months</a>');
+   html=html.replace('Your year in Thailand','Bangkok weather by month').replace('<div class="k">Best month</div>','<div class="k">Top Bangkok score</div>');
+   html=html.replace('Thailand month by month','Thailand weather by month: Bangkok');
+   html=html.replace(/<section class="season-summary">[\s\S]*?<\/section>/,'<section class="season-summary"><div class="wrap"><div class="stubs"><div class="stub"><div class="stub__band k-ideal">Bangkok weather</div><span class="stub__v">Nov–Feb</span><p>Compare cooler city days.</p></div><div class="stub"><div class="stub__band k-good">Phuket coast</div><span class="stub__v">Nov–Apr</span><p>Less rain than its wet season.</p></div><div class="stub"><div class="stub__band k-fair">Ko Samui coast</div><span class="stub__v">Feb–Apr</span><p>Less rain than November.</p></div></div></div></section>');
+   html=html.replace(/<section class="guide-section"><div class="wrap">\s*<h2>Where you go changes when you go<\/h2>[\s\S]*?<\/section>/,'');
+   html=html.replace(/<section class="guide-section"><div class="wrap prose">\s*<h2>Best time to visit Thailand for<\/h2>[\s\S]*?<\/section>/,'<section class="guide-section"><div class="wrap"><h2>Choose your trip</h2><div class="trip-grid"><article><h3>Bangkok and Chiang Mai</h3><p>Compare November to January for less heat and rain. Check Chiang Mai air quality later in the dry season.</p></article><article><h3>Phuket</h3><p>Compare November to April for less rain. Check sea conditions.</p></article><article><h3>Ko Samui</h3><p>Compare February to April. November is much wetter.</p></article></div></div></section>');
+   html=html.replace(/<section class="guide-section"><div class="wrap">\s*<h2>What is on, and when<\/h2>[\s\S]*?<\/section>/,'<section class="guide-section"><div class="wrap"><h2>Songkran in April</h2><p>Thai New Year celebrations include water play. Bangkok and Chiang Mai are hot in April. Check local event dates.</p></div></section>');
+   html=html.replace(/<section class="guide-section" id="watch-out">[\s\S]*?<\/section>/,'').replace('<a href="#watch-out">Watch out</a>','');
+   html=html.replace(/<section class="guide-section faq-section">[\s\S]*?<\/section>/,'<section class="guide-section faq-section"><div class="wrap"><h2>Good to know</h2><div class="faq"><details><summary>What is the best time to visit Thailand?</summary><div class="a">Compare November to January for Bangkok and Chiang Mai. Check Phuket and Ko Samui separately for islands.</div></details><details><summary>When is the monsoon in Thailand?</summary><div class="a">Phuket is wetter from May to October. Ko Samui has a later rain peak, especially in November.</div></details><details><summary>Is April a good time to visit Thailand?</summary><div class="a">April brings Songkran, but Bangkok and Chiang Mai are hot. Compare weather by place before you go.</div></details></div></div></section>');
+   html=html.replace('The quietest, cheapest stretch of the year.','Compare current prices for your dates. Weather cannot show the cheapest month.');
+   html=html.replace(/[✿☀🌷]/gu,'');
+   html=html.replace(/"dateModified":"[^" ]+"/g,'"dateModified":"2026-10-18"');
   }
   if(r.slug==='brazil'){
    html=html.replace('<div class="k">Best month</div>','<div class="k">Top Rio score</div>');

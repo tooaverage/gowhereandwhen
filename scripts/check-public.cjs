@@ -65,6 +65,18 @@ assert.equal((greeceSection.match(/<tr>/g)||[]).length,13,'Greece table has head
 assert(greece.includes('The score above uses Athens.')&&greeceSection.includes('miss the Cyclades, mountain weather and sea conditions'),'Greece score and coverage limits');
 assert(!greece.includes('cheaper rates')&&!/[✦✿☀🌷]/u.test(greece),'Greece unsupported price claim and pictographs');
 for(const city of require('../climate/greece.json'))assert(greeceSection.includes(city.name)&&greeceSection.includes(city.source.url.replaceAll('&','&amp;')),city.name+' source visible');
+const thailand=read(path.join(root,'country/thailand/index.html'));
+const thailandSection=thailand.match(/<section class="guide-section" id="regions">([\s\S]*?)<\/section>/)?.[1];
+assert(thailandSection,'Thailand regional comparison missing');
+assert.equal((thailandSection.match(/<tr>/g)||[]).length,13,'Thailand table has header and twelve months');
+assert(thailand.includes('The score above uses Bangkok.')&&thailandSection.includes('miss inland areas, mountains and many islands'),'Thailand score and coverage limits');
+assert(!thailand.includes('busiest and priciest')&&!thailand.includes('cheaper travel')&&!/[✦✿☀🌷]/u.test(thailand),'Thailand unsupported claims and pictographs');
+for(const city of require('../climate/thailand.json')){
+ assert(thailandSection.includes(city.name)&&thailandSection.includes(city.source.url),city.name+' source visible');
+ assert.equal(city.source.provider,'Thai Meteorological Department');
+ assert.equal(city.source.period,'1991-2020');
+ for(const key of ['hi','lo','pr'])assert.equal(city[key].length,12,city.name+' '+key);
+}
 const portugal=read(path.join(root,'country/portugal/index.html'));
 const portugalSection=portugal.match(/<section class="guide-section" id="regions">([\s\S]*?)<\/section>/)?.[1];
 assert(portugalSection,'Portugal regional comparison missing');

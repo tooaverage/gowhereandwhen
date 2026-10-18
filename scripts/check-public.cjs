@@ -66,6 +66,7 @@ assert(greece.includes('The score above uses Athens.')&&greeceSection.includes('
 assert(!greece.includes('cheaper rates')&&!/[✦✿☀🌷]/u.test(greece),'Greece unsupported price claim and pictographs');
 for(const city of require('../climate/greece.json'))assert(greeceSection.includes(city.name)&&greeceSection.includes(city.source.url.replaceAll('&','&amp;')),city.name+' source visible');
 const thailand=read(path.join(root,'country/thailand/index.html'));
+assert(read(path.join(root,'sitemap.xml')).includes('<loc>https://gowhereandwhen.com/country/thailand/</loc><lastmod>2026-10-18</lastmod>'),'Thailand sitemap lastmod');
 const thailandSection=thailand.match(/<section class="guide-section" id="regions">([\s\S]*?)<\/section>/)?.[1];
 assert(thailandSection,'Thailand regional comparison missing');
 assert.equal((thailandSection.match(/<tr>/g)||[]).length,13,'Thailand table has header and twelve months');

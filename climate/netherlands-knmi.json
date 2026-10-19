@@ -1,0 +1,250 @@
+[
+  {
+    "name": "Schiphol",
+    "region": "Amsterdam area",
+    "iso": 528,
+    "station": "240",
+    "lat": 52.32,
+    "lng": 4.79,
+    "elevationM": -3.3,
+    "hi": [
+      6.2,
+      6.9,
+      10.1,
+      14.3,
+      17.8,
+      20.3,
+      22.5,
+      22.4,
+      19.2,
+      14.7,
+      10.0,
+      6.9
+    ],
+    "lo": [
+      1.2,
+      1.0,
+      2.8,
+      5.2,
+      8.6,
+      11.3,
+      13.5,
+      13.4,
+      11.0,
+      7.7,
+      4.5,
+      1.9
+    ],
+    "pr": [
+      66.5,
+      54.7,
+      51.8,
+      39.6,
+      53.9,
+      64.8,
+      82.3,
+      98.6,
+      84.4,
+      86.7,
+      85.3,
+      81.7
+    ],
+    "source": {
+      "provider": "Royal Netherlands Meteorological Institute (KNMI)",
+      "period": "1991-2020",
+      "url": "https://cdn.knmi.nl/knmi/map/page/klimatologie/klimaatatlas/tabel/stationsdata/klimtab_9120_240.pdf",
+      "method": "Station climate table: mean daily maximum and minimum temperature; mean monthly precipitation total. Values transcribed from first table, monthly rows.",
+      "units": {
+        "temperature": "°C",
+        "precipitation": "mm/month"
+      },
+      "retrieved": "2026-10-19"
+    }
+  },
+  {
+    "name": "De Kooy",
+    "region": "North Sea coast",
+    "iso": 528,
+    "station": "235",
+    "lat": 52.93,
+    "lng": 4.78,
+    "elevationM": 1.2,
+    "hi": [
+      6.0,
+      6.2,
+      8.7,
+      12.4,
+      15.8,
+      18.5,
+      20.8,
+      21.1,
+      18.3,
+      14.3,
+      10.0,
+      7.0
+    ],
+    "lo": [
+      1.7,
+      1.4,
+      3.0,
+      5.5,
+      9.0,
+      11.8,
+      14.1,
+      14.4,
+      12.1,
+      8.7,
+      5.2,
+      2.6
+    ],
+    "pr": [
+      65.6,
+      50.1,
+      43.7,
+      34.9,
+      42.0,
+      58.7,
+      62.5,
+      89.1,
+      84.7,
+      96.5,
+      83.5,
+      75.3
+    ],
+    "source": {
+      "provider": "Royal Netherlands Meteorological Institute (KNMI)",
+      "period": "1991-2020",
+      "url": "https://cdn.knmi.nl/knmi/map/page/klimatologie/klimaatatlas/tabel/stationsdata/klimtab_9120_235.pdf",
+      "method": "Station climate table: mean daily maximum and minimum temperature; mean monthly precipitation total. Values transcribed from first table, monthly rows.",
+      "units": {
+        "temperature": "°C",
+        "precipitation": "mm/month"
+      },
+      "retrieved": "2026-10-19"
+    }
+  },
+  {
+    "name": "Vlissingen",
+    "region": "Zeeland coast",
+    "iso": 528,
+    "station": "310",
+    "lat": 51.44,
+    "lng": 3.6,
+    "elevationM": 8.0,
+    "hi": [
+      6.4,
+      6.8,
+      9.6,
+      13.3,
+      16.8,
+      19.6,
+      21.8,
+      22.0,
+      19.0,
+      14.8,
+      10.4,
+      7.2
+    ],
+    "lo": [
+      2.6,
+      2.6,
+      4.4,
+      6.9,
+      10.2,
+      13.0,
+      15.4,
+      15.6,
+      13.4,
+      10.1,
+      6.5,
+      3.5
+    ],
+    "pr": [
+      58.9,
+      52.8,
+      44.6,
+      35.0,
+      49.4,
+      62.0,
+      72.4,
+      81.8,
+      73.6,
+      73.8,
+      78.9,
+      75.7
+    ],
+    "source": {
+      "provider": "Royal Netherlands Meteorological Institute (KNMI)",
+      "period": "1991-2020",
+      "url": "https://cdn.knmi.nl/knmi/map/page/klimatologie/klimaatatlas/tabel/stationsdata/klimtab_9120_310.pdf",
+      "method": "Station climate table: mean daily maximum and minimum temperature; mean monthly precipitation total. Values transcribed from first table, monthly rows.",
+      "units": {
+        "temperature": "°C",
+        "precipitation": "mm/month"
+      },
+      "retrieved": "2026-10-19"
+    }
+  },
+  {
+    "name": "Maastricht",
+    "region": "South Limburg",
+    "iso": 528,
+    "station": "380",
+    "lat": 50.91,
+    "lng": 5.76,
+    "elevationM": 114.3,
+    "hi": [
+      5.7,
+      6.7,
+      10.7,
+      15.0,
+      18.8,
+      21.7,
+      23.8,
+      23.5,
+      19.7,
+      14.8,
+      9.7,
+      6.3
+    ],
+    "lo": [
+      0.5,
+      0.7,
+      2.7,
+      5.0,
+      8.7,
+      11.7,
+      13.8,
+      13.4,
+      10.6,
+      7.3,
+      3.8,
+      1.4
+    ],
+    "pr": [
+      63.8,
+      57.6,
+      54.6,
+      41.0,
+      57.7,
+      68.9,
+      72.8,
+      82.8,
+      57.5,
+      63.6,
+      62.2,
+      74.3
+    ],
+    "source": {
+      "provider": "Royal Netherlands Meteorological Institute (KNMI)",
+      "period": "1991-2020",
+      "url": "https://cdn.knmi.nl/knmi/map/page/klimatologie/klimaatatlas/tabel/stationsdata/klimtab_9120_380.pdf",
+      "method": "Station climate table: mean daily maximum and minimum temperature; mean monthly precipitation total. Values transcribed from first table, monthly rows.",
+      "units": {
+        "temperature": "°C",
+        "precipitation": "mm/month"
+      },
+      "retrieved": "2026-10-19"
+    }
+  }
+]

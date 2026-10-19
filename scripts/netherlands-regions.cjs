@@ -1,0 +1,13 @@
+const cities=require('../climate/netherlands-knmi.json');
+const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const esc=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+module.exports=function netherlandsRegions(){
+ if(cities.map(c=>c.station).join(',')!=='240,235,310,380')throw Error('Netherlands station sample changed');
+ for(const city of cities){
+  if(city.iso!==528||!Number.isFinite(city.lat)||!Number.isFinite(city.lng)||city.source?.period!=='1991-2020'||!city.source?.url||!['hi','lo','pr'].every(k=>city[k]?.length===12&&city[k].every(Number.isFinite)))throw Error('Netherlands station data missing: '+city.name);
+  for(let m=0;m<12;m++)if(city.hi[m]<city.lo[m]||city.hi[m]>40||city.lo[m]<-20||city.pr[m]<0||city.pr[m]>500)throw Error('Netherlands station value invalid: '+city.name+' '+m);
+ }
+ const rows=months.map((month,m)=>`<tr><th scope="row">${month}</th>${cities.map(city=>`<td>${Math.round(city.hi[m])}°C<br><small>${Math.round(city.pr[m])} mm rain</small></td>`).join('')}</tr>`).join('');
+ return `<section class="guide-section" id="regions"><div class="wrap"><h2>Netherlands weather by place</h2><p>The score above uses Amsterdam. Compare the coast and inland south before choosing a month.</p><p class="disc">Swipe the table sideways on a small screen.</p><p id="netherlands-weather-caption"><strong>Average daytime high and monthly rain, 1991–2020</strong></p><div class="table-scroll"><table class="weather-table" aria-labelledby="netherlands-weather-caption"><thead><tr><th scope="col">Month</th>${cities.map(city=>`<th scope="col">${esc(city.name)}<small>${esc(city.region)}</small></th>`).join('')}</tr></thead><tbody>${rows}</tbody></table></div><p>In July, Maastricht averages 24°C by day; De Kooy on the north coast averages 21°C. Rain is possible in every season.</p><p>These four stations miss many cities and islands. They do not show sea conditions or a forecast.</p><details class="guide-sources"><summary>Sources and weather limits</summary><p>KNMI station averages cover 1991–2020. Highs are mean daily highs; rain is the mean monthly total. Schiphol is near Amsterdam, not in its centre. De Kooy is near the North Sea coast, not a Wadden Island. The Amsterdam weather score uses separate older inputs.</p><p>${cities.map(city=>`<a href="${esc(city.source.url)}">${esc(city.name)} station table</a>`).join(' · ')} · <a href="https://www.holland.com/global/tourism/getting-around/information/weather">Netherlands tourism weather guide</a> · <a href="https://www.holland.com/global/tourism/get-inspired/dutch-icons/tulip-season-in-the-netherlands">Tulip season</a> · Checked October 2026</p></details></div></section>`;
+};

@@ -66,6 +66,16 @@ assert(greece.includes('The score above uses Athens.')&&greeceSection.includes('
 assert(!greece.includes('cheaper rates')&&!/[✦✿☀🌷]/u.test(greece),'Greece unsupported price claim and pictographs');
 for(const city of require('../climate/greece.json'))assert(greeceSection.includes(city.name)&&greeceSection.includes(city.source.url.replaceAll('&','&amp;')),city.name+' source visible');
 const thailand=read(path.join(root,'country/thailand/index.html'));
+const netherlands=read(path.join(root,'country/netherlands/index.html'));
+const netherlandsSection=netherlands.match(/<section class="guide-section" id="regions">([\s\S]*?)<\/section>/)?.[1];
+assert(netherlandsSection,'Netherlands station comparison missing');
+assert.equal((netherlandsSection.match(/<tr>/g)||[]).length,13,'Netherlands table has header and twelve months');
+assert(netherlands.includes('The score above uses Amsterdam.')&&netherlandsSection.includes('miss many cities and islands'),'Netherlands score and coverage limits');
+assert(!netherlands.includes('cheaper, quieter')&&!/[✿☀🌷]/u.test(netherlands),'Netherlands unsupported price and pictographs');
+assert(netherlands.includes('Amsterdam weather by month')&&!netherlands.includes('What is on, and when'),'Netherlands heading and repeated section');
+assert.equal(publicData.find(r=>r.iso===528).markers.length,0,'Netherlands month labels have no unrelated blossom or sun pictographs');
+for(const city of require('../climate/netherlands-knmi.json'))assert(netherlandsSection.includes(city.name)&&netherlandsSection.includes(city.source.url),city.name+' station source visible');
+assert(read(path.join(root,'sitemap.xml')).includes('<loc>https://gowhereandwhen.com/country/netherlands/</loc><lastmod>2026-10-19</lastmod>'),'Netherlands sitemap lastmod');
 assert(read(path.join(root,'sitemap.xml')).includes('<loc>https://gowhereandwhen.com/country/thailand/</loc><lastmod>2026-10-18</lastmod>'),'Thailand sitemap lastmod');
 const thailandSection=thailand.match(/<section class="guide-section" id="regions">([\s\S]*?)<\/section>/)?.[1];
 assert(thailandSection,'Thailand regional comparison missing');

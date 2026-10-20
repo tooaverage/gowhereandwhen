@@ -47,7 +47,7 @@ module.exports=function enhancePublic(root,out){
  fs.writeFileSync(path.join(out,'index.html'),home);
  for(const r of guides){
   const file=path.join(out,'country',r.slug,'index.html');let html=common(fs.readFileSync(file,'utf8'));
-  const title=r.slug==='france'?'Best Time to Visit France: Paris, Riviera & Regional Weather':r.slug==='portugal'?'Best Time to Visit Portugal: Weather by Region and Month':r.slug==='austria'?'Best Time to Visit Austria: Cities, Alps & Skiing':r.slug==='thailand'?'Best Time to Visit Thailand: Weather by Coast and Month':r.slug==='netherlands'?'Best Time to Visit the Netherlands: Weather by Place and Month':r.slug==='mexico'?'Best Time to Visit Mexico: Weather by City and Month':r.slug==='uk'?'Best Time to Visit the UK: Weather by City and Month':r.slug==='china'?'Best Time to Visit China: Weather by City and Month':r.slug==='germany'?'Best Time to Visit Germany: Cities, Oktoberfest & Alps':`Best Time to Visit ${r.name}: Weather by Month`;
+  const title=r.slug==='france'?'Best Time to Visit France: Paris, Riviera & Regional Weather':r.slug==='portugal'?'Best Time to Visit Portugal: Weather by Region and Month':r.slug==='austria'?'Best Time to Visit Austria: Cities, Alps & Skiing':r.slug==='thailand'?'Best Time to Visit Thailand: Weather by Coast and Month':r.slug==='netherlands'?'Best Time to Visit the Netherlands: Weather by Place and Month':r.slug==='croatia'?'Best Time to Visit Croatia: Weather by Place and Month':r.slug==='mexico'?'Best Time to Visit Mexico: Weather by City and Month':r.slug==='uk'?'Best Time to Visit the UK: Weather by City and Month':r.slug==='china'?'Best Time to Visit China: Weather by City and Month':r.slug==='germany'?'Best Time to Visit Germany: Cities, Oktoberfest & Alps':`Best Time to Visit ${r.name}: Weather by Month`;
   html=html.replace(/<title>.*?<\/title>/,`<title>${esc(title)} | GoWhereAndWhen</title>`);
   html=html.replace('Find your best time to visit','Best time to visit');
   html=html.replace(/(<div class="guide-intro">[\s\S]*?<\/div>)/,`$1<p class="rating-context">Weather scores use ${esc(r.city)} as a reference. They are not forecasts or measures of snow, prices or crowds. ${link('/methodology/','How to use these ratings')}</p>`);
@@ -70,6 +70,22 @@ module.exports=function enhancePublic(root,out){
    html=html.replace('The quietest, cheapest stretch of the year.','Compare current prices for your dates. Weather cannot show the cheapest month.');
    html=html.replace(/[✿☀🌷]/gu,'');
    html=html.replace(/"dateModified":"[^" ]+"/g,'"dateModified":"2026-10-19"');
+  }
+  if(r.slug==='croatia'){
+   html=html.replace('<span class="brand-symbol" aria-hidden="true">✦</span>','<img class="brand-mark" src="/storybook/assets/logo.svg" alt="" width="34" height="34">');
+   html=html.replace('<section class="guide-section" id="months">',require('./croatia-regions.cjs')()+'<section class="guide-section" id="months">');
+   html=html.replace('<a href="#months">By month</a>','<a href="#regions">Places</a><a href="#months">Months</a>');
+   html=html.replace('<a href="#whats-on">What is on</a>','');
+   html=html.replace(/<section class="guide-section"><div class="wrap">\s*<h2>What is on, and when<\/h2>[\s\S]*?<\/section>/,'');
+   html=html.replace('<div class="stub__band k-ideal">Best months</div>','<div class="stub__band k-ideal">Top Split scores</div>');
+   html=html.replace('<div class="stub__band k-good">Shoulder</div>','<div class="stub__band k-good">Other Split months</div>');
+   html=html.replace('<div class="stub__band k-fair">Low season</div>','<div class="stub__band k-fair">Cooler in Split</div>');
+   html=html.replace('The steadiest weather, peaking around Jun.','Split weather only. Compare the table for other places.');
+   html=html.replace('Croatia month by month','Split weather by month');
+   html=html.replace('<div class="k">Best month</div>','<div class="k">Top Split score</div>');
+   html=html.replace('The quietest, cheapest stretch of the year.','Compare current prices for your dates. Weather cannot show the cheapest month.');
+   html=html.replace(/[✿☀🌷]/gu,'');
+   html=html.replace(/"dateModified":"[^" ]+"/g,'"dateModified":"2026-10-20"');
   }
   if(r.slug==='china'){
    html=html.replace('<span class="brand-symbol" aria-hidden="true">✦</span>','<img class="brand-mark" src="/storybook/assets/logo.svg" alt="" width="34" height="34">');
@@ -289,7 +305,7 @@ module.exports=function enhancePublic(root,out){
  save('/methodology/',shell('How Our Travel Weather Ratings Work','Understand GoWhereAndWhen weather scores, source limitations, regional differences and the editorial approach behind the country guides.','/methodology/',fs.readFileSync(path.join(root,'scripts/methodology.html'),'utf8')));
  const urls=['/','/country/',...guides.map(r=>'/country/'+r.slug+'/'),...months.map(m=>'/when/'+m.toLowerCase()+'/'),'/methodology/'];
  require('./add-analytics.cjs')(root,out,urls);
- fs.writeFileSync(path.join(out,'sitemap.xml'),`<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.map(url=>`  <url><loc>${origin+url}</loc><lastmod>${url==='/country/netherlands/'?'2026-10-19':url==='/country/thailand/'?'2026-10-18':url==='/country/austria/'?'2026-10-17':url==='/country/greece/'?'2026-10-15':url==='/country/portugal/'?'2026-10-14':url==='/country/saudi-arabia/'?'2026-10-14':url==='/country/brazil/'?'2026-10-12':url==='/country/germany/'?'2026-10-10':url==='/country/china/'?'2026-10-09':url==='/country/japan/'?'2026-10-07':url==='/country/uk/'?'2026-10-06':url==='/country/mexico/'?'2026-10-05':url==='/country/italy/'?'2026-10-04':url==='/country/turkey/'?'2026-10-03':url==='/country/usa/'?'2026-10-01':url==='/country/spain/'?'2026-09-27':url==='/country/france/'?'2026-09-26':reviewed}</lastmod></url>`).join('\n')}\n</urlset>\n`);
+ fs.writeFileSync(path.join(out,'sitemap.xml'),`<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.map(url=>`  <url><loc>${origin+url}</loc><lastmod>${url==='/country/croatia/'?'2026-10-20':url==='/country/netherlands/'?'2026-10-19':url==='/country/thailand/'?'2026-10-18':url==='/country/austria/'?'2026-10-17':url==='/country/greece/'?'2026-10-15':url==='/country/portugal/'?'2026-10-14':url==='/country/saudi-arabia/'?'2026-10-14':url==='/country/brazil/'?'2026-10-12':url==='/country/germany/'?'2026-10-10':url==='/country/china/'?'2026-10-09':url==='/country/japan/'?'2026-10-07':url==='/country/uk/'?'2026-10-06':url==='/country/mexico/'?'2026-10-05':url==='/country/italy/'?'2026-10-04':url==='/country/turkey/'?'2026-10-03':url==='/country/usa/'?'2026-10-01':url==='/country/spain/'?'2026-09-27':url==='/country/france/'?'2026-09-26':reviewed}</lastmod></url>`).join('\n')}\n</urlset>\n`);
  fs.writeFileSync(path.join(out,'robots.txt'),`User-agent: *\nAllow: /\n\nSitemap: ${origin}/sitemap.xml\n`);
  fs.writeFileSync(path.join(out,'404.html'),shell('Page Not Found','Find a destination guide or return to the world map.','/404.html','<h1>That page could not be found</h1><p>'+link('/','Open the world map')+' or '+link('/country/','browse country guides')+'.</p>').replace('index,follow,max-image-preview:large','noindex,follow').replace(/<link rel="canonical"[^>]*>/,''));
  fs.writeFileSync(path.join(out,'llms.txt'),`# GoWhereAndWhen\n\nSeasonal travel planning with an interactive map and ${guides.length} country guides. Weather values are representative-city estimates, not forecasts, snow reports, crowd or price measurements.\n\n- [Country guides](${origin}/country/)\n- [Methodology and limitations](${origin}/methodology/)\n${guides.map(r=>`- [${r.name}](${origin}/country/${r.slug}/)`).join('\n')}\n`);

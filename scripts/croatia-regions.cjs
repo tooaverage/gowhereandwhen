@@ -1,0 +1,13 @@
+const cities=require('../climate/croatia.json');
+const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const esc=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+module.exports=function croatiaRegions(){
+ if(cities.map(c=>c.name).join(',')!=='Zagreb,Rovinj,Split,Dubrovnik')throw Error('Croatia city sample changed');
+ for(const city of cities){
+  if(city.iso!==191||!Number.isFinite(city.lat)||!Number.isFinite(city.lng)||city.lat<42||city.lat>47||city.lng<13||city.lng>20||city.source?.period!=='2001-2020'||!city.source?.url||!['hi','lo','pr'].every(k=>city[k]?.length===12&&city[k].every(Number.isFinite)))throw Error('Croatia climate missing: '+city.name);
+  for(let m=0;m<12;m++)if(city.hi[m]<city.lo[m]||city.hi[m]>45||city.lo[m]<-20||city.pr[m]<0||city.pr[m]>600)throw Error('Croatia climate invalid: '+city.name+' '+m);
+ }
+ const rows=months.map((month,m)=>`<tr><th scope="row">${month}</th>${cities.map(city=>`<td>${Math.round(city.hi[m])}°C<br><small>${Math.round(city.pr[m])} mm rain</small></td>`).join('')}</tr>`).join('');
+ return `<section class="guide-section" id="regions"><div class="wrap"><h2>Croatia weather by place</h2><p>The score above uses Split. Compare Istria, Dalmatia and Zagreb before picking a month.</p><p class="disc">Swipe the table sideways on a small screen.</p><p id="croatia-weather-caption"><strong>Average daytime high and monthly rain, 2001–2020</strong></p><div class="table-scroll"><table class="weather-table" aria-labelledby="croatia-weather-caption"><thead><tr><th scope="col">Month</th>${cities.map(city=>`<th scope="col">${esc(city.name)}</th>`).join('')}</tr></thead><tbody>${rows}</tbody></table></div><p>July is the driest month in all three coastal samples. Dubrovnik averages more rain than Split in October.</p><p>These four places miss the islands, Plitvice and mountain weather. Air temperature does not show sea or sailing conditions.</p><details class="guide-sources"><summary>Sources and weather limits</summary><p>NASA POWER / MERRA-2 estimates use daily data from 2001–2020. Highs are average daily highs; rain is the average monthly total. These are map-based averages, not forecasts or station records. The Split score uses older separate inputs.</p><p>${cities.map(city=>`<a href="${esc(city.source.url)}">${esc(city.name)} data</a>`).join(' · ')} · <a href="https://www.htz.hr/en/press/cntb-news/croatia-records-213-million-visitors-2024-4-rise">Croatian Tourism Board: 2024 regions and places</a> · <a href="https://np-plitvicka-jezera.hr/en/analysis-of-year-round-tourism-in-2024/">Plitvice 2024 visitor seasons</a> · Checked October 2026</p></details></div></section>`;
+};

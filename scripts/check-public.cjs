@@ -59,6 +59,13 @@ for(const city of require('../climate/italy.json')){
 const mexico=read(path.join(root,'country/mexico/index.html'));
 const saudi=read(path.join(root,'country/saudi-arabia/index.html'));
 const greece=read(path.join(root,'country/greece/index.html'));
+const croatia=read(path.join(root,'country/croatia/index.html'));
+const croatiaSection=croatia.match(/<section class="guide-section" id="regions">([\s\S]*?)<\/section>/)?.[1];
+assert(croatiaSection,'Croatia regional comparison missing');
+assert.equal((croatiaSection.match(/<tr>/g)||[]).length,13,'Croatia table has header and twelve months');
+assert(croatia.includes('The weather score uses Split.')&&croatiaSection.includes('miss the islands, Plitvice and mountain weather'),'Croatia score and coverage limits');
+assert(croatia.includes('Top Split scores')&&!croatia.includes('What is on, and when')&&!/[✦✿☀🌷]/u.test(croatia),'Croatia labels, repeated section and pictographs');
+for(const city of require('../climate/croatia.json'))assert(croatiaSection.includes(city.name)&&croatiaSection.includes(city.source.url.replaceAll('&','&amp;')),city.name+' source visible');
 const greeceSection=greece.match(/<section class="guide-section" id="regions">([\s\S]*?)<\/section>/)?.[1];
 assert(greeceSection,'Greece regional comparison missing');
 assert.equal((greeceSection.match(/<tr>/g)||[]).length,13,'Greece table has header and twelve months');

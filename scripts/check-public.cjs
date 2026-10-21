@@ -65,6 +65,7 @@ assert(swissSection,'Switzerland station comparison missing');
 assert.equal((swissSection.match(/<tr>/g)||[]).length,13,'Switzerland table needs twelve months');
 assert(switzerland.includes('The score above uses Zurich.')&&swissSection.includes('miss many Alpine valleys and peaks'),'Swiss score and coverage limits');
 assert(!switzerland.includes('shoulder seasons are cheaper')&&!switzerland.includes('deepest, most reliable snow')&&!/[✦✿☀🌷]/u.test(switzerland),'Swiss unsupported claims and pictographs');
+assert.deepEqual(require('../storybook/data.json').find(c=>c.iso===756).markers,[],'Swiss month controls must not show Unicode pictographs');
 for(const city of require('../climate/switzerland.json'))assert(swissSection.includes(city.name)&&swissSection.includes(city.source.url),city.name+' Swiss station source visible');
 assert(read(path.join(root,'sitemap.xml')).includes('<loc>https://gowhereandwhen.com/country/switzerland/</loc><lastmod>2026-10-21</lastmod>'),'Switzerland sitemap lastmod');
 const croatia=read(path.join(root,'country/croatia/index.html'));

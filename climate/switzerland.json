@@ -1,0 +1,254 @@
+[
+  {
+    "name": "Zurich",
+    "station": "Zürich / Kloten",
+    "iso": 756,
+    "lat": 47.4581,
+    "lng": 8.5555,
+    "altitudeM": 426,
+    "swissCoordinates": "2682711 / 1259338",
+    "hi": [
+      3.8,
+      5.7,
+      10.9,
+      15.5,
+      19.5,
+      23.2,
+      25.2,
+      24.8,
+      19.9,
+      14.3,
+      8.0,
+      4.3
+    ],
+    "lo": [
+      -2.3,
+      -2.6,
+      0.2,
+      3.4,
+      7.7,
+      11.4,
+      13.2,
+      12.9,
+      9.1,
+      5.6,
+      1.3,
+      -1.4
+    ],
+    "pr": [
+      65.3,
+      55.5,
+      64.8,
+      70.0,
+      109.9,
+      102.0,
+      116.0,
+      108.2,
+      80.2,
+      82.5,
+      74.5,
+      80.3
+    ],
+    "units": {
+      "hi": "degrees C, mean daily high",
+      "lo": "degrees C, mean daily low",
+      "pr": "mm per calendar month"
+    },
+    "source": {
+      "provider": "MeteoSwiss",
+      "period": "1991-2020",
+      "url": "https://data.geo.admin.ch/ch.meteoschweiz.klima/normwerte/normwerte.zip",
+      "method": "Station climate normals: tre2dymx, tre2dymn and rre150m0; monthly mean daily maximum/minimum temperature and mean monthly precipitation total.",
+      "retrieved": "2026-10-21"
+    }
+  },
+  {
+    "name": "Geneva",
+    "station": "Genève / Cointrin",
+    "iso": 756,
+    "lat": 46.2381,
+    "lng": 6.1089,
+    "altitudeM": 411,
+    "swissCoordinates": "2498904 / 1122631",
+    "hi": [
+      5.1,
+      7.0,
+      11.8,
+      15.9,
+      20.1,
+      24.2,
+      26.7,
+      26.2,
+      21.1,
+      15.5,
+      9.3,
+      5.6
+    ],
+    "lo": [
+      -1.1,
+      -1.1,
+      1.7,
+      5.0,
+      9.1,
+      12.7,
+      14.6,
+      14.2,
+      10.7,
+      7.2,
+      2.6,
+      -0.2
+    ],
+    "pr": [
+      72.8,
+      55.9,
+      62.1,
+      67.1,
+      78.5,
+      83.2,
+      79.2,
+      81.2,
+      90.7,
+      96.5,
+      88.6,
+      89.9
+    ],
+    "units": {
+      "hi": "degrees C, mean daily high",
+      "lo": "degrees C, mean daily low",
+      "pr": "mm per calendar month"
+    },
+    "source": {
+      "provider": "MeteoSwiss",
+      "period": "1991-2020",
+      "url": "https://data.geo.admin.ch/ch.meteoschweiz.klima/normwerte/normwerte.zip",
+      "method": "Station climate normals: tre2dymx, tre2dymn and rre150m0; monthly mean daily maximum/minimum temperature and mean monthly precipitation total.",
+      "retrieved": "2026-10-21"
+    }
+  },
+  {
+    "name": "Lugano",
+    "station": "Lugano",
+    "iso": 756,
+    "lat": 46.0043,
+    "lng": 8.9108,
+    "altitudeM": 273,
+    "swissCoordinates": "2717874 / 1095882",
+    "hi": [
+      7.1,
+      9.0,
+      13.5,
+      16.7,
+      20.8,
+      24.9,
+      27.3,
+      26.8,
+      22.1,
+      16.9,
+      11.6,
+      7.7
+    ],
+    "lo": [
+      1.2,
+      1.9,
+      5.2,
+      8.5,
+      12.4,
+      16.1,
+      18.0,
+      17.8,
+      14.2,
+      10.2,
+      5.7,
+      2.0
+    ],
+    "pr": [
+      65.5,
+      61.3,
+      75.5,
+      138.0,
+      177.6,
+      171.5,
+      157.9,
+      158.2,
+      164.9,
+      149.7,
+      166.6,
+      79.9
+    ],
+    "units": {
+      "hi": "degrees C, mean daily high",
+      "lo": "degrees C, mean daily low",
+      "pr": "mm per calendar month"
+    },
+    "source": {
+      "provider": "MeteoSwiss",
+      "period": "1991-2020",
+      "url": "https://data.geo.admin.ch/ch.meteoschweiz.klima/normwerte/normwerte.zip",
+      "method": "Station climate normals: tre2dymx, tre2dymn and rre150m0; monthly mean daily maximum/minimum temperature and mean monthly precipitation total.",
+      "retrieved": "2026-10-21"
+    }
+  },
+  {
+    "name": "Zermatt",
+    "station": "Zermatt",
+    "iso": 756,
+    "lat": 46.0207,
+    "lng": 7.7491,
+    "altitudeM": 1638,
+    "swissCoordinates": "2624297 / 1097574",
+    "hi": [
+      0.8,
+      1.7,
+      5.7,
+      9.8,
+      13.9,
+      17.8,
+      20.0,
+      19.6,
+      15.4,
+      11.2,
+      5.1,
+      1.5
+    ],
+    "lo": [
+      -7.4,
+      -7.3,
+      -4.0,
+      -0.7,
+      3.2,
+      6.6,
+      8.3,
+      8.3,
+      5.0,
+      1.4,
+      -3.1,
+      -6.3
+    ],
+    "pr": [
+      42.2,
+      29.7,
+      33.3,
+      39.9,
+      77.4,
+      69.9,
+      58.9,
+      68.4,
+      51.2,
+      57.0,
+      65.2,
+      47.3
+    ],
+    "units": {
+      "hi": "degrees C, mean daily high",
+      "lo": "degrees C, mean daily low",
+      "pr": "mm per calendar month"
+    },
+    "source": {
+      "provider": "MeteoSwiss",
+      "period": "1991-2020",
+      "url": "https://data.geo.admin.ch/ch.meteoschweiz.klima/normwerte/normwerte.zip",
+      "method": "Station climate normals: tre2dymx, tre2dymn and rre150m0; monthly mean daily maximum/minimum temperature and mean monthly precipitation total.",
+      "retrieved": "2026-10-21"
+    }
+  }
+]

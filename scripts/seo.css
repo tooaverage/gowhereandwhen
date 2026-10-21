@@ -42,3 +42,4 @@
 }
 
 @media(max-width:699px){.greece-guide .hero-scene .map-mini-controls{bottom:190px}}
+@media(max-width:699px){.switzerland-guide .hero-heading h1.long-place{font-size:clamp(2rem,10vw,3rem)}}

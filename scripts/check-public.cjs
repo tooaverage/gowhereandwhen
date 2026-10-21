@@ -59,6 +59,14 @@ for(const city of require('../climate/italy.json')){
 const mexico=read(path.join(root,'country/mexico/index.html'));
 const saudi=read(path.join(root,'country/saudi-arabia/index.html'));
 const greece=read(path.join(root,'country/greece/index.html'));
+const switzerland=read(path.join(root,'country/switzerland/index.html'));
+const swissSection=switzerland.match(/<section class="guide-section" id="regions">([\s\S]*?)<\/section>/)?.[1];
+assert(swissSection,'Switzerland station comparison missing');
+assert.equal((swissSection.match(/<tr>/g)||[]).length,13,'Switzerland table needs twelve months');
+assert(switzerland.includes('The score above uses Zurich.')&&swissSection.includes('miss many Alpine valleys and peaks'),'Swiss score and coverage limits');
+assert(!switzerland.includes('shoulder seasons are cheaper')&&!switzerland.includes('deepest, most reliable snow')&&!/[✦✿☀🌷]/u.test(switzerland),'Swiss unsupported claims and pictographs');
+for(const city of require('../climate/switzerland.json'))assert(swissSection.includes(city.name)&&swissSection.includes(city.source.url),city.name+' Swiss station source visible');
+assert(read(path.join(root,'sitemap.xml')).includes('<loc>https://gowhereandwhen.com/country/switzerland/</loc><lastmod>2026-10-21</lastmod>'),'Switzerland sitemap lastmod');
 const croatia=read(path.join(root,'country/croatia/index.html'));
 const croatiaSection=croatia.match(/<section class="guide-section" id="regions">([\s\S]*?)<\/section>/)?.[1];
 assert(croatiaSection,'Croatia regional comparison missing');

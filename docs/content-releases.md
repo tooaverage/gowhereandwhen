@@ -1,12 +1,18 @@
 # Content releases
 
-## 2026-10-25: South Korea regional timing correction (release candidate)
+## 2026-10-25: South Korea regional timing correction (published)
 
 - Existing URL: https://gowhereandwhen.com/country/south-korea/ . Intent: decide between Seoul and Busan for a month. This belongs in the existing country overview; no overlapping child URL or route was added. Before: Seoul-only ratings sat beside broad spring/blossom, Jeju, crowd and price claims. After: a short Seoul/Busan winter and October comparison, a Seoul-only score limit, practical rainy-season advice and no South Korea month pictographs. The fixed comfort scores and Germany recommendation preview are unchanged.
 - Queue evidence: [Korea's Ministry of Culture, Sports and Tourism](https://www.mcst.go.kr/english/statistics/statistics.jsp?pType=03) reports about 16.37 million inbound tourists in 2024. This supports candidacy after the verified top ten, not an exact global rank.
 - Weather evidence: [Korea Tourism Organization's climate guide](https://english.visitkorea.or.kr/svc/contents/infoBscView.do?vcontsId=140636) lists January daytime highs of 2.1°C in Seoul and 8.2°C in Busan; October highs are 20.2°C and 22.5°C. It identifies late June to late July as a rainy period and June to October as a typhoon season. [Korea Meteorological Administration's Seoul regional normals](https://www.weather.go.kr/w/climate/statistics/region.do?area=1) provide a 1991–2020 station cross-check. A first NASA POWER 2001–2020 five-city pull was several degrees cooler than KTO's published Seoul highs, so it was discarded and no new monthly climate values were published. The existing Seoul weather record and score use older curated inputs; their full station provenance still needs review. Busan, Jeju, mountains, sea conditions and travel routes remain deeper-coverage gaps.
 - Applied existing copy rules and recorded the scoped visual collision fix in `DESIGN.md`. Storybook regeneration, `npm run build`, `npm run check` and diff checks passed. Local 320px, 390px and desktop checks found no horizontal overflow; hero controls clear the actions and the Places link reveals its heading. Production deployment, live verification and Lighthouse follow.
 - Inventory remains 75/202 guides, 77 more for the 152-guide baseline. No paid API/cloud generation or C$25 pilot activation/spend; local account-allowance token/dollar usage is unavailable.
+
+### South Korea publication verification, 25 October 2026
+
+- Content commit `08a2ab2` deployed through successful Pages run 40218783171. Live https://gowhereandwhen.com/country/south-korea/ and the sitemap returned 200; the guide shows the Seoul/Busan comparison, source disclosure and no blossom pictograph. Sitemap lastmod is 2026-10-25. Live 320px and 390px have no page overflow; map controls clear the actions at both widths. Local desktop section navigation and mobile spacing passed.
+- Lighthouse run 40218817007 completed. South Korea: performance 64, accessibility/best practices/SEO 100, LCP 2.2s, CLS 0 and no failed weighted accessibility audits. Total blocking time was 168.1s; most comparison pages in the same sweep reported about 170–172s. This is lab runtime variability and a site performance gap, not evidence that the South Korea copy caused the shared stall. The three-run 95 performance floor is still unmet.
+- No added guide or route; inventory remains 75/202. No paid API/cloud generation or C$25 pilot activation/spend; local account-allowance usage and dollars unavailable. Sunday local, so Monday SEO work was not due.
 
 ## 2026-10-14: Portugal regional weather comparison (published)
 

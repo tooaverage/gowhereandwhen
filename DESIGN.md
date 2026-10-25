@@ -53,3 +53,7 @@ City names sit to the right of their marker by default. Do not retain a place-sp
 ### Narrow header, 14 October 2026
 
 At 320px, the brand and guide link collided in the shared header. Hide the duplicate header link below 421px; the world map, guide navigation and footer still provide the same paths. Check the rendered header at 320px and 390px on the homepage and a changed guide. A new guide with a long name may also need more hero height so its actions do not overlap map controls. Inspect after the map loads.
+
+### South Korea narrow map controls, 25 October 2026
+
+The map zoom buttons overlapped the hero action buttons on the South Korea guide at narrow widths. Keep those controls above the actions there, and leave room for a two-line country title at 320px. Its Places link must reveal the section heading below the sticky tabs. Check actual button and heading boxes at 320px, 390px and desktop; source assertions alone cannot verify spacing. This is a checked South Korea correction, not a claim that all guides pass.

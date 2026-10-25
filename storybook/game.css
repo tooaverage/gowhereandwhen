@@ -72,3 +72,5 @@
 
 /* Keep camera labels readable on narrow phones. */
 @media(max-width:420px){.world-tools .camera-tools{flex-wrap:wrap}.world-tools .camera-tools button,.world-tools .camera-tools .map-options{flex:0 0 auto}.world-tools .camera-tools button:nth-child(-n+3){width:auto;min-width:max-content}.world-tools .camera-tools .map-options{margin-left:auto}.world-tools .camera-tools button[data-camera="in"],.world-tools .camera-tools button[data-camera="out"]{min-width:36px}.camera-tools .map-options-content{z-index:20}}
+@media(max-width:699px){.south-korea-guide .hero-scene .map-mini-controls{bottom:200px}}
+.south-korea-guide #regions{scroll-margin-top:72px}

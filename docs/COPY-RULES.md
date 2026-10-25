@@ -119,6 +119,8 @@ Treat corrections as evidence. Do not defend stylistic habits. Flag a conflict w
 
 ## Ratchet log
 
+- **2026-10-25, South Korea checked batch:** Applied the existing no-pictograph, short-copy and local-score rules to the South Korea guide. Removed unsourced crowd/price and fixed blossom-date claims. The score remains Seoul-only; official Seoul/Busan daytime-high comparisons answer the regional winter question. Other guides remain for checked batches.
+
 - **2026-09-26, all visitor copy:** “less = more”, “grade 6 reading level”, “show visuals where it makes sense”. Use neutral, concise, visual-first copy. No chat voice, personal asides, jokes, emoji personality, setup-punchline hooks or aphoristic endings. Idioms and parallel structure are allowed when useful.
 - **2026-09-26, country guides:** Japan is the component reference. Use city/month maps and numbered itineraries; call them “Travel itinerary” or “Travel route”. Fix heading spacing. Put detailed sources in disclosures while retaining essential limits beside claims.
 - **2026-09-26, SEO priority:** “if we need them for SEO then add the words”. Add useful answers and distinct local detail, never filler to meet a word count. Keep explanations concise and jargon-free. Proposed interpretation: word limits are targets with documented accuracy/usefulness exceptions.

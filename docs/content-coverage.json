@@ -38,9 +38,16 @@
         "source": "UN Tourism Statistics Database (2025), processed by Our World in Data; cross-checked against Turismo de Portugal/INE 2024 non-resident tourist count, retrieved 14 October 2026",
         "url": "https://ourworldindata.org/grapher/international-tourist-trips",
         "crossCheck": "https://travelbi.turismodeportugal.pt/en/tourism-in-portugal/portugal-is-on-track-to-reach-30-million-international-tourists-by-2025/"
+      },
+      {
+        "iso": 410,
+        "name": "South Korea",
+        "arrivals2024Approx": 16370000,
+        "source": "Republic of Korea Ministry of Culture, Sports and Tourism, 2024 inbound tourists, retrieved 25 October 2026",
+        "url": "https://www.mcst.go.kr/english/statistics/statistics.jsp?pType=03"
       }
     ],
-    "nextCandidateNote": "Thailand's ministry reports 2024 foreign tourist arrivals, ahead of Saudi Arabia and Portugal by their 2024 overnight-arrival counts. Source definitions may differ. This is queue evidence, not a verified global rank or strictly comparable full order beyond the original top ten."
+    "nextCandidateNote": "Dated national series support candidates after the original top ten, but definitions and missing countries prevent a verified full rank. South Korea reports 16.37 million inbound tourists in 2024. Do not compare hotel nights or all border trips as if they were tourist arrivals."
   },
   "note": "Inventory only. Completion requires the source and editorial checks in CONTENT-FACTORY.md; multiple cities do not imply full national coverage.",
   "destinations": [
@@ -168,7 +175,7 @@
       "iso": 764,
       "name": "Thailand",
       "arrivalsRank": null,
-      "queueEvidence": "UN Tourism 2024 overnight arrivals; global rank unverified",
+      "queueEvidence": "Thailand Ministry of Tourism and Sports, 2024 foreign tourist arrivals, retrieved 18 October 2026",
       "slug": "thailand",
       "region": "Asia",
       "hasGuide": true,
@@ -181,7 +188,7 @@
       "iso": 682,
       "name": "Saudi Arabia",
       "arrivalsRank": null,
-      "queueEvidence": "UN Tourism 2024 overnight arrivals; global rank unverified",
+      "queueEvidence": "UN Tourism Statistics Database (2025), processed by Our World in Data, retrieved 14 October 2026",
       "slug": "saudi-arabia",
       "region": "Africa & Middle East",
       "hasGuide": true,
@@ -194,12 +201,25 @@
       "iso": 620,
       "name": "Portugal",
       "arrivalsRank": null,
-      "queueEvidence": "UN Tourism 2024 overnight arrivals; global rank unverified",
+      "queueEvidence": "UN Tourism Statistics Database (2025), processed by Our World in Data; cross-checked against Turismo de Portugal/INE 2024 non-resident tourist count, retrieved 14 October 2026",
       "slug": "portugal",
       "region": "Europe",
       "hasGuide": true,
       "cityCount": 0,
       "sourcedCityCount": 0,
+      "regionalPrototype": false,
+      "editorialStatus": "needs-review"
+    },
+    {
+      "iso": 410,
+      "name": "South Korea",
+      "arrivalsRank": null,
+      "queueEvidence": "Republic of Korea Ministry of Culture, Sports and Tourism, 2024 inbound tourists, retrieved 25 October 2026",
+      "slug": "south-korea",
+      "region": "Asia",
+      "hasGuide": true,
+      "cityCount": 1,
+      "sourcedCityCount": 1,
       "regionalPrototype": false,
       "editorialStatus": "needs-review"
     },
@@ -812,18 +832,6 @@
       "hasGuide": true,
       "cityCount": 0,
       "sourcedCityCount": 0,
-      "regionalPrototype": false,
-      "editorialStatus": "needs-review"
-    },
-    {
-      "iso": 410,
-      "name": "South Korea",
-      "arrivalsRank": null,
-      "slug": "south-korea",
-      "region": "Asia",
-      "hasGuide": true,
-      "cityCount": 1,
-      "sourcedCityCount": 1,
       "regionalPrototype": false,
       "editorialStatus": "needs-review"
     },

@@ -2,7 +2,7 @@
 const fs=require('node:fs'),path=require('node:path'),E=require('../engine.js');
 const r=__dirname,root=path.dirname(r);
 const cities=require('./canada-cities.json').map(c=>({...c,months:c.hi.map((_,m)=>({score:E.score(c,m),band:E.band(E.score(c,m)),tags:E.monthTags(c,m),season:E.seasonOf(c,m)}))}));
-const data=JSON.parse(fs.readFileSync(path.join(root,'play/data.json')));
+const data=JSON.parse(fs.readFileSync(path.join(r,'data.json')));
 const canada=data.find(c=>c.iso===124);canada.cities=cities;
 canada.lead='For a first trip, aim for <strong>June to September</strong>. The west coast, Rockies, eastern cities and Yukon have different seasons. Compare eight cities, or plan a separate winter trip for skiing and northern lights.';
 fs.writeFileSync(path.join(r,'data.json'),JSON.stringify(data));

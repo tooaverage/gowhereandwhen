@@ -1058,7 +1058,7 @@ const CONTENT = [
       { q: 'How hot is summer in the UAE?', a: 'June to September is extreme, often above 40C with high humidity, which pushes most activity indoors. Hotel prices drop to match.' },
       { q: 'When is the cheapest time to visit?', a: 'The summer months, when the heat keeps crowds away and luxury hotels discount heavily.' },
     ],
-    markers: [{ mon: 'Jan', kind: 'sun' }, { mon: 'Dec', kind: 'sparkles' }],
+    markers: [],
   },
 
   { slug: 'singapore', iso: 702, name: 'Singapore',

@@ -1,0 +1,14 @@
+const cities = require('../climate/uae.json');
+const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const esc = value => String(value).replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
+
+module.exports = function uaeRegions() {
+ if (cities.map(city => city.name).join(',') !== 'Dubai,Abu Dhabi,Al Ain,Fujairah') throw Error('UAE climate sample changed');
+ for (const city of cities) {
+  if (city.iso !== 784 || !Number.isFinite(city.lat) || !Number.isFinite(city.lng) || !city.source?.url ||
+   !['hi','lo','pr'].every(key => city[key]?.length === 12 && city[key].every(Number.isFinite))) throw Error('UAE climate missing: '+city.name);
+  for (let m=0;m<12;m++) if (city.hi[m] < city.lo[m] || city.pr[m] < 0) throw Error('UAE climate invalid: '+city.name+' '+m);
+ }
+ const rows = months.map((month,m) => `<tr><th scope="row">${month}</th>${cities.map(city => `<td>${Math.round(city.hi[m])}°C<br><small>${Math.round(city.pr[m])} mm rain</small></td>`).join('')}</tr>`).join('');
+ return `<section class="guide-section" id="regions"><div class="wrap"><h2>UAE weather by place</h2><p>The score above uses Dubai. Compare the coast and inland Al Ain before choosing a month.</p><p class="disc">Swipe the table sideways on a small screen.</p><p id="uae-weather-caption"><strong>Average daytime high and monthly rain, 2001–2020</strong></p><div class="table-scroll"><table class="weather-table" aria-labelledby="uae-weather-caption"><thead><tr><th scope="col">Month</th>${cities.map(city => `<th scope="col">${esc(city.name)}</th>`).join('')}</tr></thead><tbody>${rows}</tbody></table></div><p>Al Ain has hotter average summer days than Dubai. Fujairah is on the east coast; check sea conditions separately.</p><p>For Hatta hikes, choose cooler months and check openings. Many attractions close for summer.</p><p>These city estimates do not describe mountain trails or the sea.</p><details class="guide-sources"><summary>Sources and weather limits</summary><p>NASA POWER / MERRA-2 estimates use daily data from 2001–2020. Highs are average daily highs; rain is the average monthly total. They are planning averages, not forecasts or weather-station records. Dubai's score above uses separate curated inputs.</p><p>${cities.map(city => `<a href="${esc(city.source.url)}">${esc(city.name)} data</a>`).join(' · ')} · <a href="https://www.visitdubai.com/en/plan-your-trip/weather-in-dubai">Visit Dubai weather</a> · <a href="https://visitabudhabi.ae/en/plan-your-trip/article-hub/best-time-to-travel/">Experience Abu Dhabi seasons</a> · <a href="https://www.visitdubai.com/en/places-to-visit/hatta-dam-2">Visit Dubai Hatta opening advice</a> · <a href="https://fujairah.ae/en/pages/about.aspx">Fujairah Government geography</a> · Checked October 2026</p></details></div></section>`;
+};

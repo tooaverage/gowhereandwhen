@@ -2,10 +2,10 @@ const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/st
 const {transformSync}=require('esbuild');
 const controller=fs.readFileSync(path.join(__dirname,'analytics.js'),'utf8').replace("import('./posthog-client.js')", 'loadClient()');
 const adapter=transformSync(fs.readFileSync(path.join(__dirname,'posthog-client.js'),'utf8').replace("import posthog from 'posthog-js/dist/module.no-external';",'const posthog = mock;'),{format:'cjs'}).code;
-function run({host='gowhereandwhen.com',id='phc_TESTONLY',saved=null,gpc=false,delay=false}={}) {
- const nodes=[],events={},windowEvents={},stored=new Map(),captures=[],configs=[];
- let loads=0,enabled=false,resolve;
- const mock={init(id,config){configs.push(config);enabled=true;},opt_in_capturing(){enabled=true;},opt_out_capturing(){enabled=false;},capture(event,properties){if(enabled){const value=configs[0].before_send({event,properties});if(value)captures.push(value);}}};
+function run({host='gowhereandwhen.com',id='phc_TESTONLY',saved=null,gpc=false,delay=false,stored=new Map(),search=''}={}) {
+ const nodes=[],events={},windowEvents={},captures=[],configs=[],registered=[];
+ let loads=0,enabled=false,resolve,resets=0;const sessionStorage=Object.defineProperty({ph_test_posthog:'{}',other:'kept'},'removeItem',{value(k){delete this[k];}});
+ const mock={init(id,config){configs.push(config);enabled=true;},register(props){registered.push(props);},reset(){resets++;},opt_in_capturing(){enabled=true;},opt_out_capturing(){enabled=false;},capture(event,properties){if(enabled){const value=configs[0].before_send({event,properties});if(value)captures.push(value);}}};
  const module={exports:{}};vm.runInNewContext(adapter,{module,exports:module.exports,mock,URL,Set,Object});
  function node(tag){return {tag,dataset:{},hidden:false,listeners:{},setAttribute(){},append(){},focus(){},querySelector(){return {focus(){}};},addEventListener(n,f){this.listeners[n]=f;}};}
  const body={append(n){nodes.push(n);}};
@@ -13,9 +13,9 @@ function run({host='gowhereandwhen.com',id='phc_TESTONLY',saved=null,gpc=false,d
  const key='gww-analytics-choice-v2-posthog';
  if(saved)stored.set(key,JSON.stringify({value:saved,expires:Date.now()+100000}));
  const navigator={globalPrivacyControl:gpc};
- const context={document,window:{addEventListener(n,f){windowEvents[n]=f;}},location:{hostname:host,pathname:'/country/austria/',origin:'https://'+host,href:'https://'+host+'/country/austria/?city=Private#secret'},navigator,localStorage:{getItem:k=>stored.get(k),setItem:(k,v)=>stored.set(k,v)},URL,Date,loadClient(){loads++;return delay?new Promise(r=>resolve=r):Promise.resolve(module.exports);}};
+ const context={document,window:{addEventListener(n,f){windowEvents[n]=f;}},location:{hostname:host,pathname:'/country/austria/',origin:'https://'+host,search,href:'https://'+host+'/country/austria/'+(search||'?city=Private')+'#secret'},navigator,localStorage:{getItem:k=>stored.get(k),setItem:(k,v)=>stored.set(k,String(v)),removeItem:k=>stored.delete(k)},sessionStorage,crypto,URLSearchParams,URL,Date,loadClient(){loads++;return delay?new Promise(r=>resolve=r):Promise.resolve(module.exports);}};
  vm.runInNewContext(controller,context);
- return {nodes,events,captures,configs,module,navigator,loads:()=>loads,resolve:()=>resolve(module.exports),choose(value){nodes[0].listeners.click({target:{closest(){return {dataset:{choice:value}};}}});},storage(value){windowEvents.storage({key,newValue:JSON.stringify({value,expires:Date.now()+100000})});}};
+ return {nodes,events,captures,configs,registered,stored,sessionStorage,resets:()=>resets,module,navigator,loads:()=>loads,resolve:()=>resolve(module.exports),choose(value){nodes[0].listeners.click({target:{closest(){return {dataset:{choice:value}};}}});},storage(value){windowEvents.storage({key,newValue:JSON.stringify({value,expires:Date.now()+100000})});}};
 }
 const flush=()=>new Promise(r=>setImmediate(r));
 (async()=>{
@@ -25,7 +25,7 @@ const flush=()=>new Promise(r=>setImmediate(r));
  const t=run({saved:'no'});t.events['gww:month']({detail:{month:3,country:'austria'}});assert.equal(t.captures.length,0);
  t.choose('yes');await flush();assert.equal(t.loads(),1);assert.equal(t.captures.filter(e=>e.event==='$pageview').length,1);
  const fresh=run();await flush();assert.equal(fresh.captures.length,1,'Fresh visitors measured without popup');assert.equal(fresh.nodes[0].hidden,true,'No automatic popup');
- const config=t.configs[0];assert.equal(config.persistence,'memory');assert.equal(config.disable_persistence,true);for(const key of ['autocapture','capture_pageview','capture_pageleave','capture_performance','capture_exceptions','save_campaign_params','save_referrer'])assert.equal(config[key],false,key);
+ const config=t.configs[0];assert.equal(config.persistence,'sessionStorage');assert.equal(config.disable_persistence,undefined);for(const key of ['autocapture','capture_pageview','capture_pageleave','capture_performance','capture_exceptions','save_campaign_params','save_referrer'])assert.equal(config[key],false,key);
  assert.equal(config.disable_session_recording,true);assert.equal(config.advanced_disable_flags,true);assert.equal(config.person_profiles,'never');
  const page=t.captures[0].properties;assert.equal(page.$current_url,'https://gowhereandwhen.com/country/austria/');assert.equal(page.$referrer,'https://example.com/travel');
  t.events['gww:month']({detail:{month:3,country:'austria'}});assert.equal(t.captures.at(-1).properties.month,4);
@@ -44,5 +44,15 @@ const flush=()=>new Promise(r=>setImmediate(r));
  const clean=t.module.exports.sanitizeEvent({event:'$pageview',properties:{$current_url:'https://gowhereandwhen.com/?private=yes#secret',$referrer:'https://example.com/?email=secret',email:'secret',utm_campaign:'secret',$set:{email:'secret'},$initial_current_url:'private',distinct_id:'random'}},()=>true);
  assert.equal(clean.properties.email,undefined);assert.equal(clean.properties.$set,undefined);assert.equal(clean.properties.$initial_current_url,undefined);assert.equal(clean.properties.utm_campaign,undefined);assert.equal(clean.properties.$current_url,'https://gowhereandwhen.com/');assert.equal(clean.properties.$geoip_disable,true);
  assert.equal(t.module.exports.sanitizeEvent({event:'$autocapture'},()=>true),null);
- console.log('Passed PostHog default measurement, memory-only configuration, opt-out, SDK isolation, event sanitization, local exclusion, withdrawal and race-condition checks.');
+ const visitor=()=>JSON.parse(t2.stored.get('gww-visitor')||'null');
+ const shared=new Map(),t2=run({stored:shared});await flush();const first=visitor();assert.match(first.id,/^[0-9a-f-]{36}$/,'Visitor ID stored');assert.equal(t2.configs[0].bootstrap.distinctID,first.id);assert.equal(t2.registered.at(-1).distinct_id,first.id);
+ const t3=run({stored:shared});await flush();assert.equal(t3.configs[0].bootstrap.distinctID,first.id,'Second page load keeps the same visitor ID');assert.equal(visitor().expires,first.expires,'Visits do not extend expiry');
+ assert.ok(first.expires-Date.now()>364*864e5&&first.expires-Date.now()<=365*864e5,'Expiry is 12 months');
+ shared.set('gww-visitor',JSON.stringify({id:first.id,expires:Date.now()-1}));const t4=run({stored:shared});await flush();assert.notEqual(t4.configs[0].bootstrap.distinctID,first.id,'Expired ID replaced');
+ t4.choose('no');assert.equal(shared.has('gww-visitor'),false,'Opt-out deletes visitor ID');t4.choose('yes');await flush();const renewed=JSON.parse(shared.get('gww-visitor')).id;assert.equal(t4.registered.at(-1).distinct_id,renewed,'Re-enabling continues with a new ID');assert.equal(t4.resets(),1,'Re-enabling starts a fresh PostHog session');assert.equal(t4.sessionStorage.ph_test_posthog,undefined,'Opt-out clears PostHog tab session');assert.equal(t4.sessionStorage.other,'kept');
+ const gpcStore=new Map([['gww-visitor',JSON.stringify({id:first.id,expires:Date.now()+1e6})]]);run({gpc:true,stored:gpcStore});assert.equal(gpcStore.has('gww-visitor'),false,'GPC deletes visitor ID');
+ const own=new Map([['gww-visitor',JSON.stringify({id:first.id,expires:Date.now()+1e6})]]),i1=run({stored:own,search:'?internal=1'});await flush();assert.equal(own.get('jd_internal'),'1');assert.equal(i1.loads(),0,'Internal visits not tracked');assert.equal(own.has('gww-visitor'),false,'Internal flag deletes visitor ID');
+ const i2=run({stored:own});await flush();assert.equal(i2.loads(),0,'Internal flag persists across page loads');
+ const i3=run({stored:own,search:'?internal=0'});await flush();assert.equal(own.has('jd_internal'),false);assert.equal(i3.captures.length,1,'?internal=0 resumes tracking');
+ console.log('Passed PostHog default measurement, 12-month visitor ID, internal flag, opt-out, SDK isolation, event sanitization, local exclusion, withdrawal and race-condition checks.');
 })().catch(error=>{console.error(error);process.exitCode=1;});

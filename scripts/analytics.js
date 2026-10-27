@@ -1,13 +1,29 @@
-// Analytics runs by default with memory-only IDs; explicit refusals and GPC stop it.
+// Analytics runs by default with one anonymous visitor ID; explicit refusals, GPC and ?internal=1 stop it and delete the ID.
 const id = document.querySelector('meta[name="gww-analytics"]')?.content;
 const host = document.querySelector('meta[name="gww-analytics-host"]')?.content;
 if (/^phc_[a-zA-Z0-9]+$/.test(id || '') && ['https://us.i.posthog.com','https://eu.i.posthog.com'].includes(host) && ['gowhereandwhen.com', 'www.gowhereandwhen.com'].includes(location.hostname)) {
-  const key = 'gww-analytics-choice-v2-posthog';
-  let choice = "yes", started = false;
+  const key = 'gww-analytics-choice-v2-posthog', visitorKey = 'gww-visitor';
+  let choice = "yes", started = false, internal = false;
+  try {
+    const flag = new URLSearchParams(location.search).get('internal');
+    if (flag === '1') localStorage.setItem('jd_internal', '1');
+    if (flag === '0') localStorage.removeItem('jd_internal');
+    internal = localStorage.getItem('jd_internal') === '1';
+  } catch {}
   try { const saved = JSON.parse(localStorage.getItem(key)); if (saved && ['yes','no'].includes(saved.value) && (saved.value === 'no' || Date.now() < saved.expires)) choice = saved.value; } catch {}
   if (navigator.globalPrivacyControl) choice = 'no';
   const cleanURL = value => { if (!value) return ''; try { const u = new URL(value, location.href); return u.origin + u.pathname.replace(/\/index\.html$/, '/'); } catch { return ''; } };
-  const allowed = () => choice === 'yes' && !navigator.globalPrivacyControl;
+  const allowed = () => choice === 'yes' && !internal && !navigator.globalPrivacyControl;
+  // Random ID with a fixed 12-month life: never extended by later visits, deleted on opt-out.
+  function visitorId() {
+    try { const saved = JSON.parse(localStorage.getItem(visitorKey)); if (/^[0-9a-f-]{36}$/.test(saved?.id || '') && Date.now() < saved.expires) return saved.id; } catch {}
+    const fresh = crypto.randomUUID();
+    try { localStorage.setItem(visitorKey, JSON.stringify({id:fresh, expires:Date.now() + 31536000000})); } catch {}
+    return fresh;
+  }
+  // Also drop PostHog's tab session so a later ID can't be linked to the old one.
+  function forgetVisitor() { try { localStorage.removeItem(visitorKey); for (const k of Object.keys(sessionStorage)) if (k.startsWith('ph_')) sessionStorage.removeItem(k); } catch {} }
+  if (!allowed()) forgetVisitor();
   let client, loading, generation = 0;
   function track(name, parameters = {}) {
     if (!allowed() || !client) return;
@@ -22,18 +38,22 @@ if (/^phc_[a-zA-Z0-9]+$/.test(id || '') && ['https://us.i.posthog.com','https://
       loading ||= import('./posthog-client.js');
       const {startClient} = await loading;
       if (run !== generation || !allowed()) return;
-      client ||= startClient(id, host, allowed);
+      const visitor = visitorId();
+      // After an opt-out and opt-in on the same page, start a fresh session with the new ID.
+      if (client) client.reset(); else client = startClient(id, host, allowed, visitor);
       client.opt_in_capturing({captureEventName:false});
+      client.register({distinct_id:visitor, $device_id:visitor});
       track('$pageview');
     } catch { started = false; loading = null; }
   }
   function stop() {
     started = false; generation++;
     client?.opt_out_capturing();
+    forgetVisitor();
   }
   const panel = document.createElement('section');
   panel.className = 'analytics-choice'; panel.setAttribute('aria-label', 'Optional analytics');
-  panel.innerHTML = '<p><strong>Analytics preferences</strong> We use PostHog to measure visits and map use. Analytics IDs stay in page memory. Session recording is off.</p><p><a href="/methodology/#privacy">Privacy details</a></p><div><button type="button" data-choice="no">Disable analytics</button><button type="button" data-choice="yes">Allow analytics</button></div>';
+  panel.innerHTML = '<p><strong>Analytics preferences</strong> We use PostHog to measure visits and map use. A random ID in your browser lets us count return visits. Session recording is off.</p><p><a href="/methodology/#privacy">Privacy details</a></p><div><button type="button" data-choice="no">Disable analytics</button><button type="button" data-choice="yes">Allow analytics</button></div>';
   document.body.append(panel);
   const preferences = document.createElement('button'); preferences.type = 'button'; preferences.className = 'analytics-preferences'; preferences.textContent = 'Analytics preferences';
   (document.querySelector('footer') || document.body).append(preferences);

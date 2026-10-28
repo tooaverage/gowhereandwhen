@@ -19,10 +19,11 @@ export function sanitizeEvent(event, allowed) {
   clean.$geoip_disable = true;
   return {...event, properties:clean};
 }
-export function startClient(token, host, allowed) {
+export function startClient(token, host, allowed, visitor) {
   posthog.init(token, {
     api_host:host,
-    persistence:'memory', disable_persistence:true,
+    // The visitor ID is ours (localStorage, 12 months); PostHog keeps only per-tab session state.
+    persistence:'sessionStorage', bootstrap:{distinctID:visitor},
     person_profiles:'never',
     autocapture:false, capture_pageview:false, capture_pageleave:false,
     capture_dead_clicks:false, rageclick:false, capture_heatmaps:false,

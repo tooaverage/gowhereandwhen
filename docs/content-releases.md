@@ -1,10 +1,10 @@
 # Content releases
 
-## 2026-10-28: Singapore station weather correction (release candidate)
+## 2026-10-28: Singapore station weather correction (published)
 
 - Existing URL: https://gowhereandwhen.com/country/singapore/ . No new URL: the month decision belongs in the existing guide. Before: rounded, older monthly values, a broad February–April “driest” claim, and weather-derived crowd/price advice. After: a 12-month Changi station high/low/rain table, February named as driest, short year-round heat/rain advice, and an explicit note that the graph's score uses older separate inputs. Removed duplicate sections and unsupported demand claims.
 - Source: [Meteorological Service Singapore, Climate of Singapore](https://www.weather.gov.sg/climate-climate-of-singapore/), published 1991–2020 station means for all 36 values; [Visit Singapore travel essentials](https://www.visitsingapore.com/travel-tips/essential-travel-information/) for tropical climate context. Changi is one station; the service reports wetter central/western areas. `climate/singapore-mss.json` stores the exact values, units, location and provenance. No island-wide rain claim or new route.
-- Storybook generation, `npm run build`, `npm run check` and diff checks passed. Rendered 320-ish/390/mobile and desktop table reviewed; no page overflow. Lighthouse and deployment verification pending. Coverage remains 75/202. No paid API/cloud generation or C$25 pilot activation; account-allowance token and dollar usage unavailable.
+- Storybook generation, `npm run build`, `npm run check` and diff checks passed. Rendered effective 320px, 390px and desktop table reviewed; no page overflow. Published as commit `34c89a5` through successful Pages run 40824982398; live guide and sitemap returned 200 with the October 28 lastmod. Post-deploy Lighthouse run 40825032196 is in progress; the preceding successful nine-page sweep 40537599938 scored 100 on accessibility, best practices and SEO, and 66–67 performance. Coverage remains 75/202. No paid API/cloud generation or C$25 pilot activation; account-allowance token and dollar usage unavailable.
 
 ## 2026-10-27: UAE regional weather comparison (published)
 

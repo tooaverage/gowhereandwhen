@@ -119,6 +119,8 @@ Treat corrections as evidence. Do not defend stylistic habits. Flag a conflict w
 
 ## Ratchet log
 
+- **2026-10-28, Singapore checked page:** The old guide treated February–April as one driest window and used weather ranks to imply lower crowds and rates. Meteorological Service Singapore's Changi record identifies February as driest; November–January are wetter. Name the station and 1991–2020 period, keep the older comfort score's separate inputs visible, and avoid demand or price claims drawn from weather. Check the rendered 12-month table, FAQ and mobile layout. This is a Singapore correction; other guides remain for checked batches.
+
 - **2026-10-25, South Korea checked batch:** Applied the existing no-pictograph, short-copy and local-score rules to the South Korea guide. Removed unsourced crowd/price and fixed blossom-date claims. The score remains Seoul-only; official Seoul/Busan daytime-high comparisons answer the regional winter question. Other guides remain for checked batches.
 
 - **2026-09-26, all visitor copy:** “less = more”, “grade 6 reading level”, “show visuals where it makes sense”. Use neutral, concise, visual-first copy. No chat voice, personal asides, jokes, emoji personality, setup-punchline hooks or aphoristic endings. Idioms and parallel structure are allowed when useful.

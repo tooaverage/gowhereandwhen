@@ -1,5 +1,11 @@
 # Content releases
 
+## 2026-10-28: Singapore station weather correction (release candidate)
+
+- Existing URL: https://gowhereandwhen.com/country/singapore/ . No new URL: the month decision belongs in the existing guide. Before: rounded, older monthly values, a broad February–April “driest” claim, and weather-derived crowd/price advice. After: a 12-month Changi station high/low/rain table, February named as driest, short year-round heat/rain advice, and an explicit note that the graph's score uses older separate inputs. Removed duplicate sections and unsupported demand claims.
+- Source: [Meteorological Service Singapore, Climate of Singapore](https://www.weather.gov.sg/climate-climate-of-singapore/), published 1991–2020 station means for all 36 values; [Visit Singapore travel essentials](https://www.visitsingapore.com/travel-tips/essential-travel-information/) for tropical climate context. Changi is one station; the service reports wetter central/western areas. `climate/singapore-mss.json` stores the exact values, units, location and provenance. No island-wide rain claim or new route.
+- Storybook generation, `npm run build`, `npm run check` and diff checks passed. Rendered 320-ish/390/mobile and desktop table reviewed; no page overflow. Lighthouse and deployment verification pending. Coverage remains 75/202. No paid API/cloud generation or C$25 pilot activation; account-allowance token and dollar usage unavailable.
+
 ## 2026-10-27: UAE regional weather comparison (published)
 
 - Existing URL: https://gowhereandwhen.com/country/uae/ . Intent: choose a UAE place and month. This belongs in the country guide, so no overlapping city or route URL was added. Before: Dubai-only ratings sat beside broad coast, desert and mountain advice, a claim that the east was cooler, price guesses and month pictographs. After: a four-place, twelve-month high/rain comparison for Dubai, Abu Dhabi, Al Ain and Fujairah; a Dubai-only score limit; short Hatta opening advice; and no UAE month pictographs. The fixed weather score and unpublished Germany recommendation preview are unchanged. No full travel itinerary is claimed.

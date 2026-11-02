@@ -1,5 +1,12 @@
 # SEO learning log
 
+## 2026-11-02: Malaysia regional-answer hypothesis (pending)
+
+- Search Console's completed 28-day page/query report was reviewed. Malaysia has too little search exposure to infer a trend. Private figures and the unposted Monday pack are in `../private-marketing/2026-11-02-monday.md`.
+- Question: will a five-station month comparison on the existing Malaysia guide help travellers who need to choose between coasts and Borneo? The change adds sourced local rain contrasts and a clear Kuala Lumpur score limit, without adding a URL or padding for a word count. Review a completed 28-day period no earlier than 30 November; check Malaysia page impressions, clicks and relevant regional queries. Mark inconclusive if crawl or exposure stays sparse. A changed page cannot prove causation by itself.
+- The 5 October Mexico hypothesis is inconclusive at this review: the page still has sparse impressions and no clicks. Continue to observe; do not describe the result as a ranking loss or content failure. The indexing overview is dated, and most exclusions are canonical alternates.
+- Current [Google people-first guidance](https://developers.google.com/search/docs/fundamentals/creating-helpful-content) rejects word-count targets and artificial freshness. Its [AI-search guidance](https://developers.google.com/search/docs/fundamentals/ai-optimization-guide) warns against separate pages for query variants. Those support improving the established country guide. The November evergreen resource was left unchanged because this run's verified, bounded change is the Malaysia comparison; no near-duplicate month page was made.
+
 ## 2026-10-12: Brazil regional-answer hypothesis (pending)
 
 - Search Console domain-property access is available. The last completed 28-day period has sparse clicks, so do not infer a ranking trend from one page or use it as an arrivals queue. Raw metrics and the Monday marketing pack are in `../private-marketing/` outside this public site.

@@ -1,0 +1,14 @@
+const stations=require('../climate/malaysia-wmo.json');
+const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+module.exports=function malaysiaRegions(){
+ if(stations.map(s=>s.wmo).join(',')!=='48647,48601,48615,96413,96471')throw Error('Malaysia station sample changed');
+ for(const s of stations){
+  if(s.iso!==458||!Number.isFinite(s.lat)||!Number.isFinite(s.lng)||!Number.isFinite(s.elevationM)||s.source?.period!=='1991-2020'||!s.source?.url.startsWith('https://www.nodc.noaa.gov/'))throw Error('Malaysia station metadata missing: '+s.name);
+  for(const k of ['hi','lo','pr'])if(s[k]?.length!==12||!s[k].every(Number.isFinite))throw Error('Malaysia monthly '+k+' missing: '+s.name);
+  for(let m=0;m<12;m++)if(s.hi[m]<s.lo[m]||s.hi[m]>50||s.lo[m]<-20||s.pr[m]<0||s.pr[m]>1000)throw Error('Malaysia station value invalid: '+s.name+' '+m);
+ }
+ const rows=months.map((month,m)=>`<tr><th scope="row">${month}</th>${stations.map(s=>`<td>${Math.round(s.hi[m])}°C<br><small>${Math.round(s.pr[m])} mm rain</small></td>`).join('')}</tr>`).join('');
+ return `<section class="guide-section" id="regions"><div class="wrap"><h2>Malaysia weather by place</h2><p>The score above uses Kuala Lumpur. Compare the west coast, east coast and Borneo below.</p><p class="disc">Swipe the table sideways on a small screen.</p><p id="malaysia-weather-caption"><strong>Average daytime high and monthly rain, 1991–2020</strong></p><div class="table-scroll"><table class="weather-table" aria-labelledby="malaysia-weather-caption"><thead><tr><th scope="col">Month</th>${stations.map(s=>`<th scope="col">${esc(s.name)}<small>${esc(s.region)}</small></th>`).join('')}</tr></thead><tbody>${rows}</tbody></table></div><p>Bayan Lepas gets 80 mm of rain in January; Kota Bharu gets 677 mm in November. Kuching's wettest month is January.</p><p>Airport stations do not measure nearby islands, mountains, sea conditions or every part of Borneo.</p><details class="guide-sources"><summary>Sources and weather limits</summary><p>Malaysia's meteorological service supplied these 1991–2020 station averages to WMO. NOAA NCEI hosts the files. Highs are average daily highs; rain is the average monthly total. Every displayed month has 30 years of station data. These are past averages, not forecasts. The Kuala Lumpur score uses older separate inputs; Subang station is outside central Kuala Lumpur.</p><p>${stations.map(s=>`<a href="${esc(s.source.url)}">${esc(s.station)} station</a>`).join(' · ')} · <a href="https://www.met.gov.my/en/pendidikan/iklim-malaysia/">METMalaysia regional rain patterns</a> · <a href="https://www.malaysia.travel/explore/redang-island">Tourism Malaysia island season</a> · Checked November 2026</p></details></div></section>`;
+};

@@ -119,6 +119,8 @@ Treat corrections as evidence. Do not defend stylistic habits. Flag a conflict w
 
 ## Ratchet log
 
+- **2026-11-02, Malaysia checked page:** The old guide treated both coasts and Borneo as one simple dry-season rule, and used Kuala Lumpur scores beside countrywide sea and resort claims. Show station-specific monthly rain, name the Kuala Lumpur score limit, and keep east-coast resort timing tied to tourism guidance. Remove weather-based price and calm-sea claims. Check the rendered five-station table and month controls at phone and desktop sizes. This is a Malaysia correction; other guides remain for checked batches.
+
 - **2026-10-28, Singapore checked page:** The old guide treated February–April as one driest window and used weather ranks to imply lower crowds and rates. Meteorological Service Singapore's Changi record identifies February as driest; November–January are wetter. Name the station and 1991–2020 period, keep the older comfort score's separate inputs visible, and avoid demand or price claims drawn from weather. Check the rendered 12-month table, FAQ and mobile layout. This is a Singapore correction; other guides remain for checked batches.
 
 - **2026-10-25, South Korea checked batch:** Applied the existing no-pictograph, short-copy and local-score rules to the South Korea guide. Removed unsourced crowd/price and fixed blossom-date claims. The score remains Seoul-only; official Seoul/Busan daytime-high comparisons answer the regional winter question. Other guides remain for checked batches.

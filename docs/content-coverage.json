@@ -40,6 +40,13 @@
         "crossCheck": "https://travelbi.turismodeportugal.pt/en/tourism-in-portugal/portugal-is-on-track-to-reach-30-million-international-tourists-by-2025/"
       },
       {
+        "iso": 458,
+        "name": "Malaysia",
+        "arrivals2024": 25016698,
+        "source": "Department of Statistics Malaysia, Tourism Satellite Account 2024 and Inbound Tourism Indicators, retrieved 2 November 2026",
+        "url": "https://storage.dosm.gov.my/tourism/tourism_2024.pdf"
+      },
+      {
         "iso": 410,
         "name": "South Korea",
         "arrivals2024Approx": 16370000,
@@ -47,7 +54,7 @@
         "url": "https://www.mcst.go.kr/english/statistics/statistics.jsp?pType=03"
       }
     ],
-    "nextCandidateNote": "Dated national series support candidates after the original top ten, but definitions and missing countries prevent a verified full rank. South Korea reports 16.37 million inbound tourists in 2024. Do not compare hotel nights or all border trips as if they were tourist arrivals."
+    "nextCandidateNote": "Dated national series support candidates after the original top ten, but definitions and missing countries prevent a verified full rank. Malaysia reports 25,016,698 tourist arrivals in 2024. Do not compare hotel nights or all border trips as if they were tourist arrivals."
   },
   "note": "Inventory only. Completion requires the source and editorial checks in CONTENT-FACTORY.md; multiple cities do not imply full national coverage.",
   "destinations": [
@@ -207,6 +214,19 @@
       "hasGuide": true,
       "cityCount": 0,
       "sourcedCityCount": 0,
+      "regionalPrototype": false,
+      "editorialStatus": "needs-review"
+    },
+    {
+      "iso": 458,
+      "name": "Malaysia",
+      "arrivalsRank": null,
+      "queueEvidence": "Department of Statistics Malaysia, Tourism Satellite Account 2024 and Inbound Tourism Indicators, retrieved 2 November 2026",
+      "slug": "malaysia",
+      "region": "Asia",
+      "hasGuide": true,
+      "cityCount": 1,
+      "sourcedCityCount": 1,
       "regionalPrototype": false,
       "editorialStatus": "needs-review"
     },
@@ -580,18 +600,6 @@
       "hasGuide": true,
       "cityCount": 0,
       "sourcedCityCount": 0,
-      "regionalPrototype": false,
-      "editorialStatus": "needs-review"
-    },
-    {
-      "iso": 458,
-      "name": "Malaysia",
-      "arrivalsRank": null,
-      "slug": "malaysia",
-      "region": "Asia",
-      "hasGuide": true,
-      "cityCount": 1,
-      "sourcedCityCount": 1,
       "regionalPrototype": false,
       "editorialStatus": "needs-review"
     },

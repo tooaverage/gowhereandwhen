@@ -186,4 +186,18 @@ for(const city of require('../climate/mexico.json')){
  for(const key of ['hi','lo','pr'])assert.equal(city[key].length,12,city.name+' '+key);
  for(let m=0;m<12;m++)assert(city.hi[m]>=city.lo[m]&&city.hi[m]<50&&city.lo[m]>-20&&city.pr[m]>=0&&city.pr[m]<1000,city.name+' plausible month '+m);
 }
+const malaysia=read(path.join(root,'country/malaysia/index.html'));
+const malaysiaSection=malaysia.match(/<section class="guide-section" id="regions">([\s\S]*?)<\/section>/)?.[1];
+assert(malaysiaSection,'Malaysia regional comparison missing');
+assert.equal((malaysiaSection.match(/<tr>/g)||[]).length,13,'Malaysia table needs twelve months');
+assert(malaysiaSection.includes('The Kuala Lumpur score uses older separate inputs')&&malaysia.includes('The score above uses Kuala Lumpur'),'Malaysia score limit');
+assert(!malaysia.includes('Rates climb in peak season')&&!malaysia.includes('calm, clear seas')&&!/[✦✿☀🌷]/u.test(malaysia),'Malaysia unsupported claims and pictographs');
+for(const station of require('../climate/malaysia-wmo.json')){
+ assert(malaysiaSection.includes(station.name)&&malaysiaSection.includes(station.source.url),station.name+' station and source visible');
+ assert.equal(station.source.period,'1991-2020');
+ for(const key of ['hi','lo','pr'])assert.equal(station[key].length,12,station.name+' '+key);
+ for(let m=0;m<12;m++)assert(station.hi[m]>=station.lo[m]&&station.hi[m]<50&&station.lo[m]>-20&&station.pr[m]>=0&&station.pr[m]<1000,station.name+' plausible month '+m);
+}
+assert.deepEqual(require('../storybook/data.json').find(c=>c.iso===458).markers,[],'Malaysia month controls must not show pictographs');
+assert(read(path.join(root,'sitemap.xml')).includes('<loc>https://gowhereandwhen.com/country/malaysia/</loc><lastmod>2026-11-02</lastmod>'),'Malaysia sitemap lastmod');
 console.log(`Passed: ${expectedUrls} canonical pages, unique metadata, crawlable internal links/assets/fragments, schema JSON, archive noindex, 404 and retained island/booking surfaces.`);

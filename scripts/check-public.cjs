@@ -16,7 +16,7 @@ for(const url of urls)assert(linked.has(url),url+' orphaned');
 for(const dir of ['storybook','play','cartoon','bureau','prototypes','archive-v1','versions']){function walk(p){for(const d of fs.readdirSync(p,{withFileTypes:true})){const f=path.join(p,d.name);if(d.isDirectory())walk(f);else if(d.name.endsWith('.html'))assert(read(f).includes('noindex,follow'),f+' draft indexable');}}walk(path.join(root,dir));}
 assert(read(path.join(root,'404.html')).includes('noindex'));
 const sourceData=JSON.parse(read(path.resolve(__dirname,'../storybook/data.json'))),publicData=JSON.parse(read(path.join(root,'storybook/data.json')));
-assert.deepEqual(publicData.map(({lead,...record})=>record),sourceData.map(({lead,...record})=>record),'Weather data, scores, cities and map destinations preserved');
+assert.deepEqual(publicData.map(({lead,...record})=>record),sourceData.map(({lead,...record})=>record.iso===36?{...record,markers:[]}:record),'Weather data, scores, cities and map destinations preserved');
 const philippines=read(path.join(root,'country/philippines/index.html'));assert(philippines.includes('id="island-life"'));assert(philippines.includes('island-life.js'));assert(philippines.includes('data-booking-type="accommodation"'));
 assert(read(path.join(root,'country/austria/index.html')).includes('Austria weather by place'));
 assert((read(path.join(root,'country/austria/index.html')).match(/<tr><th scope=\"row\">(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)<\/th>/g)||[]).length>=12);
@@ -187,6 +187,20 @@ for(const city of require('../climate/mexico.json')){
  for(let m=0;m<12;m++)assert(city.hi[m]>=city.lo[m]&&city.hi[m]<50&&city.lo[m]>-20&&city.pr[m]>=0&&city.pr[m]<1000,city.name+' plausible month '+m);
 }
 const malaysia=read(path.join(root,'country/malaysia/index.html'));
+const australia=read(path.join(root,'country/australia/index.html'));
+const australiaSection=australia.match(/<section class="guide-section" id="regions">([\s\S]*?)<\/section>/)?.[1];
+assert(australiaSection,'Australia regional comparison missing');
+assert.equal((australiaSection.match(/<tr>/g)||[]).length,13,'Australia table needs twelve months');
+assert(australiaSection.includes('Sydney\'s comfort score uses older separate inputs')&&australia.includes('Sydney\'s score above cannot rate the whole country'),'Australia score limit');
+assert(!/clear water, calm seas|better prices than|worst of the stinger season|[✦✿☀🌷]/u.test(australia),'Australia unsupported claims and pictographs');
+assert.deepEqual(require('../public-dist/storybook/data.json').find(c=>c.iso===36).markers,[],'Australia month controls must not show pictographs');
+for(const place of require('../climate/australia-bom.json').places){
+ assert(australiaSection.includes(place.name),place.name+' visible');
+ for(const key of ['hi','lo','pr'])assert.equal(place[key].length,12,place.name+' '+key);
+ for(let m=0;m<12;m++)assert(place.hi[m]>=place.lo[m]&&place.hi[m]<50&&place.lo[m]>-20&&place.pr[m]>=0&&place.pr[m]<1000,place.name+' plausible month '+m);
+}
+assert(australiaSection.includes('https://www.bom.gov.au/climate/australia/cities/'),'Australia primary source visible');
+assert(read(path.join(root,'sitemap.xml')).includes('<loc>https://gowhereandwhen.com/country/australia/</loc><lastmod>2026-11-05</lastmod>'),'Australia sitemap lastmod');
 const malaysiaSection=malaysia.match(/<section class="guide-section" id="regions">([\s\S]*?)<\/section>/)?.[1];
 assert(malaysiaSection,'Malaysia regional comparison missing');
 assert.equal((malaysiaSection.match(/<tr>/g)||[]).length,13,'Malaysia table needs twelve months');

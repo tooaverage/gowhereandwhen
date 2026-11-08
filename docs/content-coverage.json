@@ -47,6 +47,13 @@
         "url": "https://storage.dosm.gov.my/tourism/tourism_2024.pdf"
       },
       {
+        "iso": 704,
+        "name": "Vietnam",
+        "arrivals2024Approx": 17600000,
+        "source": "Viet Nam National Authority of Tourism, 2024 international visitor arrivals, retrieved 8 November 2026",
+        "url": "https://vietnamtourism.gov.vn/en/post/20783"
+      },
+      {
         "iso": 410,
         "name": "South Korea",
         "arrivals2024Approx": 16370000,
@@ -54,7 +61,7 @@
         "url": "https://www.mcst.go.kr/english/statistics/statistics.jsp?pType=03"
       }
     ],
-    "nextCandidateNote": "Dated national series support candidates after the original top ten, but definitions and missing countries prevent a verified full rank. Malaysia reports 25,016,698 tourist arrivals in 2024. Do not compare hotel nights or all border trips as if they were tourist arrivals."
+    "nextCandidateNote": "Dated national series support candidates after the original top ten, but definitions and missing countries prevent a verified full rank. Malaysia reports 25,016,698 tourist arrivals and Vietnam about 17.6 million international visitor arrivals in 2024. Do not compare hotel nights or all border trips as if they were tourist arrivals."
   },
   "note": "Inventory only. Completion requires the source and editorial checks in CONTENT-FACTORY.md; multiple cities do not imply full national coverage.",
   "destinations": [
@@ -227,6 +234,19 @@
       "hasGuide": true,
       "cityCount": 1,
       "sourcedCityCount": 1,
+      "regionalPrototype": false,
+      "editorialStatus": "needs-review"
+    },
+    {
+      "iso": 704,
+      "name": "Vietnam",
+      "arrivalsRank": null,
+      "queueEvidence": "Viet Nam National Authority of Tourism, 2024 international visitor arrivals, retrieved 8 November 2026",
+      "slug": "vietnam",
+      "region": "Asia",
+      "hasGuide": true,
+      "cityCount": 0,
+      "sourcedCityCount": 0,
       "regionalPrototype": false,
       "editorialStatus": "needs-review"
     },
@@ -945,18 +965,6 @@
       "arrivalsRank": null,
       "slug": "vanuatu",
       "region": "Oceania",
-      "hasGuide": true,
-      "cityCount": 0,
-      "sourcedCityCount": 0,
-      "regionalPrototype": false,
-      "editorialStatus": "needs-review"
-    },
-    {
-      "iso": 704,
-      "name": "Vietnam",
-      "arrivalsRank": null,
-      "slug": "vietnam",
-      "region": "Asia",
       "hasGuide": true,
       "cityCount": 0,
       "sourcedCityCount": 0,

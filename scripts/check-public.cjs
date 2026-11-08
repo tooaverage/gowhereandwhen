@@ -16,8 +16,15 @@ for(const url of urls)assert(linked.has(url),url+' orphaned');
 for(const dir of ['storybook','play','cartoon','bureau','prototypes','archive-v1','versions']){function walk(p){for(const d of fs.readdirSync(p,{withFileTypes:true})){const f=path.join(p,d.name);if(d.isDirectory())walk(f);else if(d.name.endsWith('.html'))assert(read(f).includes('noindex,follow'),f+' draft indexable');}}walk(path.join(root,dir));}
 assert(read(path.join(root,'404.html')).includes('noindex'));
 const sourceData=JSON.parse(read(path.resolve(__dirname,'../storybook/data.json'))),publicData=JSON.parse(read(path.join(root,'storybook/data.json')));
-assert.deepEqual(publicData.map(({lead,...record})=>record),sourceData.map(({lead,...record})=>record.iso===36?{...record,markers:[]}:record),'Weather data, scores, cities and map destinations preserved');
+assert.deepEqual(publicData.map(({lead,...record})=>record),sourceData.map(({lead,...record})=>[36,704].includes(record.iso)?{...record,markers:[]}:record),'Weather data, scores, cities and map destinations preserved');
 const philippines=read(path.join(root,'country/philippines/index.html'));assert(philippines.includes('id="island-life"'));assert(philippines.includes('island-life.js'));assert(philippines.includes('data-booking-type="accommodation"'));
+const vietnam=read(path.join(root,'country/vietnam/index.html'));
+const vietnamSection=vietnam.match(/<section class="guide-section" id="regions">([\s\S]*?)<\/section>/)?.[1];
+assert(vietnamSection&&((vietnamSection.match(/<tr>/g)||[]).length===13),'Vietnam three-city twelve-month comparison');
+assert(vietnamSection.includes('The score above uses Hanoi.')&&vietnamSection.includes('miss mountains, islands and sea conditions'),'Vietnam score and coverage limits');
+assert(!vietnam.includes('For the whole country at once')&&!/[✦✿☀🌷]/u.test(vietnam),'Vietnam old lead and pictographs removed');
+for(const city of require('../climate/vietnam-wmo.json'))assert(vietnamSection.includes(city.name)&&vietnamSection.includes(city.source.url.replaceAll('&','&amp;')),city.name+' station source visible');
+assert(read(path.join(root,'sitemap.xml')).includes('<loc>https://gowhereandwhen.com/country/vietnam/</loc><lastmod>2026-11-08</lastmod>'),'Vietnam sitemap lastmod');
 assert(read(path.join(root,'country/austria/index.html')).includes('Austria weather by place'));
 assert((read(path.join(root,'country/austria/index.html')).match(/<tr><th scope=\"row\">(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)<\/th>/g)||[]).length>=12);
 const germany=read(path.join(root,'country/germany/index.html'));

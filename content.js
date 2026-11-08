@@ -584,7 +584,7 @@ const CONTENT = [
       { q: 'When is typhoon season in Vietnam?', a: 'Roughly July to November on the central and northern coasts, with central Vietnam most prone to flooding in October and November.' },
       { q: 'When is the best time for the south of Vietnam?', a: 'December to April, the dry season around Ho Chi Minh City and the Mekong Delta.' },
     ],
-    markers: [{ mon: 'Oct', kind: 'leaf' }, { mon: 'Apr', kind: 'sun' }],
+    markers: [],
   },
 
   { slug: 'india', iso: 356, name: 'India',

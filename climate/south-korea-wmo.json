@@ -1,0 +1,16 @@
+[
+  {
+    "name": "Seoul", "iso": 410, "lat": 37.5665, "lng": 126.978,
+    "hi": [2.1,5.1,11,17.9,23.6,27.6,29,30,26.2,20.2,11.9,4.2],
+    "lo": [-5.5,-3.2,1.9,8,13.5,18.7,22.3,22.9,17.7,10.6,3.5,-3.4],
+    "pr": [16.8,28.2,36.9,72.9,103.6,129.5,414.4,348.2,141.5,52.2,51.1,22.6],
+    "source": {"provider":"WMO / Korea Meteorological Administration","period":"1991-2020","url":"https://worldweather.wmo.int/en/city.html?cityId=231","units":"mean daily high and low in °C; mean monthly rainfall in mm","retrieved":"2026-11-13"}
+  },
+  {
+    "name": "Busan", "iso": 410, "lat": 35.1796, "lng": 129.0756,
+    "hi": [8.2,10.2,13.8,18.2,22,24.6,27.5,29.5,26.4,22.5,16.6,10.4],
+    "lo": [-0.1,1.5,5.3,10.1,14.6,18.3,22.1,23.7,19.8,14.5,8.3,2],
+    "pr": [34.5,49.6,89.7,140.9,155.9,188.4,326.8,266.5,160.6,79.6,50.4,33.8],
+    "source": {"provider":"WMO / Korea Meteorological Administration","period":"1991-2020","url":"https://worldweather.wmo.int/en/city.html?cityId=336","units":"mean daily high and low in °C; mean monthly rainfall in mm","retrieved":"2026-11-13"}
+  }
+]

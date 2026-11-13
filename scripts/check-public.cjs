@@ -89,10 +89,13 @@ assert(!uae.includes('A little cooler and good for hiking')&&!uae.includes('heav
 assert.deepEqual(require('../storybook/data.json').find(c=>c.iso===784).markers,[],'UAE month controls have no Unicode pictographs');
 for(const city of require('../climate/uae.json'))assert(uaeSection.includes(city.name)&&uaeSection.includes(city.source.url.replaceAll('&','&amp;')),city.name+' UAE source visible');
 assert(read(path.join(root,'sitemap.xml')).includes('<loc>https://gowhereandwhen.com/country/uae/</loc><lastmod>2026-10-27</lastmod>'),'UAE sitemap lastmod');
-assert(southKorea.includes('In January, Seoul averages 2°C by day. Busan averages 8°C.')&&southKorea.includes('The Seoul score uses older separate inputs'),'South Korea winter contrast and score limit');
-assert(southKorea.includes('Korea Tourism Organization climate and seasons')&&!southKorea.includes('the highest prices')&&!/[✦✿☀🌷]/u.test(southKorea),'South Korea source, unsupported price claim and pictographs');
+const koreaSection=southKorea.match(/<section class="guide-section" id="regions">([\s\S]*?)<\/section>/)?.[1];
+assert(koreaSection && (koreaSection.match(/<tr>/g)||[]).length===13,'South Korea station comparison needs twelve months');
+assert(southKorea.includes('The score above uses Seoul.')&&koreaSection.includes('miss Jeju, mountains and sea conditions'),'South Korea score and coverage limits');
+assert(!southKorea.includes('the highest prices')&&!/[✦✿☀🌷]/u.test(southKorea),'South Korea unsupported price claim and pictographs');
+for(const city of require('../climate/south-korea-wmo.json'))assert(koreaSection.includes(city.name)&&koreaSection.includes(city.source.url),city.name+' station source visible');
 assert.deepEqual(require('../storybook/data.json').find(c=>c.iso===410).markers,[],'South Korea month controls have no Unicode pictographs');
-assert(read(path.join(root,'sitemap.xml')).includes('<loc>https://gowhereandwhen.com/country/south-korea/</loc><lastmod>2026-10-25</lastmod>'),'South Korea sitemap lastmod');
+assert(read(path.join(root,'sitemap.xml')).includes('<loc>https://gowhereandwhen.com/country/south-korea/</loc><lastmod>2026-11-13</lastmod>'),'South Korea sitemap lastmod');
 const swissSection=switzerland.match(/<section class="guide-section" id="regions">([\s\S]*?)<\/section>/)?.[1];
 assert(swissSection,'Switzerland station comparison missing');
 assert.equal((swissSection.match(/<tr>/g)||[]).length,13,'Switzerland table needs twelve months');

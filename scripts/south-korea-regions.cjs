@@ -1,0 +1,12 @@
+const cities=require('../climate/south-korea-wmo.json');
+const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+module.exports=function southKoreaRegions(){
+ if(cities.map(c=>c.name).join(',')!=='Seoul,Busan')throw Error('South Korea sample changed');
+ for(const city of cities){
+  if(city.iso!==410||city.source?.period!=='1991-2020'||!city.source?.url||!Number.isFinite(city.lat)||!Number.isFinite(city.lng)||city.lat<33||city.lat>39||city.lng<124||city.lng>132)throw Error('South Korea station missing: '+city.name);
+  for(const key of ['hi','lo','pr'])if(city[key]?.length!==12||!city[key].every(Number.isFinite))throw Error('South Korea monthly data missing: '+city.name+' '+key);
+  for(let m=0;m<12;m++)if(city.hi[m]<city.lo[m]||city.hi[m]>45||city.lo[m]<-20||city.pr[m]<0||city.pr[m]>1000)throw Error('South Korea climate invalid: '+city.name+' '+m);
+ }
+ const rows=months.map((month,m)=>`<tr><th scope="row">${month}</th>${cities.map(city=>`<td>${Math.round(city.hi[m])}°C<br><small>${Math.round(city.pr[m])} mm rain</small></td>`).join('')}</tr>`).join('');
+ return `<section class="guide-section" id="regions"><div class="wrap"><h2>Seoul or Busan by month</h2><p>Busan has warmer winter days. Both cities get their most rain in July.</p><p>The score above uses Seoul. It does not rate Busan or Jeju.</p><p id="korea-weather-caption"><strong>Average daytime high and monthly rain, 1991–2020</strong></p><div class="table-scroll"><table class="weather-table" aria-labelledby="korea-weather-caption"><thead><tr><th scope="col">Month</th>${cities.map(city=>`<th scope="col">${city.name}</th>`).join('')}</tr></thead><tbody>${rows}</tbody></table></div><p>July rain is much heavier than in October in both cities. Check storm notices before summer travel.</p><p>These city stations miss Jeju, mountains and sea conditions. Check local forecasts before travel.</p><details class="guide-sources"><summary>Sources and weather limits</summary><p>WMO publishes 1991–2020 averages from Korea's weather service. Highs are average daily highs; rain is the average monthly total. These are past averages, not forecasts. The Seoul score uses older separate inputs.</p><p><a href="${cities[0].source.url}">Seoul data</a> · <a href="${cities[1].source.url}">Busan data</a> · <a href="https://english.visitkorea.or.kr/svc/contents/infoBscView.do?vcontsId=140636">Korea Tourism: seasons</a> · Checked November 2026</p></details></div></section>`;
+};

@@ -228,7 +228,7 @@ const PLACES = {
         { name: 'Manila', lat: 14.60, lng: 120.98, tier: 3, nights: 1, lab: 'l', p: 'Intramuros, then a bed near the airport for the early flight out.' },
         { name: 'Banaue', lat: 16.92, lng: 121.06, tier: 30, nights: 2, via: 'Night bus, 9 hours', p: 'The rice terraces at Batad and Bangaan, walked in a day with a guide.' },
         { name: 'Manila', lat: 14.60, lng: 120.98, tier: 30, pass: true, via: 'Bus back, then fly to Palawan' },
-        { name: 'El Nido', lat: 11.18, lng: 119.39, tier: 3, nights: 3, from: 'Manila', via: 'Fly to Puerto Princesa and a van, 6 hours', lab: 'l', p: 'Island hopping tours A to D through lagoons and limestone cliffs. Nacpan beach for a day off.' },
+        { name: 'El Nido', lat: 11.18, lng: 119.39, tier: 3, nights: 3, from: 'Manila', via: 'Fly to Puerto Princesa and a van, 6 hours', lab: 'l', p: 'Island hopping tours A to D through lagoons and limestone cliffs. The Taraw Cliff canopy walk above town. Nacpan beach for a day off.' },
         { name: 'Coron', lat: 12.00, lng: 120.20, tier: 7, nights: 3, via: 'Ferry, 3.5 to 4 hours', p: 'Kayangan lake, the Japanese wrecks for divers, and hot springs at dusk.' },
         { name: 'Boracay', lat: 11.97, lng: 121.93, tier: 30, nights: 2, via: 'Fly via Manila, or ferry to Caticlan', p: 'White Beach, sunset paraws and the party. Skip it if that is not your thing.' },
         { name: 'Moalboal', lat: 9.94, lng: 123.40, tier: 7, nights: 2, via: 'Fly to Cebu, then bus, 3 hours', alt: { Boracay: 'Fly to Cebu, then bus, 3 hours' }, lab: 'l', off: [-30, -12], p: 'The sardine run right off the beach, and Kawasan falls canyoneering.' },

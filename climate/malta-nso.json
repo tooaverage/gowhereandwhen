@@ -1,0 +1,57 @@
+{
+  "iso": 470,
+  "station": "Luqa Airport",
+  "lat": 35.8575,
+  "lng": 14.4775,
+  "provider": "Malta International Airport Meteorological Office, via National Statistics Office Malta",
+  "period": "1991-2020",
+  "url": "https://nso.gov.mt/wp-content/uploads/Climate-publication-2022.pdf",
+  "table": "Table 1.1, page 1; mean daily maximum, mean daily minimum, mean monthly rainfall",
+  "units": {
+    "hi": "°C",
+    "lo": "°C",
+    "pr": "mm"
+  },
+  "hi": [
+    15.7,
+    15.7,
+    17.4,
+    20.1,
+    24.3,
+    28.8,
+    31.7,
+    32,
+    28.6,
+    25,
+    20.8,
+    17.1
+  ],
+  "lo": [
+    10,
+    9.6,
+    10.9,
+    12.7,
+    15.8,
+    19.6,
+    22.1,
+    23,
+    21.2,
+    18.4,
+    15,
+    11.8
+  ],
+  "pr": [
+    79.4,
+    68.9,
+    39.7,
+    18.7,
+    11,
+    7.3,
+    0.2,
+    11.2,
+    59.2,
+    77.6,
+    89.1,
+    84.8
+  ]
+}

@@ -16,6 +16,13 @@ for(const url of urls)assert(linked.has(url),url+' orphaned');
 for(const dir of ['storybook','play','cartoon','bureau','prototypes','archive-v1','versions']){function walk(p){for(const d of fs.readdirSync(p,{withFileTypes:true})){const f=path.join(p,d.name);if(d.isDirectory())walk(f);else if(d.name.endsWith('.html'))assert(read(f).includes('noindex,follow'),f+' draft indexable');}}walk(path.join(root,dir));}
 assert(read(path.join(root,'404.html')).includes('noindex'));
 const sourceData=JSON.parse(read(path.resolve(__dirname,'../storybook/data.json'))),publicData=JSON.parse(read(path.join(root,'storybook/data.json')));
+const maltaData=sourceData.find(r=>r.iso===470),maltaSource=require('../climate/malta-nso.json');
+assert.equal(maltaData.slug,'malta','Malta guide must be linked from shared map data');
+for(const key of ['hi','lo','pr'])assert.deepEqual(maltaData[key],maltaSource[key],`Malta ${key} matches official source`);
+const malta=read(path.join(root,'country/malta/index.html'));
+assert(malta.includes('Luqa weather by month')&&malta.includes('Sources and weather limits')&&malta.includes(maltaSource.url),'Malta source and station scope');
+assert(!malta.includes('The quietest, cheapest stretch of the year.')&&!/[✦✿☀🌷]/u.test(malta),'Malta unsupported price claim and pictographs');
+assert(read(path.join(root,'sitemap.xml')).includes('<loc>https://gowhereandwhen.com/country/malta/</loc><lastmod>2026-11-20</lastmod>'),'Malta sitemap lastmod');
 assert.deepEqual(publicData.map(({lead,...record})=>record),sourceData.map(({lead,...record})=>[36,704].includes(record.iso)?{...record,markers:[]}:record),'Weather data, scores, cities and map destinations preserved');
 const philippines=read(path.join(root,'country/philippines/index.html'));assert(philippines.includes('id="island-life"'));assert(philippines.includes('island-life.js'));assert(philippines.includes('data-booking-type="accommodation"'));
 const vietnam=read(path.join(root,'country/vietnam/index.html'));

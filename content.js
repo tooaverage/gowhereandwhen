@@ -6,6 +6,34 @@
    ========================================================================= */
 const CONTENT = [
 
+  { slug: 'malta', iso: 470, name: 'Malta',
+    hub: { city: 'Valletta', lat: 35.8992, lng: 14.5141, zoom: 12, iata: 'MLA' },
+    title: 'Best Time to Visit Malta: Weather by Month',
+    desc: 'Compare Malta’s 1991–2020 monthly highs and rain. Choose milder days for walks or hot, dry summer days for beaches.',
+    heroLead: '<strong>April to May and October</strong> have milder days for walks. <strong>July and August</strong> are hot and almost dry at Luqa.',
+    intro: [
+      'The score uses past weather at Luqa Airport. It cannot rate sea conditions or every island coast.',
+      'Choose Valletta for city sights, Gozo for walks, or a beach base. Check local forecasts before travel.',
+    ],
+    regions: [
+      { icon: 'landmark', h: 'Valletta and Mdina', p: 'April, May and October have milder days for outdoor sights.' },
+      { icon: 'waves', h: 'Beaches and Comino', p: 'July and August have very little rain, but hot days. Check sea and boat conditions.' },
+      { icon: 'footprints', h: 'Gozo walks', p: 'Spring and autumn avoid the hottest summer days. Check the local forecast.' },
+    ],
+    bestFor: [
+      { h: 'City walks', p: 'Compare April, May and October for Valletta and Mdina.' },
+      { h: 'Beach days', p: 'July and August are hot with little rain at Luqa. Check sea conditions.' },
+      { h: 'Gozo outdoors', p: 'Try milder spring or autumn days for walks.' },
+    ],
+    whatsOn: [],
+    faq: [
+      { q: 'When is a good time to visit Malta?', a: 'For walks, compare April, May and October. Summer is hotter and much drier.' },
+      { q: 'When is Malta wettest?', a: 'Luqa averages the most rain in November, then December and January.' },
+      { q: 'Is Malta hot in August?', a: 'Luqa’s average daily high is 32°C in August. Check the forecast for your dates.' },
+    ],
+    markers: [],
+  },
+
   { slug: 'japan', iso: 392, name: 'Japan',
     hub: { city: 'Tokyo', lat: 35.6812, lng: 139.7671, zoom: 11, iata: 'TYO' },
     title: 'Best Time to Visit Japan: Month by Month Weather',

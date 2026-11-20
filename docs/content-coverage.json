@@ -636,6 +636,18 @@
       "editorialStatus": "needs-review"
     },
     {
+      "iso": 470,
+      "name": "Malta",
+      "arrivalsRank": null,
+      "slug": "malta",
+      "region": "Europe",
+      "hasGuide": true,
+      "cityCount": 0,
+      "sourcedCityCount": 0,
+      "regionalPrototype": false,
+      "editorialStatus": "needs-review"
+    },
+    {
       "iso": 584,
       "name": "Marshall Islands",
       "arrivalsRank": null,
@@ -1817,18 +1829,6 @@
       "arrivalsRank": null,
       "slug": null,
       "region": "Africa & Middle East",
-      "hasGuide": false,
-      "cityCount": 0,
-      "sourcedCityCount": 0,
-      "regionalPrototype": false,
-      "editorialStatus": "needs-review"
-    },
-    {
-      "iso": 470,
-      "name": "Malta",
-      "arrivalsRank": null,
-      "slug": null,
-      "region": "Europe",
       "hasGuide": false,
       "cityCount": 0,
       "sourcedCityCount": 0,

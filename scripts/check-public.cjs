@@ -16,6 +16,20 @@ for(const url of urls)assert(linked.has(url),url+' orphaned');
 for(const dir of ['storybook','play','cartoon','bureau','prototypes','archive-v1','versions']){function walk(p){for(const d of fs.readdirSync(p,{withFileTypes:true})){const f=path.join(p,d.name);if(d.isDirectory())walk(f);else if(d.name.endsWith('.html'))assert(read(f).includes('noindex,follow'),f+' draft indexable');}}walk(path.join(root,dir));}
 assert(read(path.join(root,'404.html')).includes('noindex'));
 const sourceData=JSON.parse(read(path.resolve(__dirname,'../storybook/data.json'))),publicData=JSON.parse(read(path.join(root,'storybook/data.json')));
+const india=read(path.join(root,'country/india/index.html'));
+const indiaSection=india.match(/<section class="guide-section" id="regions">([\s\S]*?)<\/section>/)?.[1];
+const indiaSource=require('../climate/india-imd.json');
+assert(indiaSection&&((indiaSection.match(/<tr>/g)||[]).length===13),'India has a twelve-month place comparison');
+assert(indiaSection.includes('The score above uses older Delhi inputs.')&&indiaSection.includes('miss the Himalaya, east India'),'India score and coverage limits');
+assert(indiaSection.includes('Swipe the table sideways')&&!india.includes('Best time to visit India for'),'India mobile table hint and concise sections');
+assert(!india.includes('most comfortable weather across most of the north and centre')&&!/[✦✿☀🌷]/u.test(india),'India broad season claim and pictographs removed');
+assert.deepEqual(publicData.find(r=>r.iso===356).markers,[],'India month controls have no stale event markers');
+for(const city of indiaSource){
+ assert(indiaSection.includes(city.name)&&indiaSection.includes(city.source.url),city.name+' station source visible');
+ assert.equal(city.source.period,'1991-2020');
+ for(const key of ['hi','lo','pr'])assert.equal(city[key].length,12,city.name+' '+key);
+}
+assert(read(path.join(root,'sitemap.xml')).includes('<loc>https://gowhereandwhen.com/country/india/</loc><lastmod>2026-11-24</lastmod>'),'India sitemap lastmod');
 const maltaData=sourceData.find(r=>r.iso===470),maltaSource=require('../climate/malta-nso.json');
 assert.equal(maltaData.slug,'malta','Malta guide must be linked from shared map data');
 for(const key of ['hi','lo','pr'])assert.deepEqual(maltaData[key],maltaSource[key],`Malta ${key} matches official source`);

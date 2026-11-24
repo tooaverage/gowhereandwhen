@@ -119,6 +119,8 @@ Treat corrections as evidence. Do not defend stylistic habits. Flag a conflict w
 
 ## Ratchet log
 
+- **2026-11-24, India checked page:** The old lead treated Delhi's weather window as a national answer and paired it with broad, unsourced mountain and beach claims. Name the Delhi score limit next to it and compare sourced places before giving India-wide timing advice. Keep monsoon timing regional; do not infer sea conditions or mountain access from city temperatures. Check twelve months of highs, lows and rain against the named stations, then inspect the rendered guide at phone and desktop sizes. This applies to the India batch; other guides remain for checked review.
+
 - **2026-11-02, Malaysia checked page:** The old guide treated both coasts and Borneo as one simple dry-season rule, and used Kuala Lumpur scores beside countrywide sea and resort claims. Show station-specific monthly rain, name the Kuala Lumpur score limit, and keep east-coast resort timing tied to tourism guidance. Remove weather-based price and calm-sea claims. Check the rendered five-station table and month controls at phone and desktop sizes. This is a Malaysia correction; other guides remain for checked batches.
 
 - **2026-10-28, Singapore checked page:** The old guide treated February–April as one driest window and used weather ranks to imply lower crowds and rates. Meteorological Service Singapore's Changi record identifies February as driest; November–January are wetter. Name the station and 1991–2020 period, keep the older comfort score's separate inputs visible, and avoid demand or price claims drawn from weather. Check the rendered 12-month table, FAQ and mobile layout. This is a Singapore correction; other guides remain for checked batches.

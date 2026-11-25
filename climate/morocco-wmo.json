@@ -1,0 +1,307 @@
+[
+  {
+    "name": "Marrakech",
+    "iso": 504,
+    "station": "Marrakech",
+    "lat": 31.62,
+    "lng": -8.03,
+    "hi": [
+      19.1,
+      20.7,
+      23.6,
+      25.7,
+      29.4,
+      33.6,
+      37.7,
+      37.4,
+      32.5,
+      28.5,
+      23.1,
+      20.2
+    ],
+    "lo": [
+      5.9,
+      7.6,
+      10.3,
+      12.4,
+      15.2,
+      17.9,
+      20.6,
+      21.1,
+      18.6,
+      15.7,
+      10.7,
+      7.3
+    ],
+    "pr": [
+      25.0,
+      25.7,
+      35.3,
+      26.3,
+      10.3,
+      3.1,
+      2.2,
+      4.7,
+      15.2,
+      19.1,
+      29.8,
+      24.2
+    ],
+    "units": {
+      "hi": "°C, mean daily maximum",
+      "lo": "°C, mean daily minimum",
+      "pr": "mm, mean monthly rainfall total"
+    },
+    "source": {
+      "provider": "Morocco Direction de la Météorologie Nationale via WMO World Weather Information Service",
+      "period": "1991-2020",
+      "url": "https://worldweather.wmo.int/en/city.html?cityId=180",
+      "dataUrl": "https://worldweather.wmo.int/en/json/180_en.json",
+      "retrieved": "2026-11-25"
+    }
+  },
+  {
+    "name": "Agadir",
+    "iso": 504,
+    "station": "Agadir Inezganne",
+    "lat": 30.37943,
+    "lng": -9.559449,
+    "hi": [
+      21.1,
+      22.0,
+      23.4,
+      23.2,
+      24.2,
+      25.6,
+      26.7,
+      27.0,
+      26.1,
+      26.1,
+      24.1,
+      22.1
+    ],
+    "lo": [
+      8.4,
+      10.2,
+      12.3,
+      14.1,
+      15.9,
+      18.1,
+      19.2,
+      19.5,
+      18.6,
+      16.7,
+      12.9,
+      10.1
+    ],
+    "pr": [
+      31.6,
+      28.6,
+      31.3,
+      13.8,
+      5.4,
+      0.8,
+      0.2,
+      3.1,
+      3.7,
+      21.2,
+      42.3,
+      47.4
+    ],
+    "units": {
+      "hi": "°C, mean daily maximum",
+      "lo": "°C, mean daily minimum",
+      "pr": "mm, mean monthly rainfall total"
+    },
+    "source": {
+      "provider": "Morocco Direction de la Météorologie Nationale via WMO World Weather Information Service",
+      "period": "1991-2020",
+      "url": "https://worldweather.wmo.int/en/city.html?cityId=3512",
+      "dataUrl": "https://worldweather.wmo.int/en/json/3512_en.json",
+      "retrieved": "2026-11-25"
+    }
+  },
+  {
+    "name": "Fez",
+    "iso": 504,
+    "station": "Fes",
+    "lat": 33.930654,
+    "lng": -4.973251,
+    "hi": [
+      16.0,
+      17.3,
+      19.9,
+      22.0,
+      26.4,
+      31.2,
+      35.1,
+      35.1,
+      30.3,
+      26.1,
+      20.2,
+      17.2
+    ],
+    "lo": [
+      3.7,
+      4.4,
+      6.6,
+      8.3,
+      11.5,
+      14.9,
+      17.9,
+      18.3,
+      15.6,
+      12.6,
+      8.1,
+      5.2
+    ],
+    "pr": [
+      60.1,
+      54.3,
+      59.3,
+      54.7,
+      38.2,
+      11.1,
+      1.1,
+      4.9,
+      22.6,
+      53.9,
+      65.6,
+      62.0
+    ],
+    "units": {
+      "hi": "°C, mean daily maximum",
+      "lo": "°C, mean daily minimum",
+      "pr": "mm, mean monthly rainfall total"
+    },
+    "source": {
+      "provider": "Morocco Direction de la Météorologie Nationale via WMO World Weather Information Service",
+      "period": "1991-2020",
+      "url": "https://worldweather.wmo.int/en/city.html?cityId=3515",
+      "dataUrl": "https://worldweather.wmo.int/en/json/3515_en.json",
+      "retrieved": "2026-11-25"
+    }
+  },
+  {
+    "name": "Ouarzazate",
+    "iso": 504,
+    "station": "Ouarzazate",
+    "lat": 30.932448,
+    "lng": -6.899335,
+    "hi": [
+      17.3,
+      19.3,
+      22.7,
+      26.7,
+      30.7,
+      35.5,
+      38.8,
+      37.5,
+      33.1,
+      27.5,
+      21.7,
+      17.7
+    ],
+    "lo": [
+      1.8,
+      4.5,
+      8.2,
+      11.9,
+      15.7,
+      19.6,
+      22.7,
+      22.1,
+      18.1,
+      13.3,
+      7.2,
+      3.2
+    ],
+    "pr": [
+      5.5,
+      14.2,
+      16.5,
+      6.6,
+      4.4,
+      6.6,
+      3.8,
+      12.3,
+      13.2,
+      14.8,
+      7.7,
+      9.5
+    ],
+    "units": {
+      "hi": "°C, mean daily maximum",
+      "lo": "°C, mean daily minimum",
+      "pr": "mm, mean monthly rainfall total"
+    },
+    "source": {
+      "provider": "Morocco Direction de la Météorologie Nationale via WMO World Weather Information Service",
+      "period": "1991-2020",
+      "url": "https://worldweather.wmo.int/en/city.html?cityId=3517",
+      "dataUrl": "https://worldweather.wmo.int/en/json/3517_en.json",
+      "retrieved": "2026-11-25"
+    }
+  },
+  {
+    "name": "Tangier",
+    "iso": 504,
+    "station": "Tanger",
+    "lat": 35.726255,
+    "lng": -5.905584,
+    "hi": [
+      16.8,
+      17.3,
+      19.0,
+      20.6,
+      23.7,
+      26.9,
+      29.2,
+      29.7,
+      27.4,
+      24.5,
+      20.2,
+      17.8
+    ],
+    "lo": [
+      8.2,
+      8.8,
+      10.4,
+      11.8,
+      14.1,
+      17.3,
+      19.3,
+      20.1,
+      18.6,
+      16.2,
+      12.3,
+      10.0
+    ],
+    "pr": [
+      89.8,
+      65.6,
+      72.2,
+      58.5,
+      34.5,
+      7.3,
+      1.3,
+      1.4,
+      24.2,
+      86.8,
+      116.9,
+      114.3
+    ],
+    "units": {
+      "hi": "°C, mean daily maximum",
+      "lo": "°C, mean daily minimum",
+      "pr": "mm, mean monthly rainfall total"
+    },
+    "source": {
+      "provider": "Morocco Direction de la Météorologie Nationale via WMO World Weather Information Service",
+      "period": "1991-2020",
+      "url": "https://worldweather.wmo.int/en/city.html?cityId=3521",
+      "dataUrl": "https://worldweather.wmo.int/en/json/3521_en.json",
+      "retrieved": "2026-11-25"
+    }
+  }
+]

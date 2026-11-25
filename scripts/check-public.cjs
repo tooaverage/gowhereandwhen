@@ -16,6 +16,19 @@ for(const url of urls)assert(linked.has(url),url+' orphaned');
 for(const dir of ['storybook','play','cartoon','bureau','prototypes','archive-v1','versions']){function walk(p){for(const d of fs.readdirSync(p,{withFileTypes:true})){const f=path.join(p,d.name);if(d.isDirectory())walk(f);else if(d.name.endsWith('.html'))assert(read(f).includes('noindex,follow'),f+' draft indexable');}}walk(path.join(root,dir));}
 assert(read(path.join(root,'404.html')).includes('noindex'));
 const sourceData=JSON.parse(read(path.resolve(__dirname,'../storybook/data.json'))),publicData=JSON.parse(read(path.join(root,'storybook/data.json')));
+const morocco=read(path.join(root,'country/morocco/index.html'));
+const moroccoSection=morocco.match(/<section class="guide-section" id="regions">([\s\S]*?)<\/section>/)?.[1];
+const moroccoSource=require('../climate/morocco-wmo.json');
+assert(moroccoSection&&((moroccoSection.match(/<tr>/g)||[]).length===13),'Morocco has a twelve-month place comparison');
+assert(moroccoSection.includes('older Marrakech inputs')&&moroccoSection.includes('miss mountain slopes, dunes'),'Morocco score and coverage limits');
+assert(!morocco.includes('across the cities, the desert and the mountains')&&!/[✦✿☀🌷]/u.test(morocco),'Morocco broad claim and pictographs removed');
+assert.deepEqual(publicData.find(r=>r.iso===504).markers,[],'Morocco runtime month markers removed');
+for(const city of moroccoSource){
+ assert(moroccoSection.includes(city.name)&&moroccoSection.includes(city.source.url),city.name+' station source visible');
+ assert.equal(city.source.period,'1991-2020');
+ for(const key of ['hi','lo','pr'])assert.equal(city[key].length,12,city.name+' '+key);
+}
+assert(read(path.join(root,'sitemap.xml')).includes('<loc>https://gowhereandwhen.com/country/morocco/</loc><lastmod>2026-11-25</lastmod>'),'Morocco sitemap lastmod');
 const india=read(path.join(root,'country/india/index.html'));
 const indiaSection=india.match(/<section class="guide-section" id="regions">([\s\S]*?)<\/section>/)?.[1];
 const indiaSource=require('../climate/india-imd.json');

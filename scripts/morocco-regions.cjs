@@ -1,0 +1,14 @@
+const cities=require('../climate/morocco-wmo.json');
+const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const esc=value=>String(value).replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[char]));
+
+module.exports=function moroccoRegions(){
+ if(cities.map(city=>city.name).join(',')!=='Marrakech,Agadir,Fez,Ouarzazate,Tangier')throw Error('Morocco comparison places changed');
+ for(const city of cities){
+  if(city.iso!==504||city.source?.period!=='1991-2020'||!city.source?.url||!city.source?.dataUrl||!Number.isFinite(city.lat)||!Number.isFinite(city.lng))throw Error('Morocco station source missing: '+city.name);
+  for(const key of ['hi','lo','pr'])if(city[key]?.length!==12||!city[key].every(Number.isFinite))throw Error('Morocco monthly data missing: '+city.name+' '+key);
+  for(let m=0;m<12;m++)if(city.hi[m]<city.lo[m]||city.hi[m]>50||city.lo[m]<-10||city.pr[m]<0||city.pr[m]>500)throw Error('Morocco station data invalid: '+city.name+' '+m);
+ }
+ const rows=months.map((month,m)=>`<tr><th scope="row">${month}</th>${cities.map(city=>`<td>${Math.round(city.hi[m])}°C<br><small>${city.pr[m]<1?city.pr[m].toFixed(1):Math.round(city.pr[m])} mm rain</small></td>`).join('')}</tr>`).join('');
+ return `<section class="guide-section" id="regions"><div class="wrap"><h2>Morocco weather by place</h2><p>Marrakech and Fez get hot in summer. Agadir stays milder; Tangier gets more winter rain.</p><p>The score above uses older Marrakech inputs. It does not rate the other places.</p><p id="morocco-weather-caption"><strong>Average daytime high and monthly rain, 1991–2020</strong></p><p class="disc">Swipe the table sideways on a small screen.</p><div class="table-scroll"><table class="weather-table" aria-labelledby="morocco-weather-caption"><thead><tr><th scope="col">Month</th>${cities.map(city=>`<th scope="col">${esc(city.name)}</th>`).join('')}</tr></thead><tbody>${rows}</tbody></table></div><p>Five city stations miss mountain slopes, dunes and many coastal towns. They do not show sea conditions or a forecast.</p><details class="guide-sources"><summary>Sources and weather limits</summary><p>Morocco's weather service supplied these 1991–2020 station averages to the WMO World Weather Information Service. Highs and lows are daily averages; rain is the mean monthly total. The Marrakech score uses older separate weather inputs.</p><p>${cities.map(city=>`<a href="${esc(city.source.url)}">${esc(city.name)} station</a>`).join(' · ')} · <a href="https://www.visitmorocco.com/en/content/climateseasons">Visit Morocco: regional climate</a> · <a href="https://www.visitmorocco.com/en/travel/marrakesh">Marrakech seasons</a> · <a href="https://www.visitmorocco.com/en/travel/agadir-taghazout">Agadir seasons</a> · Checked November 2026</p></details></div></section>`;
+};

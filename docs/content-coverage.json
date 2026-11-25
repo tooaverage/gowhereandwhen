@@ -54,6 +54,13 @@
         "url": "https://vietnamtourism.gov.vn/en/post/20783"
       },
       {
+        "iso": 504,
+        "name": "Morocco",
+        "arrivals2024Approx": 17400000,
+        "source": "UN Tourism, Morocco 2024 international tourist arrivals, retrieved 25 November 2026",
+        "url": "https://www.untourism.int/news/un-tourism-in-morocco-driving-investments-and-celebrating-innovation-in-africa-s-most-visited-destination"
+      },
+      {
         "iso": 410,
         "name": "South Korea",
         "arrivals2024Approx": 16370000,
@@ -61,7 +68,7 @@
         "url": "https://www.mcst.go.kr/english/statistics/statistics.jsp?pType=03"
       }
     ],
-    "nextCandidateNote": "Dated national series support candidates after the original top ten, but definitions and missing countries prevent a verified full rank. Malaysia reports 25,016,698 tourist arrivals and Vietnam about 17.6 million international visitor arrivals in 2024. Do not compare hotel nights or all border trips as if they were tourist arrivals."
+    "nextCandidateNote": "Dated national series support candidates after the original top ten, but definitions and missing countries prevent a verified full rank. Malaysia reports 25,016,698 tourist arrivals, Vietnam about 17.6 million international visitor arrivals, and Morocco about 17.4 million international tourists in 2024. Do not compare hotel nights or all border trips as if they were tourist arrivals."
   },
   "note": "Inventory only. Completion requires the source and editorial checks in CONTENT-FACTORY.md; multiple cities do not imply full national coverage.",
   "destinations": [
@@ -244,6 +251,19 @@
       "queueEvidence": "Viet Nam National Authority of Tourism, 2024 international visitor arrivals, retrieved 8 November 2026",
       "slug": "vietnam",
       "region": "Asia",
+      "hasGuide": true,
+      "cityCount": 0,
+      "sourcedCityCount": 0,
+      "regionalPrototype": false,
+      "editorialStatus": "needs-review"
+    },
+    {
+      "iso": 504,
+      "name": "Morocco",
+      "arrivalsRank": null,
+      "queueEvidence": "UN Tourism, Morocco 2024 international tourist arrivals, retrieved 25 November 2026",
+      "slug": "morocco",
+      "region": "Africa & Middle East",
       "hasGuide": true,
       "cityCount": 0,
       "sourcedCityCount": 0,
@@ -665,18 +685,6 @@
       "arrivalsRank": null,
       "slug": "micronesia",
       "region": "Oceania",
-      "hasGuide": true,
-      "cityCount": 0,
-      "sourcedCityCount": 0,
-      "regionalPrototype": false,
-      "editorialStatus": "needs-review"
-    },
-    {
-      "iso": 504,
-      "name": "Morocco",
-      "arrivalsRank": null,
-      "slug": "morocco",
-      "region": "Africa & Middle East",
       "hasGuide": true,
       "cityCount": 0,
       "sourcedCityCount": 0,
